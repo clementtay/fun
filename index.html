@@ -31,7 +31,9 @@
      background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
      -webkit-background-clip:text;background-clip:text;color:transparent;}
   .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
-  .track-art{font-size:44px;margin:18px 0 8px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.5))}
+  #heroScene{max-width:460px;margin:18px auto 0;text-align:left}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
   .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
     border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
 
@@ -59,6 +61,43 @@
   .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
   .scn-title{font-size:23px;font-weight:bold;margin:6px 0 10px}
   .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  /* Scene illustration */
+  .scene{margin:14px 0 16px;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:radial-gradient(120% 140% at 50% 0%, #23264b 0%, #14162e 70%)}
+  .scene svg{display:block;width:100%;height:auto}
+  .scene .rail{stroke:#4b4f86;stroke-width:5;fill:none;stroke-linecap:round}
+  .scene .rail.dashed{stroke-dasharray:9 10}
+  .scene .flow{stroke:var(--a);stroke-width:6;fill:none;stroke-linecap:round;
+    stroke-dasharray:16 12;opacity:.95;transition:stroke .5s ease;
+    animation:antflow 1s linear infinite}
+  .scene .flow.safe{stroke:var(--good)}
+  @keyframes antflow{to{stroke-dashoffset:-56}}
+  .scene .lever-arm{transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+  .scene .figure{transition:opacity .5s ease}
+  .scene .figure line{stroke:#d7d9ff;stroke-width:2.4;stroke-linecap:round;fill:none}
+  .scene .figure circle{fill:#d7d9ff;stroke:none}
+  .scene .figure ellipse{fill:#d7d9ff}
+  .scene .figure rect{fill:#d7d9ff}
+  .scene .figure .wall{fill:#3a3e70;stroke:#4b4f86;stroke-width:2}
+  .scene .figure.you line{stroke:var(--d)}
+  .scene .figure.you circle{fill:var(--d)}
+  .scene .figure.hit line{stroke:var(--a)}
+  .scene .figure.hit circle,.scene .figure.hit ellipse,.scene .figure.hit rect,
+  .scene .figure.hit .wall{fill:var(--a);stroke:var(--a)}
+  .scene .doomed{animation:pulseDoom 1.4s ease-in-out infinite}
+  @keyframes pulseDoom{0%,100%{opacity:1}50%{opacity:.5}}
+  .scene .cap{font:600 12px "Trebuchet MS",sans-serif;fill:var(--muted)}
+  .scene text{font-family:"Trebuchet MS",sans-serif}
+
+  /* Default-outcome banner */
+  .default-line{margin:0 0 4px;font-size:14.5px;color:#ffe0e0;
+    background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.28);
+    border-radius:12px;padding:9px 13px}
+  .default-line b{color:#ffd0d0}
+  .default-line.safe{background:rgba(78,205,196,.10);border-color:rgba(78,205,196,.28);color:#d6fff9}
+  .default-line.safe b{color:#bff6ee}
+
   .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
   .opt{
     text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
@@ -67,7 +106,19 @@
   }
   .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
   .opt .lead{font-weight:bold;color:#fff;display:block}
+  .opt-meta{display:flex;align-items:center;gap:9px;margin-top:9px;flex-wrap:wrap}
+  .opt-act{font-size:12px;font-weight:bold;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--c);background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.3);
+    border-radius:99px;padding:3px 11px;white-space:nowrap}
+  .opt-outcome{font-size:13.5px;color:var(--muted)}
+  .opt-outcome b{color:#ffb3b3;font-weight:bold}
+  .opt-outcome.safe b{color:var(--good)}
   .opt.pick{border-color:var(--b);background:#243b48}
+  .opt.pick .opt-act{color:#eafcfa;background:rgba(78,205,196,.16);border-color:rgba(78,205,196,.4)}
+  @media (prefers-reduced-motion: reduce){
+    .scene .lever-arm,.scene .flow{transition:none}
+    .scene .doomed,.scene .flow{animation:none}
+  }
   .react{margin-top:16px;padding:13px 15px;border-radius:14px;background:rgba(255,209,102,.08);
     border:1px solid rgba(255,209,102,.25);font-size:15px;color:#ffe9b0;display:none}
   .react.on{display:block;animation:fade .3s ease both}
@@ -127,7 +178,8 @@
     <div class="hero">
       <div class="kicker">A Moral Rorschach Test</div>
       <h1>The Trolley Test</h1>
-      <div class="track-art">🚃💨 &nbsp;╱╲ &nbsp;🧍‍♂️🧍‍♀️🧍</div>
+      <div class="scene" id="heroScene"></div>
+      <p class="how">Here's how it works: a runaway trolley is heading for the people on the <b>main track</b>. <b>Pull the lever</b> and it diverts onto the <b>side track</b> — saving them, but at a cost. Every dilemma shows you the tracks; you decide.</p>
       <p class="tag">Thirty runaway trolleys. Zero right answers. By the end, I'll tell you who you <em>really</em> are — your principles, your patterns, and the blind spots you'd rather not look at.</p>
       <button class="btn" id="startBtn">Pull the lever ▶</button>
       <div class="disclaimer">Not a real psychological assessment — it's a philosophy toy. It reads the <em>shape</em> of your choices across seven ethical dials and hands you an archetype. Entertainment, with a suspicious amount of accuracy.</div>
@@ -144,6 +196,8 @@
     <div class="card">
       <div class="scn-num" id="snum">Dilemma 01</div>
       <div class="scn-title" id="stitle"></div>
+      <div class="scene" id="scene"></div>
+      <div class="default-line" id="defaultLine"></div>
       <div class="scn-body" id="sbody"></div>
       <div class="opts" id="opts"></div>
       <div class="react" id="react"></div>
@@ -216,215 +270,441 @@
 const SCEN = [
  {t:"The Original Sin",
   s:"A runaway trolley barrels toward five people tied to the track. You stand at a lever. Pull it and the trolley diverts onto a side track — where one person is tied down instead. The classic. No tricks. Yet.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 strangers'}, side:{n:1,glyph:'person',label:'1 stranger'}},
   o:[
-   {label:"Pull the lever. Five beats one.", react:"Cold arithmetic. Somewhere a utilitarian just felt a chill of recognition.", sc:{cons:2,action:2}},
-   {label:"Hands off. I won't choose who dies.", react:"You refuse to become the instrument of a death — even a 'cheaper' one.", sc:{cons:-2,action:-2}}
+   {label:"Pull the lever. Five beats one.", act:"Pull the lever", ends:"side", out:"the 1 stranger dies", react:"Cold arithmetic. Somewhere a utilitarian just felt a chill of recognition.", sc:{cons:2,action:2}},
+   {label:"Hands off. I won't choose who dies.", act:"Do nothing", ends:"main", out:"the 5 strangers die", react:"You refuse to become the instrument of a death — even a 'cheaper' one.", sc:{cons:-2,action:-2}}
   ]},
 
  {t:"The Footbridge",
   s:"Same five people, same doomed trolley. This time you're on a bridge next to a very large stranger. His body — and only his — is heavy enough to stop the trolley if you shove him onto the tracks. Same math. Different hands.",
+  viz:{type:'push', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'the large man'}},
   o:[
-   {label:"Push him. The math didn't change.", react:"Most people who'd pull a lever freeze here. You didn't. That's… data.", sc:{cons:2,instr:2,head:2,action:1}},
-   {label:"I can't push a man to his death.", react:"The lever felt like fate. This feels like murder. Your gut drew a line.", sc:{cons:-1,instr:-2,head:-2}}
+   {label:"Push him. The math didn't change.", act:"Push him", ends:"side", out:"the large man dies", react:"Most people who'd pull a lever freeze here. You didn't. That's… data.", sc:{cons:2,instr:2,head:2,action:1}},
+   {label:"I can't push a man to his death.", act:"Do nothing", ends:"main", out:"the five die", react:"The lever felt like fate. This feels like murder. Your gut drew a line.", sc:{cons:-1,instr:-2,head:-2}}
   ]},
 
  {t:"The Loop",
   s:"You can divert the trolley onto a loop of track. On the loop stands one large person whose body will stop the trolley before it circles back to the five. If he weren't there, the loop would just deliver the trolley right back into the five. You need him to die.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'1 large person'}},
   o:[
-   {label:"Divert. His body is the brake I need.", react:"You're comfortable when a person is literally the mechanism. Noted.", sc:{cons:1,instr:2,action:1}},
-   {label:"No. Using his death as a tool is the line.", react:"Consequences aside, you won't reduce a person to a component.", sc:{instr:-2,cons:-1}}
+   {label:"Divert. His body is the brake I need.", act:"Divert", ends:"side", out:"the 1 dies", react:"You're comfortable when a person is literally the mechanism. Noted.", sc:{cons:1,instr:2,action:1}},
+   {label:"No. Using his death as a tool is the line.", act:"Do nothing", ends:"main", out:"the five die", react:"Consequences aside, you won't reduce a person to a component.", sc:{instr:-2,cons:-1}}
   ]},
 
  {t:"Blood and Water",
   s:"Five strangers on the main track. One person on the side track. The one person is your mother. The lever works the same as always.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 strangers'}, side:{n:1,glyph:'person',label:'your mother'}},
   o:[
-   {label:"Save the five. Strangers are people too.", react:"Impartial to the point of pain. You'd grieve, but you'd pull.", sc:{partial:-2,cons:1}},
-   {label:"Save my mother. Every time.", react:"The universe can keep its abstractions. You chose your person.", sc:{partial:2,cons:-1,head:-1}}
+   {label:"Save the five. Strangers are people too.", act:"Pull the lever", ends:"side", out:"your mother dies", react:"Impartial to the point of pain. You'd grieve, but you'd pull.", sc:{partial:-2,cons:1}},
+   {label:"Save my mother. Every time.", act:"Do nothing", ends:"main", out:"the 5 strangers die", react:"The universe can keep its abstractions. You chose your person.", sc:{partial:2,cons:-1,head:-1}}
   ]},
 
  {t:"The Value of Years",
-  s:"Main track: five people in their eighties. Side track: one child. Pure numbers say five. Something older than numbers says otherwise.",
+  s:"The trolley is bearing down on a single child on the main track. Throw the switch and it diverts onto five people in their eighties instead. Pure numbers say the five. Something older than numbers says otherwise.",
+  viz:{type:'fork', heads:'main', main:{n:1,glyph:'person',label:'1 child'}, side:{n:5,glyph:'person',label:'5 in their 80s'}},
   o:[
-   {label:"Divert — save the child.", react:"You quietly priced a life in years-remaining. Fewer lives, more future.", sc:{merit:2,cons:-1,head:1}},
-   {label:"Five lives outweigh one, whatever the ages.", react:"A life is a life is a life. You won't rank them by runway.", sc:{merit:-2,cons:1}}
+   {label:"Divert — save the child.", act:"Divert", ends:"side", out:"the five elderly die", react:"You quietly priced a life in years-remaining. Fewer lives, more future.", sc:{merit:2,cons:-1,head:1}},
+   {label:"Five lives outweigh one, whatever the ages.", act:"Do nothing", ends:"main", out:"the child dies", react:"A life is a life is a life. You won't rank them by runway.", sc:{merit:-2,cons:1}}
   ]},
 
  {t:"Skin in the Game",
   s:"Five strangers on the track. You could throw the switch — but the only way to jam the trolley is to leap onto the tracks yourself. You'd very likely die. They'd very likely live.",
+  viz:{type:'self', heads:'main', main:{n:5,glyph:'person',label:'five strangers'}, side:{n:1,glyph:'person',label:'you'}},
   o:[
-   {label:"Jump. If someone dies here, let it be me.", react:"You'd spend your own life before you'd spend a stranger's. Rare.", sc:{sacr:2,cons:1,action:1}},
-   {label:"I won't throw my life away, even for five.", react:"Your survival is a hard floor. You didn't sign up to be a martyr.", sc:{sacr:-2}}
+   {label:"Jump. If someone dies here, let it be me.", act:"Leap in", ends:"self", out:"you die; the five live", react:"You'd spend your own life before you'd spend a stranger's. Rare.", sc:{sacr:2,cons:1,action:1}},
+   {label:"I won't throw my life away, even for five.", act:"Stay back", ends:"main", out:"the five die", react:"Your survival is a hard floor. You didn't sign up to be a martyr.", sc:{sacr:-2}}
   ]},
 
  {t:"The Useful Man",
   s:"On the side track is a brilliant surgeon who, if she lives, will save hundreds of future patients. On the main track: five ordinary strangers with ordinary lives. The lever is in your hand.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 strangers'}, side:{n:1,glyph:'person',label:'a surgeon'}},
   o:[
-   {label:"Save the surgeon. Think of everyone she'll save.", react:"You keep future ledgers. One 'useful' life outweighed five plain ones.", sc:{merit:2,cons:2,head:1}},
-   {label:"Five lives now beat a promise of lives later.", react:"You won't let a résumé outrank a headcount. Present over projected.", sc:{merit:-2,cons:-1}}
+   {label:"Save the surgeon. Think of everyone she'll save.", act:"Do nothing", ends:"main", out:"the five die; the surgeon lives", react:"You keep future ledgers. One 'useful' life outweighed five plain ones.", sc:{merit:2,cons:2,head:1}},
+   {label:"Five lives now beat a promise of lives later.", act:"Pull the lever", ends:"side", out:"the surgeon dies", react:"You won't let a résumé outrank a headcount. Present over projected.", sc:{merit:-2,cons:-1}}
   ]},
 
  {t:"The Gamble",
   s:"The trolley heads for one person. You can divert it onto a rickety track toward an empty siding — but there's a real chance the aged rails collapse and fling the trolley into a crowd of five nearby. Save one for sure, or risk five to maybe save everyone.",
+  viz:{type:'fork', heads:'main', dashed:'side', main:{n:1,glyph:'person',label:'1 person'}, side:{n:5,glyph:'person',label:'rickety siding',note:'50%: hits 5'}},
   o:[
-   {label:"Take the safe route: divert, protect the one.", react:"Certainty over expected value. You don't gamble with lives.", sc:{cons:-1,head:-1,action:1}},
-   {label:"Roll the dice — a clean track might save all.", react:"You'll accept risk for a better expected outcome. Cool head, or reckless?", sc:{cons:1,head:2}}
+   {label:"Take the safe route: divert, protect the one.", act:"Divert (play it safe)", ends:"side", out:"the one is spared (slim risk to five)", react:"Certainty over expected value. You don't gamble with lives.", sc:{cons:-1,head:-1,action:1}},
+   {label:"Roll the dice — a clean track might save all.", act:"Gamble on the rails", ends:"side", out:"maybe all live — maybe five die", react:"You'll accept risk for a better expected outcome. Cool head, or reckless?", sc:{cons:1,head:2}}
   ]},
 
  {t:"The Villain on the Siding",
   s:"Five innocent people on the main track. The one person on the side track? He's the one who tied everyone else down. Diverting kills the very man responsible for the whole nightmare.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 innocents'}, side:{n:1,glyph:'person',label:'the villain'}},
   o:[
-   {label:"Divert onto him. Poetic and correct.", react:"Desert entered the equation. You think the guilty forfeit some protection.", sc:{merit:2,action:1,cons:1}},
-   {label:"His guilt doesn't make me his executioner.", react:"You separate justice from convenience. Punishment isn't yours to deal here.", sc:{merit:-2,cons:-1,instr:-1}}
+   {label:"Divert onto him. Poetic and correct.", act:"Divert", ends:"side", out:"the guilty man dies", react:"Desert entered the equation. You think the guilty forfeit some protection.", sc:{merit:2,action:1,cons:1}},
+   {label:"His guilt doesn't make me his executioner.", act:"Do nothing", ends:"main", out:"the five innocents die", react:"You separate justice from convenience. Punishment isn't yours to deal here.", sc:{merit:-2,cons:-1,instr:-1}}
   ]},
 
  {t:"The Prosecutor Is Watching",
   s:"Pulling the lever saves five and kills one — and there's a police officer who'll see you do it. You will be charged with manslaughter and likely serve years. Do the math still hold when part of the cost is yours?",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'1 person'}},
   o:[
-   {label:"Pull it. Five lives are worth my freedom.", react:"You'd pay personally for a stranger's benefit. Principle over self-interest.", sc:{sacr:2,cons:2,action:1}},
-   {label:"I'm not ruining my life over this. Hands off.", react:"When the cost got personal, the calculus shifted. Honest, at least.", sc:{sacr:-2,action:-1,cons:-1}}
+   {label:"Pull it. Five lives are worth my freedom.", act:"Pull the lever", ends:"side", out:"the 1 dies (and you're charged)", react:"You'd pay personally for a stranger's benefit. Principle over self-interest.", sc:{sacr:2,cons:2,action:1}},
+   {label:"I'm not ruining my life over this. Hands off.", act:"Do nothing", ends:"main", out:"the five die", react:"When the cost got personal, the calculus shifted. Honest, at least.", sc:{sacr:-2,action:-1,cons:-1}}
   ]},
 
  {t:"Author of the Deed",
   s:"Option A: do nothing, and five die from a failure that isn't your doing — you're merely a bystander to fate. Option B: press a button that saves them but makes YOU the direct cause of one unrelated death. Same net lives. Different signature on the paperwork.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'1 bystander'}},
   o:[
-   {label:"Press the button. Outcomes are what matter.", react:"You don't hide behind 'I just let it happen.' Authorship doesn't scare you.", sc:{cons:2,action:2}},
-   {label:"I won't put my name on a killing.", react:"There's a real difference to you between causing and allowing. The pen matters.", sc:{cons:-2,action:-2,instr:-1}}
+   {label:"Press the button. Outcomes are what matter.", act:"Press the button", ends:"side", out:"1 unrelated person dies", react:"You don't hide behind 'I just let it happen.' Authorship doesn't scare you.", sc:{cons:2,action:2}},
+   {label:"I won't put my name on a killing.", act:"Do nothing", ends:"main", out:"the five die", react:"There's a real difference to you between causing and allowing. The pen matters.", sc:{cons:-2,action:-2,instr:-1}}
   ]},
 
  {t:"Two Footbridges",
   s:"To stop the trolley you must push one of two large strangers. Stranger A is a random commuter. Stranger B is a convicted killer out on parole, standing right beside you. If you're pushing anyone, does it matter who?",
+  viz:{type:'push', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'one man'}, bridge:[{ends:'A',label:'a commuter'},{ends:'B',label:'a convict'}]},
   o:[
-   {label:"If I must push, push the convict.", react:"You'd rather sacrifice the 'less deserving.' Worth is doing quiet work in you.", sc:{merit:2,instr:1,head:1}},
-   {label:"Push neither. A life is not a punishment slot.", react:"Refuses to convert a person into a tool, criminal record or not.", sc:{instr:-2,merit:-1}},
-   {label:"Push A or B, doesn't matter — just stop the trolley.", react:"Blind to desert; the math is the math. Ruthlessly even-handed.", sc:{cons:2,instr:2,merit:-1,head:1}}
+   {label:"If I must push, push the convict.", act:"Push the convict", ends:"B", out:"the convict dies", react:"You'd rather sacrifice the 'less deserving.' Worth is doing quiet work in you.", sc:{merit:2,instr:1,head:1}},
+   {label:"Push neither. A life is not a punishment slot.", act:"Do nothing", ends:"main", out:"the five die", react:"Refuses to convert a person into a tool, criminal record or not.", sc:{instr:-2,merit:-1}},
+   {label:"Push A or B, doesn't matter — just stop the trolley.", act:"Push either", ends:"either", out:"one man dies", react:"Blind to desert; the math is the math. Ruthlessly even-handed.", sc:{cons:2,instr:2,merit:-1,head:1}}
   ]},
 
  {t:"Five Humans or a Bus of Puppies",
   s:"Main track: five human strangers. Side track: a crate of one hundred puppies. Numbers are not everything, but they are… a lot of puppies.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 humans'}, side:{n:100,glyph:'animal',label:'100 puppies'}},
   o:[
-   {label:"Save the humans, obviously.", react:"Firm species line. A hundred is still not one of us, to you.", sc:{merit:1,partial:1,head:-1}},
-   {label:"...Save the puppies. I said what I said.", react:"You weight suffering broadly and don't treat humanity as a trump card. Bold.", sc:{merit:-1,head:1,partial:-1}}
+   {label:"Save the humans, obviously.", act:"Divert", ends:"side", out:"the 100 puppies die", react:"Firm species line. A hundred is still not one of us, to you.", sc:{merit:1,partial:1,head:-1}},
+   {label:"...Save the puppies. I said what I said.", act:"Do nothing", ends:"main", out:"the five humans die", react:"You weight suffering broadly and don't treat humanity as a trump card. Bold.", sc:{merit:-1,head:1,partial:-1}}
   ]},
 
  {t:"The Transplant Ward",
   s:"No trolley. A doctor has five patients dying for want of five different organs. In the waiting room sits one healthy stranger whose organs are a perfect match for all five. Nobody would ever know. Five live, one dies. Sound familiar?",
+  viz:{type:'ward', heads:'main', main:{n:5,glyph:'bed',label:'5 dying patients'}, side:{n:1,glyph:'person',label:'1 healthy visitor'}},
   o:[
-   {label:"Harvest. It's the footbridge with a scalpel.", react:"You're consistent, at least — and that consistency is genuinely unsettling.", sc:{cons:2,instr:2,head:2}},
-   {label:"Absolutely not. This is monstrous.", react:"Here your gut slams the brake — a person is not a parts bin. Most agree.", sc:{instr:-2,cons:-1,head:-1}}
+   {label:"Harvest. It's the footbridge with a scalpel.", act:"Harvest the organs", ends:"side", out:"the healthy visitor dies", react:"You're consistent, at least — and that consistency is genuinely unsettling.", sc:{cons:2,instr:2,head:2}},
+   {label:"Absolutely not. This is monstrous.", act:"Refuse", ends:"main", out:"the five patients die", react:"Here your gut slams the brake — a person is not a parts bin. Most agree.", sc:{instr:-2,cons:-1,head:-1}}
   ]},
 
  {t:"Trespassers",
   s:"The five on the main track climbed over a fence and are picnicking on live rails, ignoring every warning sign. The one on the side track is a maintenance worker doing his lawful job. Divert, and the careful die for the careless.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 trespassers'}, side:{n:1,glyph:'person',label:'a lawful worker'}},
   o:[
-   {label:"Save the five. Foolishness isn't a death sentence.", react:"You don't let recklessness strip people of their claim to rescue.", sc:{merit:-2,cons:1}},
-   {label:"Don't divert — the worker did nothing wrong.", react:"Choices have weight for you. The negligent partly authored their fate.", sc:{merit:2,cons:-1}}
+   {label:"Save the five. Foolishness isn't a death sentence.", act:"Divert", ends:"side", out:"the lawful worker dies", react:"You don't let recklessness strip people of their claim to rescue.", sc:{merit:-2,cons:1}},
+   {label:"Don't divert — the worker did nothing wrong.", act:"Do nothing", ends:"main", out:"the five trespassers die", react:"Choices have weight for you. The negligent partly authored their fate.", sc:{merit:2,cons:-1}}
   ]},
 
  {t:"The Heroic Leap",
   s:"You can save five by leaping in front of the trolley yourself — a near-certain death, but a certain rescue. No lever, no stranger to sacrifice. Just you and gravity.",
+  viz:{type:'self', heads:'main', main:{n:5,glyph:'person',label:'five strangers'}, side:{n:1,glyph:'person',label:'you'}},
   o:[
-   {label:"Leap. This is what the moment asks of me.", react:"You genuinely rank five strangers above your own continued existence.", sc:{sacr:2,cons:1,action:2}},
-   {label:"I mourn them, but I don't jump.", react:"There's a limit to what you'll surrender. Self-preservation holds the line.", sc:{sacr:-2,action:-1}}
+   {label:"Leap. This is what the moment asks of me.", act:"Leap in", ends:"self", out:"you die; the five live", react:"You genuinely rank five strangers above your own continued existence.", sc:{sacr:2,cons:1,action:2}},
+   {label:"I mourn them, but I don't jump.", act:"Stay back", ends:"main", out:"the five die", react:"There's a limit to what you'll surrender. Self-preservation holds the line.", sc:{sacr:-2,action:-1}}
   ]},
 
  {t:"No One Will Ever Know",
   s:"One person you deeply love on one track; five strangers on the other. Crucially: the choice is completely private. No cameras, no witnesses, no one to ever judge you. Only you will carry it.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 strangers'}, side:{n:1,glyph:'person',label:'your beloved'}},
   o:[
-   {label:"Save my beloved. Secrecy changes nothing.", react:"Your loyalty isn't performance — it's the same in the dark.", sc:{partial:2,head:-1}},
-   {label:"Save the five, and live with the private grief.", react:"Even unseen, the numbers bind you. Principle without an audience.", sc:{partial:-2,cons:1,sacr:1}}
+   {label:"Save my beloved. Secrecy changes nothing.", act:"Do nothing", ends:"main", out:"the 5 strangers die", react:"Your loyalty isn't performance — it's the same in the dark.", sc:{partial:2,head:-1}},
+   {label:"Save the five, and live with the private grief.", act:"Pull the lever", ends:"side", out:"your beloved dies", react:"Even unseen, the numbers bind you. Principle without an audience.", sc:{partial:-2,cons:1,sacr:1}}
   ]},
 
  {t:"The Self-Driving Car",
   s:"You program autonomous cars. A crash is unavoidable: the car can stay straight and kill five pedestrians, or swerve into a wall, killing its single passenger — who trusted your code with their life. You set the default, today, in the cold.",
+  viz:{type:'fork', vehicle:'car', heads:'main', main:{n:5,glyph:'person',label:'5 pedestrians'}, side:{n:1,glyph:'wall',label:'a wall (the passenger)'}},
   o:[
-   {label:"Swerve — minimize deaths, sacrifice the one.", react:"You'd code the car to kill its own owner for the greater good. Consistent.", sc:{cons:2,head:2,action:1}},
-   {label:"Protect the passenger who trusted the machine.", react:"Loyalty to the person in your care outranks the anonymous many.", sc:{cons:-1,partial:1,head:-1}}
+   {label:"Swerve — minimize deaths, sacrifice the one.", act:"Swerve", ends:"side", out:"the passenger dies", react:"You'd code the car to kill its own owner for the greater good. Consistent.", sc:{cons:2,head:2,action:1}},
+   {label:"Protect the passenger who trusted the machine.", act:"Stay straight", ends:"main", out:"the five pedestrians die", react:"Loyalty to the person in your care outranks the anonymous many.", sc:{cons:-1,partial:1,head:-1}}
   ]},
 
  {t:"Certain Five, Probable Ten",
   s:"Track A: five people you can save with certainty. Track B: a mechanism that has a 50% chance of saving ten and a 50% chance of saving no one. Expected value says B. Your stomach says A.",
+  viz:{type:'fork', heads:'main', dashed:'side', main:{n:5,glyph:'person',label:'5 (certain)'}, side:{n:10,glyph:'person',label:'10 lives',note:'50% chance'}},
   o:[
-   {label:"Certainty. Save the five in hand.", react:"You won't trade real lives for a coin-flip's promise. Risk-averse with souls.", sc:{cons:-1,head:-2}},
-   {label:"Go for ten. The expected value is higher.", react:"You optimize the average even when the variance is human lives.", sc:{cons:2,head:2}}
+   {label:"Certainty. Save the five in hand.", act:"Take the sure thing", ends:"side", out:"the five live; the ten are lost", react:"You won't trade real lives for a coin-flip's promise. Risk-averse with souls.", sc:{cons:-1,head:-2}},
+   {label:"Go for ten. The expected value is higher.", act:"Gamble for ten", ends:"main", out:"50%: save ten — or lose all", react:"You optimize the average even when the variance is human lives.", sc:{cons:2,head:2}}
   ]},
 
  {t:"Two-for-One",
   s:"The lone worker on the side track is visibly pregnant. Some would count her as two lives; others say that's not how this works. The main track still holds five.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'a pregnant worker'}},
   o:[
-   {label:"Still save the five — five outnumbers 'two.'", react:"You held the arithmetic steady and didn't flinch at the framing.", sc:{cons:2,head:1}},
-   {label:"That changes things — I can't divert onto her.", react:"Potential and vulnerability moved you off the pure count.", sc:{cons:-1,head:-1,instr:-1}}
+   {label:"Still save the five — five outnumbers 'two.'", act:"Divert", ends:"side", out:"the pregnant worker dies", react:"You held the arithmetic steady and didn't flinch at the framing.", sc:{cons:2,head:1}},
+   {label:"That changes things — I can't divert onto her.", act:"Do nothing", ends:"main", out:"the five die", react:"Potential and vulnerability moved you off the pure count.", sc:{cons:-1,head:-1,instr:-1}}
   ]},
 
  {t:"The Dying Man",
   s:"The single person on the side track is terminally ill and, doctors agree, has about a week to live. The five on the main track are healthy. Does a shorter runway make the sacrifice 'cost less'?",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 healthy people'}, side:{n:1,glyph:'person',label:'a dying man'}},
   o:[
-   {label:"Divert — his week costs less than their decades.", react:"You'll weigh remaining life like a currency. Efficient, and a little chilling.", sc:{merit:2,cons:2,head:2}},
-   {label:"His last week is still his whole world.", react:"You refuse to discount a life by its expiry date. Every day counts fully.", sc:{merit:-2,head:-1}}
+   {label:"Divert — his week costs less than their decades.", act:"Divert", ends:"side", out:"the dying man dies (a week early)", react:"You'll weigh remaining life like a currency. Efficient, and a little chilling.", sc:{merit:2,cons:2,head:2}},
+   {label:"His last week is still his whole world.", act:"Do nothing", ends:"main", out:"the five die", react:"You refuse to discount a life by its expiry date. Every day counts fully.", sc:{merit:-2,head:-1}}
   ]},
 
  {t:"The Endless Lever",
   s:"You can hold the trolley off the five — but only by gripping a lever that takes all your strength, for hours, indefinitely, in agony. The moment you let go, they die. There is no lock, no relief in sight.",
+  viz:{type:'self', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'you'}},
   o:[
-   {label:"Hold on as long as my body physically can.", react:"You'll absorb ongoing personal suffering to keep strangers alive. Dogged.", sc:{sacr:2,action:2,cons:1}},
-   {label:"I'll hold a while, but I won't destroy myself.", react:"You accept a duty to help — but not an unlimited one. Boundaries intact.", sc:{sacr:-1,cons:-1}}
+   {label:"Hold on as long as my body physically can.", act:"Hold the lever", ends:"none", out:"you endure — they live", safe:true, react:"You'll absorb ongoing personal suffering to keep strangers alive. Dogged.", sc:{sacr:2,action:2,cons:1}},
+   {label:"I'll hold a while, but I won't destroy myself.", act:"Let go, in time", ends:"main", out:"eventually the five die", react:"You accept a duty to help — but not an unlimited one. Boundaries intact.", sc:{sacr:-1,cons:-1}}
   ]},
 
  {t:"A Name and a Face",
   s:"Track A: five anonymous silhouettes, no details, just five. Track B: one person you've been told all about — her name is Mara, she paints, she has a dog named Biscuit. The vivid one, or the faceless five?",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 (anonymous)'}, side:{n:1,glyph:'person',label:'Mara'}},
   o:[
-   {label:"Save the five. A story shouldn't outweigh a sum.", react:"You resist the identifiable-victim pull and stay loyal to the numbers.", sc:{cons:2,head:1,partial:-1}},
-   {label:"I can't be the one to end Mara.", react:"Vividness moves you — the concrete person outweighs the abstract many.", sc:{cons:-2,head:-2,partial:1}}
+   {label:"Save the five. A story shouldn't outweigh a sum.", act:"Pull the lever", ends:"side", out:"Mara dies", react:"You resist the identifiable-victim pull and stay loyal to the numbers.", sc:{cons:2,head:1,partial:-1}},
+   {label:"I can't be the one to end Mara.", act:"Do nothing", ends:"main", out:"the faceless five die", react:"Vividness moves you — the concrete person outweighs the abstract many.", sc:{cons:-2,head:-2,partial:1}}
   ]},
 
  {t:"Near and Far",
   s:"Track A: five strangers in a distant country you'll never visit. Track B: one person — your next-door neighbor, whose face you know. Distance is just distance… or is it?",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 (far away)'}, side:{n:1,glyph:'person',label:'your neighbor'}},
   o:[
-   {label:"Save the five, distance be damned.", react:"Your moral circle is wide and flat — a life's worth doesn't fade with miles.", sc:{partial:-2,cons:1}},
-   {label:"Save my neighbor. Proximity is a real bond.", react:"Nearness creates obligation for you. The circle has a warm center.", sc:{partial:2,head:-1}}
+   {label:"Save the five, distance be damned.", act:"Pull the lever", ends:"side", out:"your neighbor dies", react:"Your moral circle is wide and flat — a life's worth doesn't fade with miles.", sc:{partial:-2,cons:1}},
+   {label:"Save my neighbor. Proximity is a real bond.", act:"Do nothing", ends:"main", out:"the distant five die", react:"Nearness creates obligation for you. The circle has a warm center.", sc:{partial:2,head:-1}}
   ]},
 
  {t:"No Good Option",
   s:"The trolley WILL kill someone; there's no 'save more' here. Track A: a beloved schoolteacher who mentors dozens of kids. Track B: a reclusive stranger no one seems to miss. One dies no matter what. You only choose who.",
+  viz:{type:'fork', heads:'main', main:{n:1,glyph:'person',label:'a beloved teacher'}, side:{n:1,glyph:'person',label:'a lone stranger'}},
   o:[
-   {label:"Spare the teacher — she matters to so many.", react:"You measure a life by its web of connections. Social value tipped it.", sc:{merit:2,head:1,cons:1}},
-   {label:"I refuse to rank their worth. I flip a mental coin.", react:"You won't play god with human value; randomness feels more just to you.", sc:{merit:-2,cons:-1}}
+   {label:"Spare the teacher — she matters to so many.", act:"Divert to the stranger", ends:"side", out:"the reclusive stranger dies", react:"You measure a life by its web of connections. Social value tipped it.", sc:{merit:2,head:1,cons:1}},
+   {label:"I refuse to rank their worth. I flip a mental coin.", act:"Leave it to chance", ends:"main", out:"chance decides who dies", react:"You won't play god with human value; randomness feels more just to you.", sc:{merit:-2,cons:-1}}
   ]},
 
  {t:"The Uncertain Shout",
   s:"You could divert (kill one, save five, certain). OR you could just scream a warning — a 60% chance the five scramble clear and NOBODY dies, a 40% chance they freeze and all five die, and either way the one on the siding lives. Clean hands, worse odds.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'the five'}, side:{n:1,glyph:'person',label:'1 on the siding'}},
   o:[
-   {label:"Divert. A sure save beats a hopeful yell.", react:"You'll get your hands dirty to guarantee an outcome. Doer, not hoper.", sc:{action:2,cons:1,head:1}},
-   {label:"Shout. Maybe everyone walks away — and I killed no one.", react:"You prize clean hands and hope over certain, authored harm.", sc:{action:-2,instr:-1,cons:-1}}
+   {label:"Divert. A sure save beats a hopeful yell.", act:"Divert", ends:"side", out:"the 1 dies (five saved for sure)", react:"You'll get your hands dirty to guarantee an outcome. Doer, not hoper.", sc:{action:2,cons:1,head:1}},
+   {label:"Shout. Maybe everyone walks away — and I killed no one.", act:"Just shout", ends:"both-safe", out:"60%: everyone lives — 40%: the five die", safe:true, react:"You prize clean hands and hope over certain, authored harm.", sc:{action:-2,instr:-1,cons:-1}}
   ]},
 
  {t:"The Abstract Thousands",
   s:"Let the five die and a mysterious billionaire will, in gratitude, fund a hospital that statistically saves thousands over the next decade. Save the five now, and the offer vanishes. Concrete lives in front of you, or invisible lives on a spreadsheet?",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 present lives'}, side:{n:5,glyph:'bed',label:'a future hospital',note:'saves 1000s'}},
   o:[
-   {label:"Take the deal — thousands outweigh five.", react:"You trust the spreadsheet over the scene. Statistical lives are real to you.", sc:{cons:2,head:2}},
-   {label:"Save the five in front of me. I don't trade real for hypothetical.", react:"The concrete, present life anchors you; distant statistics don't move your hand.", sc:{cons:-2,head:-1,action:1}}
+   {label:"Take the deal — thousands outweigh five.", act:"Do nothing", ends:"main", out:"the five die (thousands saved later)", react:"You trust the spreadsheet over the scene. Statistical lives are real to you.", sc:{cons:2,head:2}},
+   {label:"Save the five in front of me. I don't trade real for hypothetical.", act:"Save the five", ends:"none", out:"the five live (the deal vanishes)", safe:true, react:"The concrete, present life anchors you; distant statistics don't move your hand.", sc:{cons:-2,head:-1,action:1}}
   ]},
 
  {t:"Child Versus Elders",
   s:"To save five people in their nineties, you must divert onto one healthy nine-year-old. Raw numbers scream five. Something primal screams the child.",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 in their 90s'}, side:{n:1,glyph:'person',label:'a 9-year-old'}},
   o:[
-   {label:"Save the five elders. A count is a count.", react:"You held the line on numbers even against the strongest instinct there is.", sc:{cons:2,merit:-1,head:1}},
-   {label:"Protect the child, whatever the math.", react:"The future outweighed the sum for you. Primal, and unashamed of it.", sc:{merit:2,cons:-2,head:-1}}
+   {label:"Save the five elders. A count is a count.", act:"Divert", ends:"side", out:"the child dies", react:"You held the line on numbers even against the strongest instinct there is.", sc:{cons:2,merit:-1,head:1}},
+   {label:"Protect the child, whatever the math.", act:"Do nothing", ends:"main", out:"the five elders die", react:"The future outweighed the sum for you. Primal, and unashamed of it.", sc:{merit:2,cons:-2,head:-1}}
   ]},
 
  {t:"The Unborn Five",
   s:"Track A: one living, breathing person today. Track B: a device that, if spared, will enable five people to be born in the future who otherwise never will exist. Present life versus future lives-to-be.",
+  viz:{type:'fork', heads:'main', main:{n:1,glyph:'person',label:'1 living person'}, side:{n:5,glyph:'person',label:'5 future lives',note:'a device'}},
   o:[
-   {label:"Save the living person in front of me.", react:"You weight actual, present lives far above potential ones. Here-and-now ethics.", sc:{cons:-1,head:-1,merit:-1}},
-   {label:"Choose the five future lives.", react:"You count lives-to-come almost as fully as lives-that-are. Long time horizon.", sc:{cons:2,head:2}}
+   {label:"Save the living person in front of me.", act:"Divert", ends:"side", out:"the device (5 future lives) is destroyed", react:"You weight actual, present lives far above potential ones. Here-and-now ethics.", sc:{cons:-1,head:-1,merit:-1}},
+   {label:"Choose the five future lives.", act:"Do nothing", ends:"main", out:"the living person dies", react:"You count lives-to-come almost as fully as lives-that-are. Long time horizon.", sc:{cons:2,head:2}}
   ]},
 
  {t:"The Test Repeats",
   s:"One last time: five on the main track, one on the side, a simple lever. Exactly like the very first dilemma — no twists, no faces, no stakes for you. Now that you've seen how you think… do you answer the same way you did at the start?",
+  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 strangers'}, side:{n:1,glyph:'person',label:'1 stranger'}},
   o:[
-   {label:"Pull the lever. Same as I began.", react:"Thirty dilemmas didn't shake your first instinct. That's a spine.", sc:{cons:2,action:2}},
-   {label:"Hands off. Same as I began.", react:"You end where you started — the journey confirmed, not converted, you.", sc:{cons:-2,action:-2}}
+   {label:"Pull the lever. Same as I began.", act:"Pull the lever", ends:"side", out:"the 1 dies", react:"Thirty dilemmas didn't shake your first instinct. That's a spine.", sc:{cons:2,action:2}},
+   {label:"Hands off. Same as I began.", act:"Do nothing", ends:"main", out:"the five die", react:"You end where you started — the journey confirmed, not converted, you.", sc:{cons:-2,action:-2}}
   ]}
 ];
+
+/* ============================================================
+   SVG SCENE ILLUSTRATIONS
+   Every dilemma draws a clean diagram: the trolley, both paths
+   with their occupants, a lever, and a bold arrow that shows
+   where the trolley is heading (updates when you choose).
+   ============================================================ */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* --- figure glyphs (feet sit on baseline b) --- */
+function personSVG(x,b,cls){
+  return '<g class="figure '+(cls||'')+'">'
+    +'<circle cx="'+x+'" cy="'+(b-24)+'" r="5.5"/>'
+    +'<line x1="'+x+'" y1="'+(b-18)+'" x2="'+x+'" y2="'+(b-8)+'"/>'
+    +'<line x1="'+(x-7)+'" y1="'+(b-15)+'" x2="'+(x+7)+'" y2="'+(b-15)+'"/>'
+    +'<line x1="'+x+'" y1="'+(b-8)+'" x2="'+(x-6)+'" y2="'+b+'"/>'
+    +'<line x1="'+x+'" y1="'+(b-8)+'" x2="'+(x+6)+'" y2="'+b+'"/></g>';
+}
+function animalSVG(x,b,cls){
+  return '<g class="figure '+(cls||'')+'">'
+    +'<ellipse cx="'+x+'" cy="'+(b-6)+'" rx="9" ry="5.5"/>'
+    +'<circle cx="'+(x+9)+'" cy="'+(b-9)+'" r="4"/>'
+    +'<line x1="'+(x-5)+'" y1="'+(b-2)+'" x2="'+(x-5)+'" y2="'+(b+3)+'"/>'
+    +'<line x1="'+(x+5)+'" y1="'+(b-2)+'" x2="'+(x+5)+'" y2="'+(b+3)+'"/></g>';
+}
+function bedSVG(x,b,cls){
+  return '<g class="figure '+(cls||'')+'">'
+    +'<rect x="'+(x-12)+'" y="'+(b-9)+'" width="24" height="9" rx="2"/>'
+    +'<circle cx="'+(x-7)+'" cy="'+(b-12)+'" r="3"/>'
+    +'<line x1="'+(x-12)+'" y1="'+b+'" x2="'+(x-12)+'" y2="'+(b+5)+'"/>'
+    +'<line x1="'+(x+12)+'" y1="'+b+'" x2="'+(x+12)+'" y2="'+(b+5)+'"/></g>';
+}
+function wallSVG(x,b,cls){
+  return '<g class="figure '+(cls||'')+'"><rect class="wall" x="'+(x-16)+'" y="'+(b-30)+'" width="32" height="30" rx="3"/></g>';
+}
+function glyphSVG(kind,x,b,cls){
+  if(kind==='animal') return animalSVG(x,b,cls);
+  if(kind==='bed')    return bedSVG(x,b,cls);
+  if(kind==='wall')   return wallSVG(x,b,cls);
+  if(kind==='you')    return personSVG(x,b,(cls||'')+' you');
+  return personSVG(x,b,cls);
+}
+function groupSVG(cx,b,g,hit){
+  const show=Math.min(g.n||1,5), sp=17, w=(show-1)*sp, s0=cx-w/2;
+  let out='';
+  for(let k=0;k<show;k++) out+=glyphSVG(g.glyph,s0+k*sp,b,hit?'hit doomed':'');
+  return out;
+}
+function capSVG(cx,y,text,anchor){
+  return '<text class="cap" x="'+cx+'" y="'+y+'" text-anchor="'+(anchor||'middle')+'">'+esc(text)+'</text>';
+}
+function vehicleSVG(x,y,kind){
+  if(kind==='car'){
+    return '<g class="trolley">'
+      +'<rect x="'+x+'" y="'+(y-15)+'" width="48" height="21" rx="10" fill="var(--d)" stroke="#0c0d1c" stroke-width="2"/>'
+      +'<rect x="'+(x+9)+'" y="'+(y-12)+'" width="18" height="9" rx="2" fill="#0c0d1c" opacity=".45"/>'
+      +'<circle cx="'+(x+12)+'" cy="'+(y+7)+'" r="5" fill="#0c0d1c"/>'
+      +'<circle cx="'+(x+36)+'" cy="'+(y+7)+'" r="5" fill="#0c0d1c"/></g>';
+  }
+  return '<g class="trolley">'
+    +'<rect x="'+x+'" y="'+(y-22)+'" width="52" height="30" rx="6" fill="var(--a)" stroke="#0c0d1c" stroke-width="2"/>'
+    +'<rect x="'+(x+7)+'" y="'+(y-17)+'" width="13" height="11" rx="2" fill="#12122a"/>'
+    +'<rect x="'+(x+26)+'" y="'+(y-17)+'" width="13" height="11" rx="2" fill="#12122a"/>'
+    +'<rect x="'+(x+45)+'" y="'+(y-19)+'" width="7" height="25" rx="2" fill="#7a1f1f"/>'
+    +'<circle cx="'+(x+12)+'" cy="'+(y+9)+'" r="5" fill="#0c0d1c"/>'
+    +'<circle cx="'+(x+40)+'" cy="'+(y+9)+'" r="5" fill="#0c0d1c"/></g>';
+}
+function svgWrap(inner){
+  return '<svg viewBox="0 0 460 200" role="img" aria-label="Trolley scene">'+inner+'</svg>';
+}
+
+/* --- fork: trolley on a track that forks into main (default) + side. Also handles car / risk / loop. --- */
+function sceneFork(viz,chosen){
+  const heads = chosen ? chosen.ends : viz.heads;      // where the trolley goes
+  const takesMain = (heads==='main');
+  const safe = !!(chosen && (chosen.ends==='both-safe' || chosen.ends==='none'));
+  const mDash = viz.dashed==='main' ? ' dashed' : '';
+  const sDash = viz.dashed==='side' ? ' dashed' : '';
+  const inRail  = 'M6,100 L175,100';
+  const mainRail= 'M175,100 C205,100 205,58 245,58 L452,58';
+  const sideRail= 'M175,100 C205,100 205,150 245,150 L452,150';
+  const flow = safe
+    ? 'M70,100 L175,100 C205,100 205,58 245,58 L452,58'     // everyone clears — green all the way
+    : takesMain
+      ? 'M70,100 L175,100 C205,100 205,58 245,58 L335,58'
+      : 'M70,100 L175,100 C205,100 205,150 245,150 L335,150';
+  const lev = (takesMain||safe) ? -20 : 22;
+  let s='';
+  s+='<path class="rail" d="'+inRail+'"/>';
+  s+='<path class="rail'+mDash+'" d="'+mainRail+'"/>';
+  s+='<path class="rail'+sDash+'" d="'+sideRail+'"/>';
+  s+='<path class="flow'+(safe?' safe':'')+'" d="'+flow+'"/>';
+  s+=vehicleSVG(18,100,viz.vehicle);
+  s+='<g class="lever-arm" style="transform:rotate('+lev+'deg);transform-origin:170px 100px">'
+    +'<line x1="170" y1="100" x2="170" y2="74" class="rail" stroke-width="4"/>'
+    +'<circle cx="170" cy="72" r="6" fill="var(--c)" stroke="#0c0d1c" stroke-width="2"/></g>';
+  s+='<circle cx="170" cy="100" r="3.5" fill="#8f8bc0"/>';
+  s+=groupSVG(360,58,viz.main,heads==='main');
+  s+=capSVG(360,22,viz.main.label);
+  if(viz.main.note) s+=capSVG(360,44,viz.main.note);
+  s+=groupSVG(360,150,viz.side,heads==='side');
+  s+=capSVG(360,176,viz.side.label);
+  if(viz.side.note) s+=capSVG(360,192,viz.side.note);
+  return svgWrap(s);
+}
+
+/* --- push: footbridge over a single track; a heavy figure (or two) to shove. --- */
+function scenePush(viz,chosen){
+  const heads = chosen ? chosen.ends : viz.heads;
+  const fiveHit = (heads==='main');
+  const bY=62, x1=100, x2=300;
+  const figs = viz.bridge || [{ends:'side',label:viz.side.label}];
+  const n=figs.length, sp=(x2-x1)/(n+1);
+  let bf='';
+  figs.forEach((f,idx)=>{
+    const x=x1+sp*(idx+1);
+    const fhit = (heads===f.ends) || (heads==='either');
+    bf+=personSVG(x,bY,fhit?'hit doomed':'')+capSVG(x,bY+16,f.label);
+  });
+  const flowEnd = fiveHit ? 372 : 225;
+  let s='';
+  s+='<path class="rail" d="M6,150 L452,150"/>';
+  s+='<line class="rail" x1="'+(x1-10)+'" y1="'+(bY+9)+'" x2="'+(x2+10)+'" y2="'+(bY+9)+'"/>';
+  s+='<line class="rail" x1="'+x1+'" y1="'+(bY+9)+'" x2="'+x1+'" y2="140" stroke-width="3"/>';
+  s+='<line class="rail" x1="'+x2+'" y1="'+(bY+9)+'" x2="'+x2+'" y2="140" stroke-width="3"/>';
+  s+='<path class="flow" d="M70,150 L'+flowEnd+',150"/>';
+  s+=vehicleSVG(18,150);
+  s+=bf;
+  s+=groupSVG(405,150,viz.main,fiveHit);
+  s+=capSVG(405,176,viz.main.label);
+  return svgWrap(s);
+}
+
+/* --- self: a single track toward the five, with "you" able to leap in / hold the lever. --- */
+function sceneSelf(viz,chosen){
+  const heads = chosen ? chosen.ends : viz.heads;
+  const selfHit = (heads==='self');
+  const fiveHit = (heads==='main');
+  const held = (heads==='none');                 // you held the trolley off — everyone lives
+  const flowEnd = (selfHit||held) ? 150 : 372;
+  let s='';
+  s+='<path class="rail" d="M6,120 L452,120"/>';
+  s+='<path class="flow'+(held?' safe':'')+'" d="M70,120 L'+flowEnd+',120"/>';
+  s+=vehicleSVG(18,120);
+  s+=personSVG(150,150,'you'+(selfHit?' hit doomed':''));
+  s+=capSVG(150,170,'you');
+  s+=groupSVG(370,120,viz.main,fiveHit);
+  s+=capSVG(370,140,viz.main.label);
+  return svgWrap(s);
+}
+
+/* --- ward: a hospital (no trolley) — five dying patients, one healthy visitor. --- */
+function sceneWard(viz,chosen){
+  const heads = chosen ? chosen.ends : viz.heads;
+  const fiveHit = (heads==='main');
+  const oneHit  = (heads==='side');
+  let s='';
+  s+='<rect x="18" y="40" width="424" height="138" rx="14" fill="none" stroke="#4b4f86" stroke-width="2.5"/>';
+  s+=capSVG(230,30,'A hospital — no trolley, same math');
+  s+='<line x1="18" y1="70" x2="442" y2="70" stroke="#2c2f57" stroke-width="1.5"/>';
+  s+=groupSVG(330,138,viz.main,fiveHit);
+  s+=capSVG(330,162,viz.main.label);
+  s+=personSVG(110,138,oneHit?'hit doomed':'');
+  s+=capSVG(110,162,viz.side.label);
+  s+='<text x="210" y="132" text-anchor="middle" font-size="20">➜</text>';
+  return svgWrap(s);
+}
+
+function renderScene(viz,chosen){
+  if(!viz) return '';
+  if(viz.type==='push') return scenePush(viz,chosen);
+  if(viz.type==='self') return sceneSelf(viz,chosen);
+  if(viz.type==='ward') return sceneWard(viz,chosen);
+  return sceneFork(viz,chosen);
+}
+
+/* Default-outcome banner text (what happens if you do nothing). */
+function defaultText(viz){
+  if(viz.type==='ward')
+    return {safe:false, html:'By default, <b>'+esc(viz.main.label)+'</b> die — unless you act.'};
+  if(viz.type==='self')
+    return {safe:false, html:'🚃 The trolley is bearing down on <b>'+esc(viz.main.label)+'</b>. Only you can stop it.'};
+  const vehicle = viz.vehicle==='car' ? 'car' : 'trolley';
+  const emoji = viz.vehicle==='car' ? '🚗' : '🚃';
+  const who = viz.heads==='side' ? viz.side.label : viz.main.label;
+  return {safe:false, html:emoji+' Right now the '+vehicle+' is heading for <b>'+esc(who)+'</b>. Your move.'};
+}
+/* Per-option consequence line. */
+function outcomeText(opt){
+  return {safe:!!opt.safe, html:opt.out||''};
+}
+
+/* Classic setup shown on the intro screen. */
+const HERO_VIZ = {type:'fork', heads:'main',
+  main:{n:5, glyph:'person', label:'5 people'},
+  side:{n:1, glyph:'person', label:'1 person'}};
 
 /* ---------- state ---------- */
 let i = 0;
@@ -443,11 +723,17 @@ function render(){
   $('sbody').textContent = q.s;
   $('count').textContent = (i+1)+' / '+SCEN.length;
   $('fill').style.width = ((i)/SCEN.length*100)+'%';
+  $('scene').innerHTML = renderScene(q.viz, answers[i]!=null ? q.o[answers[i]] : null);
+  const dt = defaultText(q.viz);
+  const dl = $('defaultLine'); dl.innerHTML = dt.html; dl.className = 'default-line'+(dt.safe?' safe':'');
   const box = $('opts'); box.innerHTML='';
   q.o.forEach((opt,idx)=>{
     const b=document.createElement('button');
     b.className='opt'+(answers[i]===idx?' pick':'');
-    b.innerHTML='<span class="lead">'+opt.label+'</span>';
+    const oc=outcomeText(opt);
+    b.innerHTML='<span class="lead">'+opt.label+'</span>'
+      +'<span class="opt-meta"><span class="opt-act">'+esc(opt.act||'Choose')+'</span>'
+      +'<span class="opt-outcome'+(oc.safe?' safe':'')+'">→ '+oc.html+'</span></span>';
     b.onclick=()=>choose(idx);
     box.appendChild(b);
   });
@@ -466,6 +752,7 @@ function choose(idx){
   answers[i]=idx;
   const q=SCEN[i];
   document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('scene').innerHTML = renderScene(q.viz, q.o[idx]);   // animate the trolley onto the chosen path
   const r=$('react'); r.textContent=q.o[idx].react; r.classList.remove('on'); void r.offsetWidth; r.classList.add('on');
   $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
 }
@@ -862,6 +1149,7 @@ async function downloadCard(){
 /* ---------- wire up all controls (no inline handlers) ---------- */
 function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
 function init(){
+  const hero=$('heroScene'); if(hero) hero.innerHTML=renderScene(HERO_VIZ,null);
   on('startBtn', start);
   on('backBtn', prev);
   on('next', next);
