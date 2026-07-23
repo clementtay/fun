@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Taste Test — 18 Questions, One Aesthetic</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(34px,8vw,54px);margin:6px 0 4px;line-height:1.02;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .globe{font-size:70px;margin:14px 0 4px}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+
+  /* Progress */
+  .topbar{display:flex;align-items:center;gap:12px;margin:6px 0 20px}
+  .bar{flex:1;height:9px;background:#20234a;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4);transition:width .4s ease}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:bold}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,var(--card),#191b38);border:1px solid var(--line);
+    border-radius:22px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .4s ease both}
+  .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
+  .scn-emoji{font-size:44px;margin:10px 0 2px;text-align:center}
+  .scn-title{font-size:23px;font-weight:bold;margin:6px 0 6px}
+  .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .opt{
+    text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
+    padding:15px 16px;border-radius:15px;cursor:pointer;font-size:16px;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
+  }
+  .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:16.5px}
+  .opt.pick{border-color:var(--b);background:#243b48}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+  .nextbtn{opacity:.35;pointer-events:none;transition:opacity .2s}
+  .nextbtn.ready{opacity:1;pointer-events:auto}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit}
+  .backlink:hover{color:var(--ink)}
+
+  /* Results */
+  .arche{text-align:center;padding:8px 6px 4px}
+  .arche .emoji{font-size:58px}
+  .arche h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 2px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .arche .sub{color:var(--muted);font-size:15px;margin-bottom:4px}
+  .blurb{font-size:16.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:18px;margin:16px 0}
+  .sect-h{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);
+    font-weight:bold;margin:26px 0 10px}
+  .axis{margin:14px 0}
+  .axis .lbls{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px}
+  .axis .lbls b{color:var(--ink)}
+  .axtrack{position:relative;height:12px;background:#20234a;border-radius:99px}
+  .axtrack > span{position:absolute;top:50%;transform:translate(-50%,-50%);height:20px;width:20px;border-radius:50%;
+    background:linear-gradient(90deg,#4ecdc4,#ffd166);box-shadow:0 3px 10px rgba(0,0,0,.4);border:2px solid #12122a;transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .axtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#3a3e70}
+  .axis .read{font-size:14px;color:#cfcbf3;margin-top:7px}
+  .cardlist{display:grid;gap:12px;grid-template-columns:1fr}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+  .mini h4{margin:0 0 4px;font-size:16px}
+  .mini.blind{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}
+  .mini.super{border-color:rgba(78,205,196,.35);background:rgba(78,205,196,.06)}
+  .mini.dest{border-color:rgba(166,133,255,.35);background:rgba(166,133,255,.06)}
+  .mini p{margin:0;font-size:14.5px;color:#d9d5ff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .chip{background:#23264b;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13.5px}
+  .chip b{color:var(--c)}
+  .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;text-align:center}
+  .again{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .again a{text-decoration:none}
+
+  /* Share lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(6,6,18,.86);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .lightbox.on{display:flex;animation:fade .3s ease both}
+  .lb-inner{max-width:420px;width:100%;text-align:center}
+  .lb-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin-bottom:12px}
+  #shareImg{width:100%;max-height:66vh;object-fit:contain;border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
+  .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
+  .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">What's Your Aesthetic?</div>
+      <h1>The Taste Test</h1>
+      <div class="globe">🎨</div>
+      <p class="how">Here's how it works: eighteen quick questions about what your eye <b>actually</b> reaches for — the rooms, the clothes, the art, the little objects. No right answers, just your instincts.</p>
+      <p class="tag">By the end I'll read the shape of your choices across six taste dials and hand you your aesthetic archetype — plus the styles and spaces you'd truly love.</p>
+      <button class="btn" id="startBtn">Start looking ▶</button>
+      <div class="disclaimer">Not a real personality test — it's an aesthetic toy. It reads the <em>pattern</em> of your preferences and gives you an archetype. Entertainment, with a suspicious amount of accuracy.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backlink" id="backBtn">‹ back</button>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="count" id="count">1 / 18</div>
+    </div>
+    <div class="card">
+      <div class="scn-num" id="snum">Question 01</div>
+      <div class="scn-emoji" id="semoji"></div>
+      <div class="scn-title" id="stitle"></div>
+      <div class="scn-body" id="sbody"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
+        <button class="btn nextbtn" id="next">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="arche">
+      <div class="emoji" id="rEmoji">🎨</div>
+      <h2 id="rName">Your Aesthetic Type</h2>
+      <div class="sub" id="rTagline"></div>
+    </div>
+    <div class="blurb" id="rBlurb"></div>
+
+    <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">Your Aesthetic</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
+
+    <div class="sect-h">Styles You'd Love</div>
+    <div class="cardlist"><div class="mini dest"><h4 id="rDestH">Styles &amp; spaces for you</h4><p id="rDestP"></p></div></div>
+
+    <div class="sect-h">Your Six Taste Dials</div>
+    <div id="rAxes"></div>
+
+    <div class="sect-h">Your Taste Superpower</div>
+    <div class="cardlist"><div class="mini super"><h4 id="rSuperH"></h4><p id="rSuperP"></p></div></div>
+
+    <div class="sect-h">Your Blind Spots</div>
+    <div class="cardlist" id="rBlind"></div>
+
+    <div class="sect-h">Your Taste Motto</div>
+    <div class="blurb" id="rPrinciple" style="margin-top:0"></div>
+
+    <div class="footnote" id="rConsistency"></div>
+    <div class="again">
+      <button class="btn" id="shareBtn">📸 Share my result</button>
+      <button class="btn ghost" id="restartBtn">Retake the quiz ↺</button>
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+    </div>
+    <div class="footnote">Built as a taste toy. Share your type, compare with friends, argue about it happily.</div>
+  </section>
+
+  <!-- SHARE LIGHTBOX -->
+  <div id="shareBox" class="lightbox">
+    <div class="lb-inner">
+      <div class="lb-title">Your shareable card</div>
+      <img id="shareImg" alt="Your Taste Test result card">
+      <div class="lb-hint" id="lbHint">Tap “Share” to send it, “Save” to download, or long-press the image.</div>
+      <div class="lb-btns">
+        <button class="btn" id="lbShare">📤 Share</button>
+        <button class="btn ghost" id="lbSave">⬇ Save</button>
+        <button class="backlink" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SIX TASTE DIALS (each answer nudges some of them)
+   density: Minimal & spare (−)    ↔  Maximal & rich (+)
+   era    : Classic & timeless (−) ↔  Novel & trend-led (+)
+   energy : Cosy & calm (−)        ↔  Bold & dramatic (+)
+   palette: Muted & neutral (−)    ↔  Vivid & colourful (+)
+   order  : Ordered & neat (−)     ↔  Organic & eclectic (+)
+   axis   : Function first (−)     ↔  Form first (+)
+   ============================================================ */
+
+const SCEN = [
+ {t:"Step into your dream living room. What's the first thing you notice?", emoji:"🛋️",
+  s:"Same room, same budget-ish. Which version makes you exhale?",
+  o:[
+   {act:"Bare walls, one perfect chair, everything else tucked away.", sc:{density:-2,order:-1}},
+   {act:"Shelves crammed with books, plants, and little collected things.", sc:{density:2,order:1}},
+   {act:"A statement sofa in a colour you can hear from across the room.", sc:{energy:2,palette:2}},
+   {act:"Warm textures, soft lamps, a pile of cosy throws.", sc:{energy:-2,palette:-1}}
+  ]},
+
+ {t:"Open your dream wardrobe.", emoji:"👗",
+  s:"What's hanging in there?",
+  o:[
+   {act:"A capsule of five things, all in the same quiet neutrals.", sc:{density:-2,palette:-1}},
+   {act:"Every colour and pattern, clashing gloriously.", sc:{palette:2,order:1,density:1}},
+   {act:"Timeless classics — a trench, a white shirt, good denim.", sc:{era:-2}},
+   {act:"Whatever just walked the runway this season.", sc:{era:2,energy:1}}
+  ]},
+
+ {t:"Pick the coffee shop you'd linger in all afternoon.", emoji:"☕",
+  s:"Which one draws your eye through the window?",
+  o:[
+   {act:"Bare concrete, one steel bench, single-origin only.", sc:{density:-2,palette:-1}},
+   {act:"Mismatched vintage armchairs and walls covered in art.", sc:{order:2,density:1,era:-1}},
+   {act:"Neon signs, loud music, buzzing with energy.", sc:{energy:2,palette:1}},
+   {act:"Warm wood, candlelight, quiet corners.", sc:{energy:-2,axis:1}}
+  ]},
+
+ {t:"Choose a phone case.", emoji:"📱",
+  s:"The one you'd actually carry around.",
+  o:[
+   {act:"No case at all — the bare phone is the design.", sc:{density:-2,axis:1}},
+   {act:"A clear case. It protects everything, that's the point.", sc:{axis:-2}},
+   {act:"A wild pattern or a colour you can spot in any bag.", sc:{palette:2,energy:1}},
+   {act:"Something understated in soft leather.", sc:{era:-1,palette:-1}}
+  ]},
+
+ {t:"What goes on the wall above the sofa?", emoji:"🖼️",
+  s:"You get one wall. Fill it.",
+  o:[
+   {act:"One large minimalist print, floating in white space.", sc:{density:-2,palette:-1}},
+   {act:"A dense gallery wall, frame to frame to frame.", sc:{density:2,order:1}},
+   {act:"A classic oil painting, the kind that ages well.", sc:{era:-2,axis:1}},
+   {act:"A bold abstract in colours that shouldn't work but do.", sc:{palette:2,energy:1}}
+  ]},
+
+ {t:"Your ideal listening room, as a look.", emoji:"🎧",
+  s:"If your music taste were a space, it'd be…",
+  o:[
+   {act:"Ambient and spare — a single piano in a still room.", sc:{density:-1,energy:-2}},
+   {act:"Maximal and orchestral — walls of glorious sound.", sc:{density:1,energy:2}},
+   {act:"The classics on vinyl, warm and timeless.", sc:{era:-2}},
+   {act:"Whatever's charting and new right now.", sc:{era:2,palette:1}}
+  ]},
+
+ {t:"You're wrapping a gift. What did you pick?", emoji:"🎁",
+  s:"For someone whose taste you admire.",
+  o:[
+   {act:"Something beautifully useless but gorgeous to look at.", sc:{axis:2}},
+   {act:"Something genuinely practical they'll use every day.", sc:{axis:-2}},
+   {act:"A handmade, one-of-a-kind object with a story.", sc:{order:1,era:-1}},
+   {act:"The buzzy new thing everyone's after this year.", sc:{era:2,palette:1}}
+  ]},
+
+ {t:"A website loads. Which one makes you stay?", emoji:"💻",
+  s:"First impression, purely on the look.",
+  o:[
+   {act:"Oceans of white space, one line of huge type.", sc:{density:-2,axis:1}},
+   {act:"Rich, busy, packed with detail and motion.", sc:{density:2,energy:1}},
+   {act:"Clean and functional — it just gets the job done.", sc:{axis:-2,density:-1}},
+   {act:"Playful, colourful, and a little unexpected.", sc:{palette:2,energy:1}}
+  ]},
+
+ {t:"Set the table.", emoji:"🍽️",
+  s:"Which plates come out of the cupboard?",
+  o:[
+   {act:"Plain white, perfectly matched, all identical.", sc:{order:-2,palette:-1}},
+   {act:"A jumble of hand-thrown ceramics, none matching.", sc:{order:2,era:-1}},
+   {act:"Bold patterned plates in bright glazes.", sc:{palette:2,density:1}},
+   {act:"Sleek matte black with clean modern lines.", sc:{era:1,axis:1,palette:-1}}
+  ]},
+
+ {t:"Design your desk.", emoji:"🪑",
+  s:"Where you'd actually want to sit and work.",
+  o:[
+   {act:"A clear surface, one notebook, nothing else.", sc:{density:-2,order:-1}},
+   {act:"Organised chaos — everything out and within reach.", sc:{density:1,order:2}},
+   {act:"A few curated objects arranged just so.", sc:{order:-2,axis:1}},
+   {act:"Purely functional: monitor, keyboard, done.", sc:{axis:-2}}
+  ]},
+
+ {t:"Pick a palette you'd paint your life in.", emoji:"🎨",
+  s:"Which set of swatches feels like home?",
+  o:[
+   {act:"Whites, greys, and warm beige.", sc:{palette:-2,energy:-1}},
+   {act:"Deep jewel tones, rich and saturated.", sc:{palette:1,energy:1,density:1}},
+   {act:"Bright primaries, bold and loud.", sc:{palette:2,energy:2}},
+   {act:"Soft, muted pastels.", sc:{palette:-1,energy:-1}}
+  ]},
+
+ {t:"Choose your typography.", emoji:"🔤",
+  s:"The lettering that feels most like you.",
+  o:[
+   {act:"A clean sans-serif, nothing fancy.", sc:{density:-1,axis:-1}},
+   {act:"An elegant classic serif.", sc:{era:-2}},
+   {act:"A quirky display font with real personality.", sc:{energy:1,order:1}},
+   {act:"Bold, huge, and impossible to ignore.", sc:{energy:2,density:1}}
+  ]},
+
+ {t:"Throw on a weekend outfit.", emoji:"🧥",
+  s:"No occasion. Just you.",
+  o:[
+   {act:"All black, sharp and simple.", sc:{density:-1,palette:-2}},
+   {act:"Cosy oversized knits and soft layers.", sc:{energy:-2,axis:-1}},
+   {act:"One statement piece that turns heads.", sc:{energy:2,palette:1}},
+   {act:"Vintage finds, thrifted and freely mixed.", sc:{order:2,era:-1}}
+  ]},
+
+ {t:"You buy one object for the shelf.", emoji:"🕯️",
+  s:"Purely because you liked the look of it.",
+  o:[
+   {act:"A single sculptural vase, left empty on purpose.", sc:{density:-2,axis:1}},
+   {act:"A shelf of quirky collected curios.", sc:{density:2,order:2}},
+   {act:"A sleek new smart-home gadget.", sc:{era:2,axis:-1}},
+   {act:"A warm woven basket or a soft throw.", sc:{energy:-1,era:-1}}
+  ]},
+
+ {t:"How does your space come together?", emoji:"🏠",
+  s:"Be honest about the process.",
+  o:[
+   {act:"Planned to the millimetre, everything intentional.", sc:{order:-2,axis:1}},
+   {act:"Collected slowly, evolving, a happy jumble.", sc:{order:2}},
+   {act:"Matching sets, coordinated, calmly harmonious.", sc:{order:-1,palette:-1}},
+   {act:"Bold experiments — it's always changing.", sc:{order:1,energy:1,era:1}}
+  ]},
+
+ {t:"Do something with the walls.", emoji:"🧱",
+  s:"Blank canvas. What happens?",
+  o:[
+   {act:"Crisp gallery white, and leave it.", sc:{density:-2,palette:-1}},
+   {act:"A dramatic dark feature wall.", sc:{energy:2,palette:-1}},
+   {act:"Bold patterned wallpaper, floor to ceiling.", sc:{palette:2,density:1}},
+   {act:"Exposed brick, raw and textured.", sc:{era:-1,axis:-1}}
+  ]},
+
+ {t:"One last print for the hallway.", emoji:"🖌️",
+  s:"Which one goes up?",
+  o:[
+   {act:"A single minimalist line drawing.", sc:{density:-2,palette:-1}},
+   {act:"A vintage travel or film poster.", sc:{era:-2,palette:1}},
+   {act:"A neon-bright pop-art piece.", sc:{palette:2,energy:2}},
+   {act:"A quiet botanical study.", sc:{energy:-1,palette:-1}}
+  ]},
+
+ {t:"Sum up your whole design philosophy.", emoji:"✨",
+  s:"If you had to put it on a sign.",
+  o:[
+   {act:"If it's not useful, it goes. Function first.", sc:{axis:-2}},
+   {act:"Beauty is reason enough. Form first.", sc:{axis:2}},
+   {act:"Less, but better. Restraint over excess.", sc:{density:-2,order:-1}},
+   {act:"More is more. Fill the room with joy.", sc:{density:2,energy:1,palette:1}}
+  ]}
+];
+
+/* ---------- scoring ---------- */
+const AXES = [
+  {k:'density', negL:'Minimal & spare',    posL:'Maximal & rich',    neg:'Minimalist', pos:'Maximalist'},
+  {k:'era',     negL:'Classic & timeless', posL:'Novel & trend-led', neg:'Classicist', pos:'Trendsetter'},
+  {k:'energy',  negL:'Cosy & calm',        posL:'Bold & dramatic',   neg:'Cosy soul',  pos:'Bold soul'},
+  {k:'palette', negL:'Muted & neutral',    posL:'Vivid & colourful', neg:'Neutralist', pos:'Colourist'},
+  {k:'order',   negL:'Ordered & neat',     posL:'Organic & eclectic',neg:'Curator',    pos:'Free spirit'},
+  {k:'axis',    negL:'Function first',     posL:'Form first',        neg:'Pragmatist', pos:'Aesthete'}
+];
+
+function computeMax(){
+  const max={};
+  AXES.forEach(a=>max[a.k]=0);
+  SCEN.forEach(q=>{
+    AXES.forEach(a=>{
+      let m=0;
+      q.o.forEach(opt=>{ if(opt.sc[a.k]!==undefined) m=Math.max(m,Math.abs(opt.sc[a.k])); });
+      max[a.k]+=m;
+    });
+  });
+  return max;
+}
+
+let RESULT=null;
+let CURRENT_ARCH=null;
+function diagnose(){
+  const tot={}, max=computeMax();
+  AXES.forEach(a=>tot[a.k]=0);
+  answers.forEach((ai,qi)=>{
+    const sc=SCEN[qi].o[ai].sc;
+    for(const k in sc) tot[k]+=sc[k];
+  });
+  // normalized -1..1 and 0..100
+  const norm={}, pct={};
+  AXES.forEach(a=>{ const n = max[a.k]?tot[a.k]/max[a.k]:0; norm[a.k]=n; pct[a.k]=Math.round((n+1)/2*100); });
+  RESULT={tot,norm,pct};
+  renderResults();
+}
+
+/* ---------- archetype selection ---------- */
+function archetype(n){
+  const A=[];
+  A.push({key:'minimalist', score:(-n.density)*1.2 + (-n.palette)*0.35 + n.axis*0.15, emoji:'🤍', name:'The Minimalist',
+    tag:'Less, but so much better',
+    dest:"Pared-back, breathable spaces: Scandinavian interiors, Japanese-inspired rooms, a capsule wardrobe, gallery-white walls, and one perfect object per shelf.",
+    blurb:"Your eye finds peace in emptiness. Where others see a bare room and want to fill it, you see a bare room and feel your shoulders drop. Every object you keep has earned its place; everything else has quietly left. It's not about having little — it's about wanting only the right things, and giving them room to breathe. You understand the hardest design trick of all: knowing what to leave out."});
+  A.push({key:'maximalist', score:n.density*1.2 + n.palette*0.4 + n.energy*0.3, emoji:'🎪', name:'The Maximalist',
+    tag:'More is more, and then a little more',
+    dest:"Rich, layered worlds: gallery walls, pattern on pattern, deep saturated rooms, crammed bookshelves, and interiors that reward a long, slow look.",
+    blurb:"You believe a room should be a full sentence, not a whisper. Pattern on pattern, colour on colour, shelves that tell a hundred stories — that's not clutter to you, that's life, lived visibly. You collect, you layer, you fill, and somehow it all coheres because it all came from you. Restraint is for other people. Where they see too much, you see barely enough, and the joy of it is written all over the walls."});
+  A.push({key:'classicist', score:(-n.era)*1.2 + (-n.energy)*0.2 + n.axis*0.15, emoji:'🏛️', name:'The Classicist',
+    tag:'Timeless beats trendy, every time',
+    dest:"Enduring, well-made things: a good trench, oil paintings, antique wood, tailored lines, and the kind of interiors that looked right fifty years ago and still do.",
+    blurb:"You have no interest in what's new for the sake of new. Your taste is anchored in the things that have already survived every trend — the clean tailoring, the well-made object, the palette that never dates. You'd rather own one thing that lasts than ten that don't, and you can spot cheap novelty from across a room. There's a quiet confidence to it: you're not chasing the moment, because you're playing a longer game."});
+  A.push({key:'trendsetter', score:n.era*1.2 + n.palette*0.3 + n.energy*0.2, emoji:'🚀', name:'The Trendsetter',
+    tag:'You saw it first',
+    dest:"The leading edge: new designers, of-the-moment palettes, statement pieces, bold experiments, and whatever the feed is about to fall in love with.",
+    blurb:"Your radar is always tuned to what's next. You spot the palette, the shape, the designer before everyone else catches on — and by the time they do, you've already moved on. It's not restlessness so much as appetite: you love the thrill of the new and the fun of being early. Your taste is a living thing, always updating, and the world usually turns out to agree with you a season or two later."});
+  A.push({key:'cosy', score:(-n.energy)*1.15 + (-n.palette)*0.4 + (-n.density)*0.15, emoji:'🕯️', name:'The Cosy Soul',
+    tag:'Warmth over wow, always',
+    dest:"Soft, inviting nests: candlelight, warm wood, wool throws, muted earthy tones, reading nooks, and rooms that hug you the moment you walk in.",
+    blurb:"You don't want a space that impresses — you want one that holds you. Soft light, warm textures, gentle colours, a chair you sink into: that's your whole design language, and it's a wise one. While others chase the bold and the dramatic, you've quietly perfected the art of the room you never want to leave. Comfort, for you, isn't the opposite of good taste — it's the entire point of it."});
+  A.push({key:'colourist', score:n.palette*1.2 + n.energy*0.4, emoji:'🌈', name:'The Colourist',
+    tag:'Life’s too short for beige',
+    dest:"Joyful, saturated spaces: bold walls, bright textiles, clashing-that-works palettes, pop-art prints, and any object with the courage to be loud.",
+    blurb:"Colour is your first language. Where others reach for the safe neutral, you reach for the one that makes the whole room sing — and you're rarely wrong. You mix shades that shouldn't get along and dare them to, and somehow they do. It's not chaos; it's confidence. You believe a space should lift your mood the second you enter it, and you've never once regretted choosing the brighter option."});
+  A.push({key:'eclectic', score:n.order*1.2 + n.density*0.3 + (-n.era)*0.25, emoji:'🧩', name:'The Eclectic',
+    tag:'Rules are for other people’s rooms',
+    dest:"Layered, collected worlds: flea-market finds, mismatched ceramics, vintage mixed with new, gallery walls, and spaces that clearly grew rather than got installed.",
+    blurb:"Your taste refuses to be filed under one style. A mid-century chair next to a flea-market lamp next to something your friend made — it shouldn't work, and yet in your hands it does. You collect by instinct, not by scheme, and your spaces feel lived-in and alive because nothing arrived matching. It's a harder trick than it looks: you're not following a rulebook, you're trusting an eye, and the eye is good."});
+  A.push({key:'balanced', score:0.3 - variance(n), emoji:'👁️', name:'The Balanced Eye',
+    tag:'A little of everything, on purpose',
+    dest:"Flexible, well-judged spaces that flex to the moment: a bit minimal, a bit warm, a considered mix of old and new that always somehow lands right.",
+    blurb:"You refuse to be pinned to one aesthetic. Some days you crave clean and spare, some days rich and warm; sometimes you'll splash out on colour, sometimes you'll keep it quiet. You read each room, each outfit, each object on its own terms and take it as it comes — which makes you the rare person whose taste travels anywhere. Your gift is range: you can find the good in a minimalist loft or a maximalist parlour, and make either one feel right."});
+  A.sort((x,y)=>y.score-x.score);
+  return A[0];
+}
+function variance(n){ // how far from center overall (0 = perfectly balanced)
+  const vals=AXES.map(a=>Math.abs(n[a.k]));
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* ---------- narrative helpers ---------- */
+function axisRead(a,n){
+  const v=n[a.k]; const s=Math.abs(v);
+  const strong = s>0.55;
+  const mild = s>0.2;
+  if(!mild) return "You sit right in the middle here — it swings with the mood, and you like it that way.";
+  const lean = strong ? "strongly" : "moderately";
+  const map={
+    density:{pos:"You want richness — layers, detail, and a space full of things to look at.",neg:"You crave spareness; empty space is the luxury and the point."},
+    era:{pos:"You're drawn to the new — fresh designers, current palettes, what's next.",neg:"You favour the timeless; you trust the things that have already outlasted the trends."},
+    energy:{pos:"You go bold — drama, contrast, and a look that makes an entrance.",neg:"You seek calm — soft light, warm textures, and rooms that soothe."},
+    palette:{pos:"You reach for colour; the brighter and more saturated, the happier your eye.",neg:"You lean into muted neutrals; restraint in colour reads as elegance to you."},
+    order:{pos:"You like the collected and the mismatched; a happy jumble feels alive.",neg:"You like things ordered and curated; harmony and neatness settle you."},
+    axis:{pos:"Beauty leads for you — if it looks right, that's reason enough.",neg:"Function leads for you — a thing has to work before it earns its looks."}
+  };
+  return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
+}
+
+/* Brief "what your taste is like" synthesis for the results page. */
+function tasteProfile(n){
+  const P = {
+    density:{pos:"want spaces rich with layers, detail, and things to discover",
+             neg:"want spaces spare and breathable, with room around everything"},
+    era:{pos:"are pulled toward the new, the fresh, and the just-arrived",
+         neg:"are drawn to the timeless things that never date"},
+    energy:{pos:"reach for the bold, the dramatic, and the look that makes an entrance",
+            neg:"reach for warmth, calm, and a look that soothes"},
+    palette:{pos:"live for colour and the joy of a saturated, singing palette",
+             neg:"find elegance in muted neutrals and quiet tones"},
+    order:{pos:"love the collected, the mismatched, the happily eclectic",
+           neg:"love the ordered, the curated, the calmly harmonious"},
+    axis:{pos:"let beauty lead — if it looks right, that's reason enough",
+          neg:"let function lead — a thing has to work before it earns its looks"}
+  };
+  const CLOSE = {
+    density:{pos:"Give you an empty shelf and you'll make it a story.",neg:"Give you a blank wall and you'll leave it beautifully blank."},
+    era:{pos:"You're always a season ahead.",neg:"You're playing a longer game than the trend cycle."},
+    energy:{pos:"You'd rather a room made a statement than kept quiet.",neg:"You'd rather a room held you than impressed anyone."},
+    palette:{pos:"You've never once regretted the brighter choice.",neg:"You know restraint reads as confidence."},
+    order:{pos:"Nothing you own arrived matching, and that's the charm.",neg:"Everything you own knows its place."},
+    axis:{pos:"You choose with your eye first.",neg:"You choose with your hands first."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "Your taste is hard to pin down — and that's the charm. Across eighteen questions you leaned every which way, balancing spare with rich, classic with new, calm with bold. In short: you're an all-rounder who reads each room on its own terms and takes it exactly as it comes.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "Your taste is one where "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
+function blindSpots(n){
+  const out=[];
+  if(n.density<-0.4) out.push(["Spare to the point of sterile","Your restraint is beautiful — but a room stripped of everything personal can tip from serene into cold. A single warm, imperfect object often does more for a space than another clean surface."]);
+  if(n.density>0.4) out.push(["When rich becomes cluttered","You layer with real skill — but even the best maximalist room needs a pocket of quiet to let the eye rest. Not every surface has to be a story; some can just breathe."]);
+  if(n.era<-0.4) out.push(["Timeless can tip into stuck","Trusting the classics is wise — but the occasional new idea keeps a look alive rather than embalmed. A single current piece can make everything timeless around it feel intentional, not dated."]);
+  if(n.era>0.45) out.push(["Chasing the new too hard","You spot trends early — but a home built entirely on what's hot risks feeling like a showroom you'll be sick of by spring. A few enduring anchors give the fresh stuff something to play against."]);
+  if(n.energy>0.45) out.push(["All drama, no rest","Bold is your gift — but a space that's shouting everywhere gives the eye nowhere to land. Even the most dramatic room needs one calm corner to make the drama read."]);
+  if(n.energy<-0.45) out.push(["Cosy can turn timid","Your warmth is genuinely soothing — but always playing it soft can mean never letting a space surprise you. One bold gesture in a calm room doesn't break the peace; it wakes it up."]);
+  if(n.palette>0.45) out.push(["Colour with no anchor","Your palette sings — but too many loud notes at once and nothing gets to be the star. A neutral or two isn't a compromise; it's the frame that makes your colours pop."]);
+  if(n.palette<-0.45) out.push(["The safety of beige","Muted tones are quietly elegant — but a space with no colour at all can read as unfinished rather than restrained. One brave hue is often all a neutral room is missing."]);
+  if(n.axis<-0.45) out.push(["Function over feeling","You choose what works — admirable, but the most useful room in the world can still leave you cold. Sometimes the object that just makes you happy to look at is worth the shelf it takes."]);
+  if(n.order<-0.45) out.push(["Too perfectly curated","Your eye for order is enviable — but a space with everything in its exact place can feel more staged than lived-in. A little happy imperfection is what makes a room feel like someone actually loves it."]);
+  if(out.length===0) out.push(["The comfortable middle","You balance every impulse, which makes your taste travel anywhere — but it can also mean never fully leaning into what you'd love most. Sometimes it's worth committing to one aesthetic and going all the way."]);
+  return out.slice(0,3);
+}
+
+function superpower(n){
+  const c=[];
+  c.push([Math.abs(n.density), n.density>0?["The layering eye","You can pile pattern on colour on texture and make it sing where anyone else would make a mess. Your rooms reward a long look and never run out of things to notice."]:["The art of subtraction","You know exactly what to leave out — the rarest skill in design. Where others add and add, you edit until only the right things remain, and the calm it creates is unmistakable."]]);
+  c.push([Math.abs(n.era), n.era>0?["Trend radar","You see what's coming before it arrives. You spot the shape, the shade, the name early — and the world usually catches up to your eye a season or two later."]:["A timeless instinct","You can tell the lasting from the fleeting at a glance. Nothing you choose dates, because you never chased the moment in the first place."]]);
+  c.push([Math.abs(n.palette), n.palette>0?["A fearless colour sense","You mix shades that shouldn't work and dare them to — and they do. You bring rooms and outfits to life with a confidence most people never find."]:["The elegance of restraint","You make neutral look rich, not boring. Your muted palettes read as considered and calm, and that quiet confidence is its own kind of statement."]]);
+  c.push([Math.abs(n.energy), n.energy>0?["A flair for drama","You know how to make a space make an entrance. One bold gesture from you does what a dozen safe choices never could."]:null]);
+  c.push([Math.abs(n.axis), n.axis<0?["Taste that actually works","You never let beauty override use — your spaces look good and live well. That marriage of form and function is harder to pull off than either alone."]:null]);
+  const best=c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0])[0];
+  return best[1];
+}
+
+function principle(arch,n){
+  const P={
+    minimalist:"“Perfection is achieved when there is nothing left to take away.”",
+    maximalist:"“More is more. If you love it, put it on the wall.”",
+    classicist:"“Buy once, buy well, and let it outlast the trends.”",
+    trendsetter:"“By the time it's everywhere, I'm already onto the next thing.”",
+    cosy:"“A room should hold you, not just impress you.”",
+    colourist:"“Life's too short for beige — choose the brighter one.”",
+    eclectic:"“Nothing matches, and that's exactly the point.”",
+    balanced:"“The best aesthetic is the one you read room by room.”"
+  };
+  return P[arch.key]||P.balanced;
+}
+
+/* ---------- state ---------- */
+let i = 0;
+const answers = new Array(SCEN.length).fill(null); // stores chosen option index
+
+const $ = id => document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+
+function start(){ i=0; render(); show('quiz'); }
+function restart(){ answers.fill(null); i=0; show('intro'); }
+
+function render(){
+  const q = SCEN[i];
+  $('snum').textContent = 'Question ' + String(i+1).padStart(2,'0');
+  $('semoji').textContent = q.emoji || '';
+  $('stitle').textContent = q.t;
+  $('sbody').textContent = q.s;
+  $('count').textContent = (i+1)+' / '+SCEN.length;
+  $('fill').style.width = ((i)/SCEN.length*100)+'%';
+  const box = $('opts'); box.innerHTML='';
+  q.o.forEach((opt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(answers[i]===idx?' pick':'');
+    b.innerHTML='<span class="opt-do">'+esc(opt.act)+'</span>';
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  if(answers[i]!==null){
+    $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+  } else {
+    $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
+  }
+  $('next').textContent = (i===SCEN.length-1)?'See my result ▶':'Next ▶';
+}
+
+function choose(idx){
+  answers[i]=idx;
+  document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+}
+
+function next(){
+  if(answers[i]===null) return;
+  if(i===SCEN.length-1){ diagnose(); show('results'); return; }
+  i++; render();
+}
+function prev(){
+  if(i===0){ show('intro'); return; }
+  i--; render();
+}
+
+/* ---------- render results ---------- */
+function renderResults(){
+  const {norm,pct}=RESULT;
+  const arch=archetype(norm);
+  CURRENT_ARCH=arch;
+  $('rEmoji').textContent=arch.emoji;
+  $('rName').textContent=arch.name;
+  $('rTagline').textContent=arch.tag;
+  $('rBlurb').textContent=arch.blurb;
+  $('rProfile').textContent=tasteProfile(norm);
+  $('rDestP').textContent=arch.dest;
+
+  // chips: dominant traits
+  const chips=$('rChips'); chips.innerHTML='';
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ranked.forEach(r=>{
+    const label = r.v>=0 ? r.a.pos : r.a.neg;
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML='<b>'+label+'</b>';
+    chips.appendChild(el);
+  });
+
+  // axes
+  const box=$('rAxes'); box.innerHTML='';
+  AXES.forEach(a=>{
+    const p=pct[a.k];
+    const d=document.createElement('div'); d.className='axis';
+    d.innerHTML =
+      '<div class="lbls"><span>'+a.negL+'</span><span>'+a.posL+'</span></div>'+
+      '<div class="axtrack"><span style="left:0%"></span><div class="mid"></div></div>'+
+      '<div class="read">'+axisRead(a,norm)+'</div>';
+    box.appendChild(d);
+    // animate knob
+    requestAnimationFrame(()=>{ d.querySelector('.axtrack > span').style.left = p+'%'; });
+  });
+
+  // superpower
+  const sp=superpower(norm);
+  $('rSuperH').textContent=sp[0]; $('rSuperP').textContent=sp[1];
+
+  // blind spots
+  const bl=$('rBlind'); bl.innerHTML='';
+  blindSpots(norm).forEach(b=>{
+    const d=document.createElement('div'); d.className='mini blind';
+    d.innerHTML='<h4>'+b[0]+'</h4><p>'+b[1]+'</p>'; bl.appendChild(d);
+  });
+
+  // principle
+  $('rPrinciple').textContent=principle(arch,norm);
+
+  // versatility note
+  const v=variance(norm);
+  $('rConsistency').textContent = v>0.4
+    ? "You have a strongly defined aesthetic — you know exactly the look you love, and you commit to it all the way."
+    : "You're a versatile eye — your taste flexes with the room, which means almost any space can be made to feel right.";
+}
+
+/* ============================================================
+   SHAREABLE RESULT CARD  (rendered on a canvas)
+   ============================================================ */
+let CARD_BLOB=null;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' '); const lines=[]; let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawShareCard(){
+  const W=1080, H=1350;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const {norm,pct}=RESULT, arch=CURRENT_ARCH;
+
+  // background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232653'); bg.addColorStop(.45,'#131427'); bg.addColorStop(1,'#0c0d1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // subtle glow
+  const glow=ctx.createRadialGradient(W/2,180,60,W/2,180,700);
+  glow.addColorStop(0,'rgba(120,110,220,.28)'); glow.addColorStop(1,'rgba(120,110,220,0)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,W,340);
+  // border frame
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,24,24,W-48,H-48,36); ctx.stroke();
+
+  ctx.textAlign='center';
+
+  // kicker
+  ctx.fillStyle='#ffd166'; ctx.font='bold 26px "Trebuchet MS",Arial';
+  ctx.fillText('T H E   T A S T E   T E S T', W/2, 92);
+
+  // emoji
+  ctx.font='120px "Segoe UI Emoji","Apple Color Emoji",serif';
+  ctx.fillText(arch.emoji, W/2, 232);
+
+  // archetype name (gradient)
+  ctx.font='bold 74px "Trebuchet MS",Arial';
+  const nameLines=wrapLines(ctx,arch.name,W-160);
+  let ny=310;
+  nameLines.forEach(ln=>{
+    const tw=ctx.measureText(ln).width;
+    const g=ctx.createLinearGradient(W/2-tw/2,0,W/2+tw/2,0);
+    g.addColorStop(0,'#ffd166'); g.addColorStop(.5,'#ff6b6b'); g.addColorStop(1,'#a685ff');
+    ctx.fillStyle=g; ctx.fillText(ln,W/2,ny); ny+=80;
+  });
+  // tagline
+  ctx.fillStyle='#b9b4e6'; ctx.font='italic 30px "Trebuchet MS",Arial';
+  const tagLines=wrapLines(ctx,'“'+arch.tag+'”',W-200);
+  tagLines.forEach(ln=>{ ctx.fillText(ln, W/2, ny+8); ny+=42; });
+  let y=ny+40;
+
+  // signature trait chips (top 3 axes)
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ctx.font='bold 30px "Trebuchet MS",Arial';
+  const labels=ranked.map(r=> r.v>=0 ? r.a.pos : r.a.neg);
+  const padX=28, gap=18, chipH=64;
+  const widths=labels.map(l=>ctx.measureText(l).width+padX*2);
+  const totalW=widths.reduce((s,w)=>s+w,0)+gap*(labels.length-1);
+  let cx=(W-totalW)/2;
+  const chipCols=['#ff6b6b','#4ecdc4','#a685ff'];
+  labels.forEach((l,idx)=>{
+    const w=widths[idx];
+    ctx.fillStyle='rgba(255,255,255,.05)';
+    roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.fill();
+    ctx.strokeStyle=chipCols[idx]; ctx.lineWidth=2; roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.stroke();
+    ctx.fillStyle='#f4f1ff'; ctx.textAlign='center';
+    ctx.fillText(l, cx+w/2, y+chipH/2+11);
+    cx+=w+gap;
+  });
+  y+=chipH+70;
+
+  // "MY TASTE PROFILE" heading
+  ctx.fillStyle='#ffd166'; ctx.font='bold 24px "Trebuchet MS",Arial';
+  ctx.fillText('M Y   T A S T E   P R O F I L E', W/2, y);
+  y+=44;
+
+  // six dials
+  const dialL=90, dialR=W-90, dialW=dialR-dialL;
+  const rowH=66;
+  ctx.textBaseline='alphabetic';
+  AXES.forEach(a=>{
+    ctx.font='500 22px "Trebuchet MS",Arial';
+    ctx.textAlign='left'; ctx.fillStyle='#8f8bc0';
+    ctx.fillText(a.negL, dialL, y);
+    ctx.textAlign='right';
+    ctx.fillText(a.posL, dialR, y);
+    // track
+    const ty=y+22;
+    ctx.fillStyle='#22254a';
+    roundRect(ctx,dialL,ty,dialW,12,6); ctx.fill();
+    // mid tick
+    ctx.fillStyle='#3a3e70'; ctx.fillRect(dialL+dialW/2-1,ty-3,2,18);
+    // knob
+    const kx=dialL + dialW*(pct[a.k]/100);
+    const kg=ctx.createLinearGradient(kx-14,0,kx+14,0);
+    kg.addColorStop(0,'#4ecdc4'); kg.addColorStop(1,'#ffd166');
+    ctx.fillStyle=kg;
+    ctx.beginPath(); ctx.arc(kx,ty+6,14,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0c0d1c'; ctx.lineWidth=3; ctx.stroke();
+    y+=rowH;
+  });
+
+  y+=6;
+  // motto quote box
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const quote=principle(arch,norm);
+  ctx.font='italic 30px "Trebuchet MS",Arial';
+  const qLines=wrapLines(ctx,quote,W-220);
+  const boxH=qLines.length*44+56;
+  ctx.fillStyle='rgba(255,255,255,.04)';
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.stroke();
+  ctx.fillStyle='#efeaff';
+  let qy=y+52;
+  qLines.forEach(ln=>{ ctx.fillText(ln,W/2,qy); qy+=44; });
+  y+=boxH+56;
+
+  // footer
+  ctx.fillStyle='#7d79ad'; ctx.font='22px "Trebuchet MS",Arial';
+  ctx.fillText('18 questions · 6 taste dials · a taste toy', W/2, H-46);
+
+  return cv;
+}
+
+function openShare(){
+  if(!RESULT||!CURRENT_ARCH) return;
+  const cv=drawShareCard();
+  $('shareImg').src=cv.toDataURL('image/png');
+  cv.toBlob(b=>{ CARD_BLOB=b; }, 'image/png');
+  // hide native share button if unsupported
+  $('lbShare').style.display = (navigator.share||navigator.canShare) ? '' : 'none';
+  $('shareBox').classList.add('on');
+}
+function closeShare(){ $('shareBox').classList.remove('on'); }
+
+function ensureBlob(){
+  return new Promise(res=>{
+    if(CARD_BLOB) return res(CARD_BLOB);
+    drawShareCard().toBlob(b=>{ CARD_BLOB=b; res(b); }, 'image/png');
+  });
+}
+
+async function nativeShare(){
+  const blob=await ensureBlob();
+  const file=new File([blob],'taste-test-result.png',{type:'image/png'});
+  const text='I got “'+CURRENT_ARCH.name+'” on The Taste Test.';
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'My Taste Test result', text});
+      return;
+    }
+    if(navigator.share){ await navigator.share({title:'My Taste Test result', text}); return; }
+  }catch(e){ /* user cancelled or blocked — fall through */ }
+  downloadCard();
+}
+
+async function downloadCard(){
+  const blob=await ensureBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='taste-test-result.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  $('lbHint').textContent='Saved! If nothing downloaded, long-press the image above to save it.';
+}
+
+/* ---------- wire up all controls (no inline handlers) ---------- */
+function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
+function init(){
+  on('startBtn', start);
+  on('backBtn', prev);
+  on('next', next);
+  on('shareBtn', openShare);
+  on('restartBtn', restart);
+  on('lbShare', nativeShare);
+  on('lbSave', downloadCard);
+  on('lbClose', closeShare);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+</script>
+</body>
+</html>
