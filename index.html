@@ -105,16 +105,10 @@
     transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
   }
   .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
-  .opt .lead{font-weight:bold;color:#fff;display:block}
-  .opt-meta{display:flex;align-items:center;gap:9px;margin-top:9px;flex-wrap:wrap}
-  .opt-act{font-size:12px;font-weight:bold;letter-spacing:.4px;text-transform:uppercase;
-    color:var(--c);background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.3);
-    border-radius:99px;padding:3px 11px;white-space:nowrap}
-  .opt-outcome{font-size:13.5px;color:var(--muted)}
-  .opt-outcome b{color:#ffb3b3;font-weight:bold}
-  .opt-outcome.safe b{color:var(--good)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:17px}
+  .opt-outcome{display:block;margin-top:7px;font-size:14px;color:#ffb3b3}
+  .opt-outcome.safe{color:var(--good)}
   .opt.pick{border-color:var(--b);background:#243b48}
-  .opt.pick .opt-act{color:#eafcfa;background:rgba(78,205,196,.16);border-color:rgba(78,205,196,.4)}
   @media (prefers-reduced-motion: reduce){
     .scene .lever-arm,.scene .flow{transition:none}
     .scene .doomed,.scene .flow{animation:none}
@@ -200,7 +194,6 @@
       <div class="default-line" id="defaultLine"></div>
       <div class="scn-body" id="sbody"></div>
       <div class="opts" id="opts"></div>
-      <div class="react" id="react"></div>
       <div class="nav">
         <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
         <button class="btn nextbtn" id="next">Next ▶</button>
@@ -218,6 +211,9 @@
     <div class="blurb" id="rBlurb"></div>
 
     <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">In Principle, You're…</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
 
     <div class="sect-h">Your Seven Moral Dials</div>
     <div id="rAxes"></div>
@@ -293,11 +289,11 @@ const SCEN = [
   ]},
 
  {t:"Blood and Water",
-  s:"Five strangers on the main track. One person on the side track. The one person is your mother. The lever works the same as always.",
-  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 strangers'}, side:{n:1,glyph:'person',label:'your mother'}},
+  s:"The trolley is heading straight for your mother, tied to the main track. Pull the lever and it diverts onto a side track — where five strangers are tied down instead. Doing nothing lets it run her over.",
+  viz:{type:'fork', heads:'main', main:{n:1,glyph:'person',label:'your mother'}, side:{n:5,glyph:'person',label:'5 strangers'}},
   o:[
-   {label:"Save the five. Strangers are people too.", act:"Pull the lever", ends:"side", out:"your mother dies", react:"Impartial to the point of pain. You'd grieve, but you'd pull.", sc:{partial:-2,cons:1}},
-   {label:"Save my mother. Every time.", act:"Do nothing", ends:"main", out:"the 5 strangers die", react:"The universe can keep its abstractions. You chose your person.", sc:{partial:2,cons:-1,head:-1}}
+   {label:"Save the five. Strangers are people too.", act:"Do nothing", ends:"main", out:"your mother dies", react:"Impartial to the point of pain. You'd grieve, but you'd pull.", sc:{partial:-2,cons:1}},
+   {label:"Save my mother. Every time.", act:"Pull the lever", ends:"side", out:"the 5 strangers die", react:"The universe can keep its abstractions. You chose your person.", sc:{partial:2,cons:-1,head:-1}}
   ]},
 
  {t:"The Value of Years",
@@ -398,11 +394,11 @@ const SCEN = [
   ]},
 
  {t:"No One Will Ever Know",
-  s:"One person you deeply love on one track; five strangers on the other. Crucially: the choice is completely private. No cameras, no witnesses, no one to ever judge you. Only you will carry it.",
-  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 strangers'}, side:{n:1,glyph:'person',label:'your beloved'}},
+  s:"The one you deeply love is tied to the main track, and the trolley is bearing down on them. Pull the lever and it diverts onto five strangers instead. Crucially: the choice is completely private. No cameras, no witnesses, no one to ever judge you. Only you will carry it.",
+  viz:{type:'fork', heads:'main', main:{n:1,glyph:'person',label:'your beloved'}, side:{n:5,glyph:'person',label:'5 strangers'}},
   o:[
-   {label:"Save my beloved. Secrecy changes nothing.", act:"Do nothing", ends:"main", out:"the 5 strangers die", react:"Your loyalty isn't performance — it's the same in the dark.", sc:{partial:2,head:-1}},
-   {label:"Save the five, and live with the private grief.", act:"Pull the lever", ends:"side", out:"your beloved dies", react:"Even unseen, the numbers bind you. Principle without an audience.", sc:{partial:-2,cons:1,sacr:1}}
+   {label:"Save my beloved. Secrecy changes nothing.", act:"Pull the lever", ends:"side", out:"the 5 strangers die", react:"Your loyalty isn't performance — it's the same in the dark.", sc:{partial:2,head:-1}},
+   {label:"Save the five, and live with the private grief.", act:"Do nothing", ends:"main", out:"your beloved dies", react:"Even unseen, the numbers bind you. Principle without an audience.", sc:{partial:-2,cons:1,sacr:1}}
   ]},
 
  {t:"The Self-Driving Car",
@@ -446,19 +442,19 @@ const SCEN = [
   ]},
 
  {t:"A Name and a Face",
-  s:"Track A: five anonymous silhouettes, no details, just five. Track B: one person you've been told all about — her name is Mara, she paints, she has a dog named Biscuit. The vivid one, or the faceless five?",
-  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 (anonymous)'}, side:{n:1,glyph:'person',label:'Mara'}},
+  s:"The trolley is bearing down on Mara — you've been told all about her: she paints, she has a dog named Biscuit. Pull the lever and it diverts onto five anonymous silhouettes instead, no details, just five. The vivid one, or the faceless five?",
+  viz:{type:'fork', heads:'main', main:{n:1,glyph:'person',label:'Mara'}, side:{n:5,glyph:'person',label:'5 (anonymous)'}},
   o:[
-   {label:"Save the five. A story shouldn't outweigh a sum.", act:"Pull the lever", ends:"side", out:"Mara dies", react:"You resist the identifiable-victim pull and stay loyal to the numbers.", sc:{cons:2,head:1,partial:-1}},
-   {label:"I can't be the one to end Mara.", act:"Do nothing", ends:"main", out:"the faceless five die", react:"Vividness moves you — the concrete person outweighs the abstract many.", sc:{cons:-2,head:-2,partial:1}}
+   {label:"Save the five. A story shouldn't outweigh a sum.", act:"Do nothing", ends:"main", out:"Mara dies", react:"You resist the identifiable-victim pull and stay loyal to the numbers.", sc:{cons:2,head:1,partial:-1}},
+   {label:"I can't be the one to end Mara.", act:"Pull the lever", ends:"side", out:"the faceless five die", react:"Vividness moves you — the concrete person outweighs the abstract many.", sc:{cons:-2,head:-2,partial:1}}
   ]},
 
  {t:"Near and Far",
-  s:"Track A: five strangers in a distant country you'll never visit. Track B: one person — your next-door neighbor, whose face you know. Distance is just distance… or is it?",
-  viz:{type:'fork', heads:'main', main:{n:5,glyph:'person',label:'5 (far away)'}, side:{n:1,glyph:'person',label:'your neighbor'}},
+  s:"The trolley is bearing down on your next-door neighbor, whose face you know. Pull the lever and it diverts onto five strangers in a distant country you'll never visit. Distance is just distance… or is it?",
+  viz:{type:'fork', heads:'main', main:{n:1,glyph:'person',label:'your neighbor'}, side:{n:5,glyph:'person',label:'5 (far away)'}},
   o:[
-   {label:"Save the five, distance be damned.", act:"Pull the lever", ends:"side", out:"your neighbor dies", react:"Your moral circle is wide and flat — a life's worth doesn't fade with miles.", sc:{partial:-2,cons:1}},
-   {label:"Save my neighbor. Proximity is a real bond.", act:"Do nothing", ends:"main", out:"the distant five die", react:"Nearness creates obligation for you. The circle has a warm center.", sc:{partial:2,head:-1}}
+   {label:"Save the five, distance be damned.", act:"Do nothing", ends:"main", out:"your neighbor dies", react:"Your moral circle is wide and flat — a life's worth doesn't fade with miles.", sc:{partial:-2,cons:1}},
+   {label:"Save my neighbor. Proximity is a real bond.", act:"Pull the lever", ends:"side", out:"the distant five die", react:"Nearness creates obligation for you. The circle has a warm center.", sc:{partial:2,head:-1}}
   ]},
 
  {t:"No Good Option",
@@ -731,18 +727,14 @@ function render(){
     const b=document.createElement('button');
     b.className='opt'+(answers[i]===idx?' pick':'');
     const oc=outcomeText(opt);
-    b.innerHTML='<span class="lead">'+opt.label+'</span>'
-      +'<span class="opt-meta"><span class="opt-act">'+esc(opt.act||'Choose')+'</span>'
-      +'<span class="opt-outcome'+(oc.safe?' safe':'')+'">→ '+oc.html+'</span></span>';
+    b.innerHTML='<span class="opt-do">'+esc(opt.act||'Choose')+'</span>'
+      +'<span class="opt-outcome'+(oc.safe?' safe':'')+'">→ '+oc.html+'</span>';
     b.onclick=()=>choose(idx);
     box.appendChild(b);
   });
-  const r=$('react');
   if(answers[i]!==null){
-    r.textContent=q.o[answers[i]].react; r.classList.add('on');
     $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
   } else {
-    r.classList.remove('on'); r.textContent='';
     $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
   }
   $('next').textContent = (i===SCEN.length-1)?'See my diagnosis ▶':'Next ▶';
@@ -753,7 +745,6 @@ function choose(idx){
   const q=SCEN[i];
   document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
   $('scene').innerHTML = renderScene(q.viz, q.o[idx]);   // animate the trolley onto the chosen path
-  const r=$('react'); r.textContent=q.o[idx].react; r.classList.remove('on'); void r.offsetWidth; r.classList.add('on');
   $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
 }
 
@@ -863,6 +854,46 @@ function axisRead(a,n){
   return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
 }
 
+/* Brief "what you're probably like, in principle" synthesis for the results page. */
+function moralProfile(n){
+  const P = {
+    cons:{pos:"weigh outcomes above rules — the result is what settles a moral question for you",
+          neg:"hold some rules as lines that a good result can't buy back"},
+    action:{pos:"would rather act than let events run their course",
+            neg:"are wary of making yourself the author of harm, even to prevent more of it"},
+    partial:{pos:"put the people close to you ahead of strangers",
+             neg:"treat a stranger's life as weighing almost the same as a loved one's"},
+    head:{pos:"reason through the numbers even when your gut objects",
+          neg:"trust what you feel for the person in front of you over the arithmetic"},
+    instr:{pos:"will use a person as a means when the stakes are high enough",
+           neg:"refuse to treat a person as a tool, whatever the payoff"},
+    sacr:{pos:"would put your own safety or life on the line before a stranger's",
+          neg:"treat your own survival as a line you won't dig beneath"},
+    merit:{pos:"weigh who 'deserves' saving — innocence, worth, years left",
+           neg:"refuse to rank one life as worth more than another"}
+  };
+  const CLOSE = {
+    cons:{pos:"Faced with a hard call, you'll do the math and live with it.",neg:"Faced with a hard call, you ask what's right to do, not only what turns out best."},
+    action:{pos:"When something can be done, you'll be the one to do it.",neg:"When in doubt, you'd rather not be the hand that makes it happen."},
+    partial:{pos:"When it comes down to it, you choose your people.",neg:"When it comes down to it, you try to be fair to everyone equally."},
+    head:{pos:"You keep your head when it's hardest to.",neg:"You lead with your heart, and you don't apologise for it."},
+    instr:{pos:"You'll cross lines others won't if the payoff is big enough.",neg:"There are lines you simply won't cross, whatever the ledger says."},
+    sacr:{pos:"And you'd spend yourself before spending someone else.",neg:"And you keep your own wellbeing firmly in the count."},
+    merit:{pos:"You read each life by its context, not just the headcount.",neg:"You give every life an equal claim, full stop."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "…hard to pin down, and that's the point. Across thirty dilemmas you shifted with the situation — sometimes counting lives, sometimes keeping your hands clean, sometimes following your heart. In principle you're a pragmatist: the right answer depends on the case, and you'd mean it.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "In principle, "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
 function blindSpots(n){
   const out=[];
   if(n.head>0.35) out.push(["The empathy blind spot","Your calculations are clean, but real people aren't spreadsheet cells. The danger isn't being wrong — it's being so right on paper that you stop feeling the weight of what you're deciding."]);
@@ -913,6 +944,7 @@ function renderResults(){
   $('rName').textContent=arch.name;
   $('rTagline').textContent=arch.tag;
   $('rBlurb').textContent=arch.blurb;
+  $('rProfile').textContent=moralProfile(norm);
 
   // chips: dominant traits
   const chips=$('rChips'); chips.innerHTML='';
