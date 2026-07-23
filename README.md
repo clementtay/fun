@@ -17,6 +17,13 @@ curiosity — and reveal your holiday archetype (Beach Lounger, City & Culture
 Explorer, Adrenaline Adventurer, and more), plus where you'd thrive. Lives in
 [`holiday.html`](holiday.html).
 
+## The Enneagram Navigator
+
+Pick your Enneagram type and wing to get concrete guidance for what happens
+when you're stressed — and how to actually unwind — based on your type's
+stress (disintegration) and growth (integration) arrows, coloured by the
+chosen wing. Lives in [`enneagram.html`](enneagram.html).
+
 ### GitHub Pages
 
 The site deploys automatically via the workflow in
