@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attachment Navigator — How You Bond</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Hub link */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+
+  /* Intro */
+  .hero{text-align:center;padding:26px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(32px,7.5vw,52px);margin:8px 0 4px;line-height:1.04;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:12px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:16px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+  .disclaimer a{color:var(--c)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+  .mt{margin-top:22px}
+
+  /* Section heads */
+  .step-h{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin:4px 0 4px}
+  .step-title{font-size:24px;font-weight:bold;margin:0 0 4px}
+  .step-sub{color:var(--muted);font-size:15px;margin:0 0 18px}
+
+  /* Style grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:380px){.grid{grid-template-columns:1fr}}
+  .type-card{
+    text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;
+    padding:16px 15px;cursor:pointer;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+    display:flex;flex-direction:column;gap:2px;min-height:118px;
+  }
+  .type-card:hover,.type-card:focus-visible{border-color:#5b60a8;background:#23264b;transform:translateY(-2px);outline:none}
+  .type-num{font-size:30px;font-weight:bold;line-height:1;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .type-name{font-weight:bold;font-size:15.5px;margin-top:6px}
+  .type-desc{font-size:13px;color:var(--muted);line-height:1.35}
+
+  /* Context choices */
+  .ctx-card{
+    display:block;width:100%;text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;padding:18px 18px;
+    cursor:pointer;font-family:inherit;margin-bottom:14px;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+  }
+  .ctx-card:hover,.ctx-card:focus-visible{border-color:var(--b);background:#20304a;transform:translateY(-1px);outline:none}
+  .ctx-label{font-weight:bold;font-size:20px;color:#fff}
+  .ctx-tag{font-size:14px;color:var(--c);font-weight:bold;margin-left:8px}
+  .ctx-note{display:block;margin-top:7px;font-size:14.5px;color:#d9d5ff;line-height:1.4}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px;flex-wrap:wrap}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit;padding:6px 2px}
+  .backlink:hover,.backlink:focus-visible{color:var(--ink);outline:none}
+
+  /* Results */
+  .res-head{text-align:center;padding:6px 6px 2px}
+  .res-head .badge{display:inline-block;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--c);font-weight:bold}
+  .res-head h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 4px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .res-head .sub{color:var(--muted);font-size:15.5px;margin:0 auto;max-width:520px}
+  .ctx-blurb{font-size:15.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:15px 17px;margin:16px 0 6px}
+
+  .panel{border-radius:20px;padding:18px 18px 20px;margin:18px 0;border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--card),#191b38);box-shadow:0 16px 40px rgba(0,0,0,.3);
+    animation:pop .4s ease both}
+  .panel.stress{border-color:rgba(255,107,107,.32)}
+  .panel.unwind{border-color:rgba(78,205,196,.32)}
+  .panel-h{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+  .panel-h .ic{font-size:26px;line-height:1}
+  .panel-h h3{margin:0;font-size:21px}
+  .panel.stress .panel-h h3{color:#ffb3b3}
+  .panel.unwind .panel-h h3{color:#bff6ee}
+  .lead-line{font-size:14px;color:#d9d5ff;margin:2px 0 12px}
+  .lead-line b{color:var(--ink)}
+  .sub-h{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:bold;margin:16px 0 8px}
+  .panel.stress .sub-h{color:var(--a)}
+  .panel.unwind .sub-h{color:var(--b)}
+  ul.tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+  ul.tips li{position:relative;padding-left:24px;font-size:15.5px;color:#e9e6ff;line-height:1.45}
+  ul.tips li::before{content:"";position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:50%}
+  .panel.stress ul.tips li::before{background:var(--a)}
+  .panel.unwind ul.tips li::before{background:var(--b)}
+  .tweak{margin-top:14px;font-size:14.5px;line-height:1.45;border-radius:12px;padding:11px 14px}
+  .panel.stress .tweak{background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.26);color:#ffe0e0}
+  .panel.unwind .tweak{background:rgba(78,205,196,.10);border:1px solid rgba(78,205,196,.26);color:#d6fff9}
+  .tweak b{color:#fff}
+
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin:22px auto 0;max-width:540px;line-height:1.5}
+  .footlinks{text-align:center;margin-top:10px}
+  @media (prefers-reduced-motion: reduce){
+    .screen,.panel,.type-card,.ctx-card,.btn{animation:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">Attachment Navigator</div>
+      <h1>How You Bond</h1>
+      <p class="tag">Pick the attachment style that feels most like you, and get concrete guidance for
+        how you show up when a bond gets triggered — and the moves that carry you toward secure.</p>
+      <p class="how">Attachment style is the pattern your nervous system learned for <b>closeness</b>:
+        how you reach out, protect yourself, and repair. This tool turns that pattern into things you
+        can actually notice and <b>do</b> — when you're triggered, and on the way back to steady.</p>
+      <div class="center mt">
+        <button class="btn" id="startBtn">Choose my style →</button>
+      </div>
+      <p class="disclaimer">This is a reflective lens for self-understanding — not a diagnosis, and not
+        therapy or clinical advice. Curious for a plain-English primer first? The
+        <a href="https://www.attachmentproject.com/attachment-style-quiz/" target="_blank" rel="noopener">Attachment Project's free explainer</a>
+        is a friendly place to start. Attachment style can shift over time with safety and awareness.</p>
+    </div>
+  </section>
+
+  <!-- STYLE PICKER -->
+  <section id="type" class="screen">
+    <div class="step-h">Step 1 of 2</div>
+    <p class="step-title">What's your style?</p>
+    <p class="step-sub">Pick the attachment pattern you most recognise in yourself.</p>
+    <div class="grid" id="typeGrid" role="list"></div>
+    <div class="nav">
+      <button class="backlink" id="typeBack">← Back</button>
+    </div>
+  </section>
+
+  <!-- CONTEXT PICKER -->
+  <section id="context" class="screen">
+    <div class="step-h">Step 2 of 2</div>
+    <p class="step-title" id="ctxTitle">In which relationship?</p>
+    <p class="step-sub">The same style shows up a little differently depending on the bond. Pick the one you want guidance for.</p>
+    <div id="ctxList"></div>
+    <div class="nav">
+      <button class="backlink" id="ctxBack">← Pick a different style</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="res-head">
+      <span class="badge" id="resBadge"></span>
+      <h2 id="resTitle"></h2>
+      <p class="sub" id="resSub"></p>
+    </div>
+    <div class="ctx-blurb" id="resCtxBlurb"></div>
+
+    <div class="panel stress">
+      <div class="panel-h"><span class="ic">🌩️</span><h3>When you're triggered</h3></div>
+      <p class="lead-line" id="stressLead"></p>
+      <div class="sub-h">Signs you're activated</div>
+      <ul class="tips" id="stressSigns"></ul>
+      <div class="sub-h">Steadying moves</div>
+      <ul class="tips" id="stressDo"></ul>
+      <div class="tweak" id="stressTweak"></div>
+    </div>
+
+    <div class="panel unwind">
+      <div class="panel-h"><span class="ic">🌿</span><h3>Toward secure</h3></div>
+      <p class="lead-line" id="growthLead"></p>
+      <div class="sub-h">Growth moves</div>
+      <ul class="tips" id="unwindGrowth"></ul>
+      <div class="sub-h">What helps</div>
+      <ul class="tips" id="unwindDo"></ul>
+      <div class="tweak" id="unwindTweak"></div>
+    </div>
+
+    <p class="footnote" id="resFoot"></p>
+    <div class="footlinks nav" style="justify-content:center">
+      <button class="btn ghost" id="againBtn">Pick a different style</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- Data model: 4 attachment styles, each with two panels and two relationship contexts ---------- */
+const TYPES = [
+  {
+    n:1, name:"Secure", desc:"Comfortable with closeness and independence; trusts, repairs, and communicates",
+    stressSigns:[
+      "A rupture stings, but you don't spiral into panic or shutdown",
+      "You feel the wobble and can usually name it rather than act it out",
+      "Under real strain — or with an insecure partner — old fears can flicker back"
+    ],
+    stressDo:[
+      "Say what you feel and what you need plainly, and early",
+      "Give the benefit of the doubt while still checking the facts",
+      "Stay in contact and repair rather than protesting or withdrawing"
+    ],
+    unwindGrowth:[
+      "Keep tending the bond instead of taking safety for granted",
+      "Model repair — be the one who goes first after a rupture",
+      "Notice if a particular person tips you toward anxious or avoidant"
+    ],
+    unwindDo:[
+      "Regular, low-drama check-ins that keep the connection current",
+      "Extending your steadiness to people still learning to trust",
+      "Resting in the relationship without needing to earn your place"
+    ],
+    wings:{
+      a:{label:"In romance", tag:"partners & dating",
+         note:"With a partner you offer steady closeness and can weather conflict without it threatening the bond.",
+         stressTweak:"Even secure, a distant partner can stir old doubts — stay curious and ask rather than assume the worst.",
+         unwindTweak:"Keep dating the person you're with; small, regular tending prevents big ruptures."},
+      b:{label:"In friendships", tag:"close friends",
+         note:"As a friend you're dependable and easy — present without being clingy or distant.",
+         stressTweak:"You may under-react to a friend drifting — a warm check-in beats quietly waiting it out.",
+         unwindTweak:"Be the friend who names things kindly and repairs first; it gives others permission to do the same."}
+    }
+  },
+  {
+    n:2, name:"Anxious", desc:"Craves closeness and reassurance; fears abandonment and reads for signs of distance",
+    stressSigns:[
+      "You scan for signs they're pulling away and read into small cues",
+      "Protest behaviour kicks in: texting more, seeking reassurance, keeping score",
+      "Your nervous system floods — you can't settle until you reconnect"
+    ],
+    stressDo:[
+      "Name the feeling to yourself first: 'I feel abandoned right now'",
+      "Ride out the first wave — soothe your body before you reach for them",
+      "Ask for reassurance directly and once, without testing or hinting"
+    ],
+    unwindGrowth:[
+      "Build a life and identity that isn't propped up by one person",
+      "Trust that distance isn't the same thing as abandonment",
+      "Let yourself receive care without bracing for it to be withdrawn"
+    ],
+    unwindDo:[
+      "Self-soothing practices that regulate you without their input",
+      "Friendships, work, and interests that are fully your own",
+      "Naming your own worth on the days no one is reassuring you"
+    ],
+    wings:{
+      a:{label:"In romance", tag:"partners & dating",
+         note:"In romance your fear of abandonment runs hottest and protest behaviour peaks.",
+         stressTweak:"Pause before the third text and self-soothe first — the urgency is the wave, not the truth.",
+         unwindTweak:"A full life outside the relationship is your best anchor; keep your own world alive and busy."},
+      b:{label:"In friendships", tag:"close friends",
+         note:"In friendships you invest deeply and can feel unchosen when a friend gets busy.",
+         stressTweak:"You may over-invest in one person — spread your closeness across a few so no single bond carries it all.",
+         unwindTweak:"Trust that a quiet friend is still your friend; absence isn't rejection."}
+    }
+  },
+  {
+    n:3, name:"Avoidant", desc:"Prizes independence; downplays needs and pulls back when things get close",
+    stressSigns:[
+      "You feel crowded and crave space the moment things get close",
+      "You go cool, get busy, or start finding flaws to justify the distance",
+      "You tell yourself you don't need anyone — and half-believe it"
+    ],
+    stressDo:[
+      "Notice the urge to withdraw and name it instead of just acting on it",
+      "Take space with a return time, not a silent disappearance",
+      "Stay for one more honest sentence before you retreat"
+    ],
+    unwindGrowth:[
+      "Let small needs be known before they harden into resentment",
+      "Practice staying present through a hard conversation",
+      "Treat interdependence as a strength, not a threat to your freedom"
+    ],
+    unwindDo:[
+      "Naming one real feeling out loud to someone you trust",
+      "Leaning on someone for something small, on purpose",
+      "Reconnecting after you've taken your space, rather than ghosting"
+    ],
+    wings:{
+      a:{label:"In romance", tag:"partners & dating",
+         note:"In romance, closeness triggers your need for space and your instinct to find flaws.",
+         stressTweak:"When you want to flee, take space with a return time — a pause, not a wall.",
+         unwindTweak:"Share one small need or feeling before it quietly builds into distance."},
+      b:{label:"In friendships", tag:"close friends",
+         note:"In friendships you keep things light and can let closer bonds quietly lapse.",
+         stressTweak:"You may let friendships fade when they ask for more — answer the message today.",
+         unwindTweak:"Let a friend in on something real; depth is built by staying, not by performing fine."}
+    }
+  },
+  {
+    n:4, name:"Disorganized", desc:"Wants closeness and fears it; swings between reaching out and retreating",
+    stressSigns:[
+      "You crave connection, then panic and push it away once you have it",
+      "Push-pull: reaching out, going cold, then feeling ashamed of both",
+      "Old alarm bells fire — closeness itself can feel unsafe"
+    ],
+    stressDo:[
+      "Slow everything down — you don't have to act on the first impulse",
+      "Name both truths at once: 'I want this AND I'm scared of it'",
+      "Ground your body before deciding to reach out or pull back"
+    ],
+    unwindGrowth:[
+      "Build safety in small, predictable, repeated steps",
+      "Stay with a steady person long enough to update the old story",
+      "Separate the people in front of you from the ones who first hurt you"
+    ],
+    unwindDo:[
+      "Consistency and routine that teach your body it's safe",
+      "One trustworthy person you practice simply staying with",
+      "Support — a therapist or a steady friend — as you rewire the pattern"
+    ],
+    wings:{
+      a:{label:"In romance", tag:"partners & dating",
+         note:"In romance the push-pull is strongest — you reach for closeness, then fear it.",
+         stressTweak:"Slow the pace and name both the wanting and the fear; you don't have to resolve them today.",
+         unwindTweak:"A patient, consistent partner helps rewrite the old story — let them stay long enough to matter."},
+      b:{label:"In friendships", tag:"close friends",
+         note:"In friendships you may test people, then withdraw when they get close.",
+         stressTweak:"When you want to vanish, tell them what's happening instead — 'I go quiet when I'm overwhelmed.'",
+         unwindTweak:"Steady, low-stakes friendships are a great practice ground for feeling safe."}
+    }
+  }
+];
+
+const byN = n => TYPES.find(t => t.n === n);
+
+let sel = { type:null, ctx:null }; // ctx: 'a' | 'b'
+
+/* ---------- Small utilities ---------- */
+const $ = id => document.getElementById(id);
+function on(id, fn){ const el = $(id); if(el) el.addEventListener('click', fn); }
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+  window.scrollTo({ top:0, behavior:'auto' });
+}
+function ul(el, items){
+  el.innerHTML = '';
+  items.forEach(t => { const li = document.createElement('li'); li.textContent = t; el.appendChild(li); });
+}
+
+/* ---------- Build style grid ---------- */
+function buildTypes(){
+  const grid = $('typeGrid');
+  grid.innerHTML = '';
+  TYPES.forEach(t => {
+    const b = document.createElement('button');
+    b.className = 'type-card';
+    b.setAttribute('role','listitem');
+    b.setAttribute('aria-label', t.name + ' attachment style. ' + t.desc);
+    b.innerHTML =
+      '<span class="type-num">' + t.n + '</span>' +
+      '<span class="type-name">' + t.name + '</span>' +
+      '<span class="type-desc">' + t.desc + '</span>';
+    b.addEventListener('click', () => { sel.type = t.n; sel.ctx = null; buildContext(); show('context'); });
+    grid.appendChild(b);
+  });
+}
+
+/* ---------- Build relationship-context choices for selected style ---------- */
+function buildContext(){
+  const t = byN(sel.type);
+  $('ctxTitle').textContent = t.name + ' — in which relationship?';
+  const list = $('ctxList');
+  list.innerHTML = '';
+  ['a','b'].forEach(key => {
+    const w = t.wings[key];
+    const b = document.createElement('button');
+    b.className = 'ctx-card';
+    b.setAttribute('aria-label', w.label + ', ' + w.tag + '. ' + w.note);
+    b.innerHTML =
+      '<span class="ctx-label">' + w.label + '</span>' +
+      '<span class="ctx-tag">' + w.tag + '</span>' +
+      '<span class="ctx-note">' + w.note + '</span>';
+    b.addEventListener('click', () => { sel.ctx = key; renderResults(); show('results'); });
+    list.appendChild(b);
+  });
+}
+
+/* ---------- Render results ---------- */
+function renderResults(){
+  const t = byN(sel.type);
+  const w = t.wings[sel.ctx];
+
+  $('resBadge').textContent = 'Your result';
+  $('resTitle').textContent = t.name + ' — ' + w.label;
+  $('resSub').textContent = t.desc;
+  $('resCtxBlurb').textContent = w.note;
+
+  $('stressLead').innerHTML =
+    'When a bond feels threatened, this is how <b>' + t.name.toLowerCase() + '</b> attachment tends to show up — and what settles it.';
+  ul($('stressSigns'), t.stressSigns);
+  ul($('stressDo'), t.stressDo);
+  $('stressTweak').innerHTML = '<b>' + w.label + ':</b> ' + w.stressTweak;
+
+  $('growthLead').innerHTML =
+    'Secure attachment is built, not born. These are the repeatable moves that grow it over time.';
+  ul($('unwindGrowth'), t.unwindGrowth);
+  ul($('unwindDo'), t.unwindDo);
+  $('unwindTweak').innerHTML = '<b>' + w.label + ':</b> ' + w.unwindTweak;
+
+  $('resFoot').textContent =
+    'This is a reflective lens on how you bond, not a fixed label. Attachment style shifts with safety, ' +
+    'awareness, and steady relationships — most people move toward secure with practice.';
+}
+
+/* ---------- Wire up ---------- */
+function init(){
+  buildTypes();
+  on('startBtn', () => show('type'));
+  on('typeBack', () => show('intro'));
+  on('ctxBack', () => show('type'));
+  on('againBtn', () => show('type'));
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
