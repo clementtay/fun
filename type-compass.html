@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>Type Compass — 16-Type Stress &amp; Growth Guide</title>
 <style>
   :root{
@@ -60,9 +61,10 @@
   .step-sub{color:var(--muted);font-size:15px;margin:0 0 18px}
 
   /* Type grid */
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  @media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media (max-width:380px){.grid{grid-template-columns:1fr}}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media (min-width:620px){.grid{grid-template-columns:repeat(4,1fr)}}
+  .grid-sub{grid-column:1/-1;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin:12px 2px 0;padding-top:10px;border-top:1px solid var(--line)}
+  .grid-sub:first-child{border-top:0;padding-top:0;margin-top:0}
   .type-card{
     text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
     border:1px solid var(--line);color:var(--ink);border-radius:18px;
@@ -163,7 +165,7 @@
     <div class="step-h">Step 1 of 2</div>
     <p class="step-title">What's your type?</p>
     <p class="step-sub">Pick the four-letter code you most identify with.</p>
-    <div class="grid" id="typeGrid" role="list"></div>
+    <div class="grid" id="typeGrid"></div>
     <div class="nav">
       <button class="backlink" id="typeBack">← Back</button>
     </div>
@@ -211,6 +213,7 @@
 
     <p class="footnote" id="resFoot"></p>
     <div class="footlinks nav" style="justify-content:center">
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
       <button class="btn ghost" id="againBtn">Pick a different type / identity</button>
     </div>
   </section>
@@ -739,17 +742,28 @@ function ul(el, items){
 function buildTypes(){
   const grid = $('typeGrid');
   grid.innerHTML = '';
-  TYPES.forEach(t => {
-    const b = document.createElement('button');
-    b.className = 'type-card';
-    b.setAttribute('role','listitem');
-    b.setAttribute('aria-label', t.code + ', ' + t.name + '. ' + t.desc);
-    b.innerHTML =
-      '<span class="type-num">' + t.code + '</span>' +
-      '<span class="type-name">' + t.name + '</span>' +
-      '<span class="type-desc">' + t.desc + '</span>';
-    b.addEventListener('click', () => { sel.type = t.code; sel.variant = null; buildWings(); show('wing'); });
-    grid.appendChild(b);
+  const groups = [
+    {label:'Analysts',  test:c => c[1]==='N' && c[2]==='T'},
+    {label:'Diplomats', test:c => c[1]==='N' && c[2]==='F'},
+    {label:'Sentinels', test:c => c[1]==='S' && c[3]==='J'},
+    {label:'Explorers', test:c => c[1]==='S' && c[3]==='P'}
+  ];
+  groups.forEach(g => {
+    const h = document.createElement('div');
+    h.className = 'grid-sub';
+    h.textContent = g.label;
+    grid.appendChild(h);
+    TYPES.filter(t => g.test(t.code)).forEach(t => {
+      const b = document.createElement('button');
+      b.className = 'type-card';
+      b.setAttribute('aria-label', t.code + ', ' + t.name + '. ' + t.desc);
+      b.innerHTML =
+        '<span class="type-num">' + t.code + '</span>' +
+        '<span class="type-name">' + t.name + '</span>' +
+        '<span class="type-desc">' + t.desc + '</span>';
+      b.addEventListener('click', () => { sel.type = t.code; sel.variant = null; buildWings(); show('wing'); });
+      grid.appendChild(b);
+    });
   });
 }
 
@@ -810,6 +824,15 @@ function init(){
   on('againBtn', () => show('type'));
 }
 document.addEventListener('DOMContentLoaded', init);
+
+/* keyboard: number keys pick a card on the current screen, Enter starts */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); show('type');} return; }
+  if(scr.id==='results')return;
+  if(/^[1-9]$/.test(e.key)){ var cards=scr.querySelectorAll('.type-card,.wing-card,.ctx-card'); var c=cards[+e.key-1]; if(c){e.preventDefault(); c.click();} }
+});
 </script>
 </body>
 </html>

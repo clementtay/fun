@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>The Conflict Style Quiz — 18 Questions, One Way You Fight</title>
 <style>
   :root{
@@ -123,6 +124,8 @@
     box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
   .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
   .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.opt:focus-visible,.btn:focus-visible,.backlink:focus-visible,.nextbtn:focus-visible{outline:2px solid var(--b);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -435,30 +438,39 @@ function archetype(n){
   const A=[];
   A.push({key:'competitor', score:n.assert*1.0 + n.goal*0.9 + n.approach*0.5 + n.temp*0.2, emoji:'🥊', name:'The Competitor',
     tag:'You came to win, and you usually do',
+    blurb:"When something matters, you don't dance around it — you state your case, hold your ground, and push for the outcome you believe in. People always know exactly where you stand, and in a room full of hedging, that clarity is a rare gift. You'd rather have the hard conversation now than watch a bad decision slide past unchallenged.",
     dest:"Your style shines when speed and clarity matter — a negotiation, a crisis, a moment when someone has to say the hard thing and mean it. Where it costs you: relationships that need tending, not winning. Not every disagreement is a scoreboard. Ask more often whether being right is worth being alone in the room."});
   A.push({key:'collaborator', score:n.approach*0.8 + n.assert*0.45 + (-n.goal)*0.5 + (-n.temp)*0.35, emoji:'🤝', name:'The Collaborator',
     tag:'You go straight at the problem, not the person',
+    blurb:"You treat conflict as a puzzle two people solve together, not a war one of them has to win. You'll dig past the stated position to the real need underneath, and you're patient enough to find the answer that leaves everyone whole. Disagreement doesn't rattle you — you see it as raw material for a better outcome than either side walked in with.",
     dest:"Your style shines on problems worth solving properly — where both sides have something real at stake and there's time to dig for the answer that actually works for everyone. Where it costs you: not everything deserves a summit. Some conflicts are small, or not yours, and grinding for the perfect resolution can exhaust the very people you're trying to include."});
   A.push({key:'compromiser', score:(-n.ground)*1.1 + n.assert*0.2 + (-n.temp)*0.2, emoji:'⚖️', name:'The Compromiser',
     tag:'Meet in the middle, shake on it, move on',
+    blurb:"You're the one who finds the deal. When two sides are dug in, you look for the trade that lets everyone walk away with something and keeps the group moving. You're pragmatic about perfection — 'fair enough for everyone' beats 'ideal for no one,' and you'd rather resolve it today than argue it flawless next week.",
     dest:"Your style shines when time is short and 'good enough for everyone' beats 'perfect for no one' — quick deals, split decisions, keeping a group moving. Where it costs you: some things shouldn't be split down the middle. Reaching for the fast trade can mean nobody ever names the real issue, and you settle for less than the situation deserved."});
   A.push({key:'avoider', score:(-n.approach)*1.1 + (-n.assert)*0.45 + (-n.temp)*0.2, emoji:'🚪', name:'The Avoider',
     tag:'Some fights just aren\'t worth having',
+    blurb:"You have a finely tuned sense for which battles are worth it — and most, in your experience, aren't. You stay calm, don't take the bait, and let small stuff stay small. When tempers run hot you're glad to step back and let things cool, trusting that a lot of conflict quietly solves itself if you simply don't feed it.",
     dest:"Your style shines when a conflict is trivial, someone's just venting, or tempers need to cool before anything useful can happen — you don't take the bait. Where it costs you: dodged conflicts don't disappear, they compound. The dishes, the pattern, the boundary — left unsaid long enough, small things curdle into resentment nobody saw coming."});
   A.push({key:'accommodator', score:(-n.assert)*1.0 + (-n.goal)*0.6 + (-n.ground)*0.35, emoji:'🕊️', name:'The Accommodator',
     tag:'Keeping the peace is its own kind of strength',
+    blurb:"You lead with generosity. When the relationship matters more than the point, you're glad to give ground — and people feel easy and safe around you for it. You're quick to see the other side, quick to concede when you might be wrong, and you'd far rather bend a little than let a small disagreement harden into a real rift.",
     dest:"Your style shines when the relationship matters more than the point, when you're wrong, or when giving ground now buys goodwill later — you're generous and easy to be around. Where it costs you: yielding every time teaches people your needs come last. A quiet cost adds up. Sometimes the kindest thing is to actually say what you want."});
   A.push({key:'diplomat', score:(-n.style)*1.0 + (-n.temp)*0.5 + n.approach*0.25 + n.assert*0.15, emoji:'🎩', name:'The Diplomat',
     tag:'You can say the hard thing without the sting',
+    blurb:"You've mastered the difficult message delivered kindly. You read the room, choose your words, and can tell someone a truth they don't want to hear without making an enemy of them. Where others are either blunt or silent, you find the third path — honest and gentle at once — so the point lands and the relationship survives.",
     dest:"Your style shines in delicate rooms — where the message is tough but the relationship is precious, and how you say it matters as much as what you say. Where it costs you: softness can blur the point. Wrap a message carefully enough and people miss it entirely. Now and then the kind thing is to be a little blunter than feels comfortable."});
   A.push({key:'firebrand', score:n.temp*1.2 + n.style*0.5 + n.approach*0.3, emoji:'🔥', name:'The Firebrand',
     tag:'You feel it hot and you show it',
+    blurb:"You don't do fake calm. When something stirs you it shows — in your voice, your face, your words — and there's an honesty in that most people can't manage. You bring real energy and conviction to a disagreement, and nobody ever has to guess what you're thinking or where you actually stand. What you feel is what they get.",
     dest:"Your style shines when something needs energy and honesty — you don't fake calm, and people always know exactly where they stand with you. Where it costs you: heat lands harder than you intend. In the moment it feels like passion; from the other side it can feel like being run over. The point survives better when the temperature drops a few degrees first."});
   A.push({key:'broker', score:(-n.goal)*0.8 + (-n.temp)*0.6 + n.approach*0.35 + (-n.assert)*0.2, emoji:'🌿', name:'The Peace Broker',
     tag:'You lower the temperature in the room',
+    blurb:"You're the calm at the centre of the storm. When things overheat, you're the one who slows the pace, names the common ground, and gets everyone breathing again. You instinctively de-escalate, and people lean on you to keep a hard conversation from tipping into a fight nobody actually wanted to have.",
     dest:"Your style shines when things are overheating and someone needs to hold the calm — you're the one who de-escalates, finds the shared ground, and gets everyone breathing again. Where it costs you: not every fire needs putting out. Sometimes a conflict has to burn a little to clear the air, and rushing to soothe it can bury a problem that needed to be felt."});
   A.push({key:'generalist', score:0.3 - variance(n), emoji:'🎚️', name:'The Adaptive Negotiator',
     tag:'You read the room and shift to fit it',
+    blurb:"You don't have one conflict style — you have all of them, and you switch fluidly depending on what the moment needs. You'll stand firm when it counts, yield when it's wise, and sidestep what isn't worth the energy. That range makes you hard to predict and easy to work with, whatever the disagreement in front of you.",
     dest:"Your style shines almost anywhere, because you don't have just one — you compete when you must, yield when it's wise, and dodge what isn't worth it. Where it costs you: range can slide into having no line at all. Being able to do everything sometimes means never fully committing to the response a moment truly called for."});
   A.sort((x,y)=>y.score-x.score);
   return A[0];
@@ -583,7 +595,7 @@ function render(){
   $('stitle').textContent = q.t;
   $('sbody').textContent = q.s;
   $('count').textContent = (i+1)+' / '+SCEN.length;
-  $('fill').style.width = ((i)/SCEN.length*100)+'%';
+  $('fill').style.width = ((i+1)/SCEN.length*100)+'%';
   const box = $('opts'); box.innerHTML='';
   q.o.forEach((opt,idx)=>{
     const b=document.createElement('button');
@@ -872,6 +884,20 @@ function init(){
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
 else init();
+
+/* keyboard: 1-9 pick option, Enter/Right advance, Left back, R retake */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); if(typeof start==='function')start();} return; }
+  if(scr.id==='quiz'){
+    if(/^[1-9]$/.test(e.key)){ var b=document.querySelectorAll('#opts .opt')[+e.key-1]; if(b){e.preventDefault(); b.click();} }
+    else if(e.key==='Enter'||e.key==='ArrowRight'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); prev(); }
+  } else if(scr.id==='results'){
+    if(e.key==='r'||e.key==='R'){ e.preventDefault(); restart(); }
+  }
+});
 </script>
 </body>
 </html>

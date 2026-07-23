@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>Attachment Navigator — How You Bond</title>
 <style>
   :root{
@@ -60,7 +61,7 @@
   .step-sub{color:var(--muted);font-size:15px;margin:0 0 18px}
 
   /* Style grid */
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
   @media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:380px){.grid{grid-template-columns:1fr}}
   .type-card{
@@ -163,7 +164,7 @@
     <div class="step-h">Step 1 of 2</div>
     <p class="step-title">What's your style?</p>
     <p class="step-sub">Pick the attachment pattern you most recognise in yourself.</p>
-    <div class="grid" id="typeGrid" role="list"></div>
+    <div class="grid" id="typeGrid"></div>
     <div class="nav">
       <button class="backlink" id="typeBack">← Back</button>
     </div>
@@ -211,7 +212,8 @@
 
     <p class="footnote" id="resFoot"></p>
     <div class="footlinks nav" style="justify-content:center">
-      <button class="btn ghost" id="againBtn">Pick a different style</button>
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+      <button class="btn ghost" id="againBtn">Pick a different style / relationship</button>
     </div>
   </section>
 
@@ -378,7 +380,6 @@ function buildTypes(){
   TYPES.forEach(t => {
     const b = document.createElement('button');
     b.className = 'type-card';
-    b.setAttribute('role','listitem');
     b.setAttribute('aria-label', t.name + ' attachment style. ' + t.desc);
     b.innerHTML =
       '<span class="type-num">' + t.n + '</span>' +
@@ -445,6 +446,15 @@ function init(){
   on('againBtn', () => show('type'));
 }
 document.addEventListener('DOMContentLoaded', init);
+
+/* keyboard: number keys pick a card on the current screen, Enter starts */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); show('type');} return; }
+  if(scr.id==='results')return;
+  if(/^[1-9]$/.test(e.key)){ var cards=scr.querySelectorAll('.type-card,.wing-card,.ctx-card'); var c=cards[+e.key-1]; if(c){e.preventDefault(); c.click();} }
+});
 </script>
 </body>
 </html>

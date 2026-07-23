@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>Work Mode — 18 Questions, One Way You Work Best</title>
 <style>
   :root{
@@ -123,6 +124,8 @@
     box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
   .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
   .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.opt:focus-visible,.btn:focus-visible,.backlink:focus-visible,.nextbtn:focus-visible{outline:2px solid var(--b);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -587,7 +590,7 @@ function render(){
   $('stitle').textContent = q.t;
   $('sbody').textContent = q.s;
   $('count').textContent = (i+1)+' / '+SCEN.length;
-  $('fill').style.width = ((i)/SCEN.length*100)+'%';
+  $('fill').style.width = ((i+1)/SCEN.length*100)+'%';
   const box = $('opts'); box.innerHTML='';
   q.o.forEach((opt,idx)=>{
     const b=document.createElement('button');
@@ -876,6 +879,20 @@ function init(){
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
 else init();
+
+/* keyboard: 1-9 pick option, Enter/Right advance, Left back, R retake */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); if(typeof start==='function')start();} return; }
+  if(scr.id==='quiz'){
+    if(/^[1-9]$/.test(e.key)){ var b=document.querySelectorAll('#opts .opt')[+e.key-1]; if(b){e.preventDefault(); b.click();} }
+    else if(e.key==='Enter'||e.key==='ArrowRight'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); prev(); }
+  } else if(scr.id==='results'){
+    if(e.key==='r'||e.key==='R'){ e.preventDefault(); restart(); }
+  }
+});
 </script>
 </body>
 </html>

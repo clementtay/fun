@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>fun — a collection of little quizzes</title>
 <style>
   :root{
@@ -40,6 +41,10 @@
     background:linear-gradient(90deg,#ffd166,#4ecdc4);box-shadow:0 8px 22px rgba(78,205,196,.25)}
   .footnote{font-size:12.5px;color:var(--muted);margin-top:40px;text-align:center}
   .footnote a{color:var(--b)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.quiz-card:focus-visible{outline:2px solid var(--b);outline-offset:3px;border-color:#5b60a8}
+.group{grid-column:1/-1;margin:16px 2px -4px;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--c);font-weight:bold}
+.group.first{margin-top:6px}
 </style>
 </head>
 <body>
@@ -48,10 +53,12 @@
   <div class="hero">
     <div class="kicker">A collection of little web toys</div>
     <h1>fun</h1>
-    <p class="tag">Quick, playful quizzes that read the shape of your choices and hand you a verdict. Pick one — they take a few minutes and know you a little too well.</p>
+    <p class="tag">Playful quizzes that read the shape of your choices and hand you a verdict, plus pick-your-type guides that give you tailored advice. Pick one — they take a few minutes and know you a little too well.</p>
   </div>
 
   <div class="cards">
+
+    <div class="group first">Quizzes · map your choices</div>
 
     <a class="quiz-card" href="trolley.html">
       <div class="emoji">🚃</div>
@@ -116,6 +123,8 @@
       <p>Minimal or maximal, classic or bold? Eighteen "which draws your eye?" moments map your taste across six dials and name your aesthetic.</p>
       <span class="go">Find your look ▶</span>
     </a>
+
+    <div class="group">Guides · pick your type</div>
 
     <a class="quiz-card" href="enneagram.html">
       <div class="emoji">🧭</div>

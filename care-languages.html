@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>Care Languages Navigator — Speak Their Language</title>
 <style>
   :root{
@@ -161,7 +162,7 @@
     <div class="step-h">Step 1 of 2</div>
     <p class="step-title">What's your primary language?</p>
     <p class="step-sub">Pick the one that most makes you feel loved — the way you most naturally show it, too.</p>
-    <div class="grid" id="typeGrid" role="list"></div>
+    <div class="grid" id="typeGrid"></div>
     <div class="nav">
       <button class="backlink" id="typeBack">← Back</button>
     </div>
@@ -209,6 +210,7 @@
 
     <p class="footnote" id="resFoot"></p>
     <div class="footlinks nav" style="justify-content:center">
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
       <button class="btn ghost" id="againBtn">Pick a different language / focus</button>
     </div>
   </section>
@@ -424,7 +426,6 @@ function buildTypes(){
   TYPES.forEach(t => {
     const b = document.createElement('button');
     b.className = 'type-card';
-    b.setAttribute('role','listitem');
     b.setAttribute('aria-label', t.name + '. ' + t.desc);
     b.innerHTML =
       '<span class="type-num">' + t.emoji + '</span>' +
@@ -492,6 +493,15 @@ function init(){
   on('againBtn', () => show('type'));
 }
 document.addEventListener('DOMContentLoaded', init);
+
+/* keyboard: number keys pick a card on the current screen, Enter starts */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); show('type');} return; }
+  if(scr.id==='results')return;
+  if(/^[1-9]$/.test(e.key)){ var cards=scr.querySelectorAll('.type-card,.wing-card,.ctx-card'); var c=cards[+e.key-1]; if(c){e.preventDefault(); c.click();} }
+});
 </script>
 </body>
 </html>
