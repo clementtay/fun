@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enneagram Navigator — Stress &amp; Unwind Guide</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hero{text-align:center;padding:26px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(32px,7.5vw,52px);margin:8px 0 4px;line-height:1.04;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:12px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:16px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+  .disclaimer a{color:var(--c)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+  .mt{margin-top:22px}
+
+  /* Section heads */
+  .step-h{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin:4px 0 4px}
+  .step-title{font-size:24px;font-weight:bold;margin:0 0 4px}
+  .step-sub{color:var(--muted);font-size:15px;margin:0 0 18px}
+
+  /* Type grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:380px){.grid{grid-template-columns:1fr}}
+  .type-card{
+    text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;
+    padding:16px 15px;cursor:pointer;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+    display:flex;flex-direction:column;gap:2px;min-height:118px;
+  }
+  .type-card:hover,.type-card:focus-visible{border-color:#5b60a8;background:#23264b;transform:translateY(-2px);outline:none}
+  .type-num{font-size:30px;font-weight:bold;line-height:1;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .type-name{font-weight:bold;font-size:15.5px;margin-top:6px}
+  .type-desc{font-size:13px;color:var(--muted);line-height:1.35}
+
+  /* Wing choices */
+  .wing-card{
+    display:block;width:100%;text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;padding:18px 18px;
+    cursor:pointer;font-family:inherit;margin-bottom:14px;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+  }
+  .wing-card:hover,.wing-card:focus-visible{border-color:var(--b);background:#20304a;transform:translateY(-1px);outline:none}
+  .wing-label{font-weight:bold;font-size:20px;color:#fff}
+  .wing-tag{font-size:14px;color:var(--c);font-weight:bold;margin-left:8px}
+  .wing-note{display:block;margin-top:7px;font-size:14.5px;color:#d9d5ff;line-height:1.4}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px;flex-wrap:wrap}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit;padding:6px 2px}
+  .backlink:hover,.backlink:focus-visible{color:var(--ink);outline:none}
+
+  /* Results */
+  .res-head{text-align:center;padding:6px 6px 2px}
+  .res-head .badge{display:inline-block;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--c);font-weight:bold}
+  .res-head h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 4px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .res-head .sub{color:var(--muted);font-size:15.5px;margin:0 auto;max-width:520px}
+  .wing-blurb{font-size:15.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:15px 17px;margin:16px 0 6px}
+
+  .panel{border-radius:20px;padding:18px 18px 20px;margin:18px 0;border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--card),#191b38);box-shadow:0 16px 40px rgba(0,0,0,.3);
+    animation:pop .4s ease both}
+  .panel.stress{border-color:rgba(255,107,107,.32)}
+  .panel.unwind{border-color:rgba(78,205,196,.32)}
+  .panel-h{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+  .panel-h .ic{font-size:26px;line-height:1}
+  .panel-h h3{margin:0;font-size:21px}
+  .panel.stress .panel-h h3{color:#ffb3b3}
+  .panel.unwind .panel-h h3{color:#bff6ee}
+  .arrow-line{font-size:14px;color:#d9d5ff;margin:2px 0 12px}
+  .arrow-line b{color:var(--ink)}
+  .sub-h{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:bold;margin:16px 0 8px}
+  .panel.stress .sub-h{color:var(--a)}
+  .panel.unwind .sub-h{color:var(--b)}
+  ul.tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+  ul.tips li{position:relative;padding-left:24px;font-size:15.5px;color:#e9e6ff;line-height:1.45}
+  ul.tips li::before{content:"";position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:50%}
+  .panel.stress ul.tips li::before{background:var(--a)}
+  .panel.unwind ul.tips li::before{background:var(--b)}
+  .tweak{margin-top:14px;font-size:14.5px;line-height:1.45;border-radius:12px;padding:11px 14px}
+  .panel.stress .tweak{background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.26);color:#ffe0e0}
+  .panel.unwind .tweak{background:rgba(78,205,196,.10);border:1px solid rgba(78,205,196,.26);color:#d6fff9}
+  .tweak b{color:#fff}
+
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin:22px auto 0;max-width:540px;line-height:1.5}
+  .footlinks{text-align:center;margin-top:10px}
+  @media (prefers-reduced-motion: reduce){
+    .screen,.panel,.type-card,.wing-card,.btn{animation:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hero">
+      <div class="kicker">Enneagram Navigator</div>
+      <h1>Stress &amp; Unwind</h1>
+      <p class="tag">Pick your type and wing, and get concrete guidance for what happens when you're
+        stressed — and how to actually recharge — based on your Enneagram arrows.</p>
+      <p class="how">Each type has a <b>stress direction</b> (where you drift when overwhelmed) and a
+        <b>growth direction</b> (the healthy place you move toward when you relax and grow).
+        This tool turns those arrows into things you can <b>do</b>.</p>
+      <div class="center mt">
+        <button class="btn" id="startBtn">Choose my type →</button>
+      </div>
+      <p class="disclaimer">This assumes you already know your Enneagram type. Not sure?
+        Take a free typing test like the
+        <a href="https://www.truity.com/test/enneagram-personality-test" target="_blank" rel="noopener">Truity Enneagram test</a>
+        first, then come back. This is a reflective tool, not clinical advice.</p>
+    </div>
+  </section>
+
+  <!-- TYPE PICKER -->
+  <section id="type" class="screen">
+    <div class="step-h">Step 1 of 2</div>
+    <p class="step-title">What's your type?</p>
+    <p class="step-sub">Pick the core number you most identify with.</p>
+    <div class="grid" id="typeGrid" role="list"></div>
+    <div class="nav">
+      <button class="backlink" id="typeBack">← Back</button>
+    </div>
+  </section>
+
+  <!-- WING PICKER -->
+  <section id="wing" class="screen">
+    <div class="step-h">Step 2 of 2</div>
+    <p class="step-title" id="wingTitle">And your wing?</p>
+    <p class="step-sub">Your wing is the neighbouring type that flavours your core. Pick the one that fits.</p>
+    <div id="wingList"></div>
+    <div class="nav">
+      <button class="backlink" id="wingBack">← Pick a different type</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="res-head">
+      <span class="badge" id="resBadge"></span>
+      <h2 id="resTitle"></h2>
+      <p class="sub" id="resSub"></p>
+    </div>
+    <div class="wing-blurb" id="resWingBlurb"></div>
+
+    <div class="panel stress">
+      <div class="panel-h"><span class="ic">🌩️</span><h3>Under stress</h3></div>
+      <p class="arrow-line" id="stressArrow"></p>
+      <div class="sub-h">Signs you're spiralling</div>
+      <ul class="tips" id="stressSigns"></ul>
+      <div class="sub-h">Try this to steady yourself</div>
+      <ul class="tips" id="stressDo"></ul>
+      <div class="tweak" id="stressTweak"></div>
+    </div>
+
+    <div class="panel unwind">
+      <div class="panel-h"><span class="ic">🌿</span><h3>To unwind &amp; grow</h3></div>
+      <p class="arrow-line" id="growthArrow"></p>
+      <div class="sub-h">Borrow these healthy moves</div>
+      <ul class="tips" id="unwindGrowth"></ul>
+      <div class="sub-h">Recharge with</div>
+      <ul class="tips" id="unwindDo"></ul>
+      <div class="tweak" id="unwindTweak"></div>
+    </div>
+
+    <p class="footnote" id="resFoot"></p>
+    <div class="footlinks nav" style="justify-content:center">
+      <button class="btn ghost" id="againBtn">Pick a different type / wing</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- Data model: 9 types with stress + growth arrows and two wings each ---------- */
+const TYPES = [
+  {
+    n:1, name:"The Reformer", desc:"Principled, purposeful, self-controlled",
+    stressTo:4, growthTo:7,
+    stressSigns:[
+      "Inner critic gets louder; nothing feels good enough",
+      "Resentment builds as you bottle up frustration",
+      "You withdraw, brood, and feel misunderstood or hard-done-by"
+    ],
+    stressDo:[
+      "Name the 'good enough' bar out loud and deliberately stop there",
+      "Do something imperfect on purpose — a messy sketch, a rough draft",
+      "Move your body to discharge the tension instead of stewing on it"
+    ],
+    unwindGrowth:[
+      "Let yourself be spontaneous and follow curiosity without a plan",
+      "Say yes to fun for its own sake — not because it's productive",
+      "Reframe setbacks as options rather than failures"
+    ],
+    unwindDo:[
+      "Playful, low-stakes activities where mistakes don't matter",
+      "Try something brand new with zero expectation of being good at it",
+      "Time in nature or with humour to soften the internal rulebook"
+    ],
+    wings:{
+      a:{label:"1w9", tag:"The Idealist", note:"Calmer, more detached and diplomatic — you seek an ideal world quietly.",
+         stressTweak:"Your withdrawal runs deep — set a timer on brooding and re-engage before you numb out.",
+         unwindTweak:"Solitude recharges you, but pair it with gentle play so it doesn't tip into checking out."},
+      b:{label:"1w2", tag:"The Advocate", note:"Warmer, more people-focused and driven to improve things for others.",
+         stressTweak:"You may over-give while critical — protect one block of time that's just for you.",
+         unwindTweak:"Guilt-free rest is your growth edge; schedule fun and treat it as non-negotiable."}
+    }
+  },
+  {
+    n:2, name:"The Helper", desc:"Generous, warm, people-pleasing",
+    stressTo:8, growthTo:4,
+    stressSigns:[
+      "You feel unappreciated and quietly (or loudly) resentful",
+      "Warmth flips to controlling, blaming, or emotional pressure",
+      "You give to get, then feel used when it isn't returned"
+    ],
+    stressDo:[
+      "Ask directly for what you need instead of hinting",
+      "Pause before helping and check: am I doing this freely, or to be needed?",
+      "Let someone do something for you and simply receive it"
+    ],
+    unwindGrowth:[
+      "Turn attention inward — notice your own feelings and wants",
+      "Create or journal to express your inner world honestly",
+      "Allow yourself to be a person with needs, not just a helper"
+    ],
+    unwindDo:[
+      "Solo time that's entirely about you — no one to tend to",
+      "Creative or expressive outlets (art, music, writing) with no audience",
+      "Rest without earning it first"
+    ],
+    wings:{
+      a:{label:"2w1", tag:"The Servant", note:"More principled, dutiful and self-controlled — helping with a sense of 'should'.",
+         stressTweak:"Guilt drives you hard; name the 'should' and ask if it's really yours to carry.",
+         unwindTweak:"Give yourself explicit permission to rest — frame it as necessary, not indulgent."},
+      b:{label:"2w3", tag:"The Host", note:"More outgoing, ambitious and image-aware — the charming connector.",
+         stressTweak:"You may perform helpfulness for approval — step off-stage and check what YOU feel.",
+         unwindTweak:"Unplug from being seen; a private, unproductive evening is deeply restorative for you."}
+    }
+  },
+  {
+    n:3, name:"The Achiever", desc:"Driven, adaptable, image-conscious",
+    stressTo:9, growthTo:6,
+    stressSigns:[
+      "You hit a wall and shut down, numbing out or zoning into busywork",
+      "Procrastination and avoidance replace your usual drive",
+      "You disconnect from feelings and go through the motions"
+    ],
+    stressDo:[
+      "Swap the giant goal for one small, finishable next action",
+      "Ask 'what do I actually feel right now?' — not what I should feel",
+      "Step off the treadmill for an hour with zero productivity attached"
+    ],
+    unwindGrowth:[
+      "Commit to people and causes beyond your own success",
+      "Be honest about doubts instead of projecting having it handled",
+      "Value being loyal and reliable over being impressive"
+    ],
+    unwindDo:[
+      "Time with people who like you when you're not achieving anything",
+      "An activity you'll never be 'the best' at — just for enjoyment",
+      "Genuine rest, not the optimized, résumé-building kind"
+    ],
+    wings:{
+      a:{label:"3w2", tag:"The Charmer", note:"Warmer, more relational and encouraging — success through people.",
+         stressTweak:"Approval fuels you; when it dips you fade — reconnect with one person who knows the real you.",
+         unwindTweak:"Recharge socially, but with people you don't have to impress."},
+      b:{label:"3w4", tag:"The Professional", note:"More introspective, self-aware and craft-focused — success through excellence.",
+         stressTweak:"You swing between driven and deflated — let a feeling exist without fixing it.",
+         unwindTweak:"Solitary creative work restores you when it's for meaning, not metrics."}
+    }
+  },
+  {
+    n:4, name:"The Individualist", desc:"Expressive, sensitive, introspective",
+    stressTo:2, growthTo:1,
+    stressSigns:[
+      "You over-focus on others to be needed, losing yourself",
+      "You become clingy or people-pleasing, then resentful",
+      "Emotional intensity spikes; you dramatize the difficulty"
+    ],
+    stressDo:[
+      "Come back to your own body and breath before reaching outward",
+      "Do one concrete, ordinary task to interrupt the emotional spiral",
+      "Notice what's actually fine right now, not just what's missing"
+    ],
+    unwindGrowth:[
+      "Take disciplined, practical action toward what matters",
+      "Build steady routines that don't depend on how you feel",
+      "Act on principle rather than waiting for the right mood"
+    ],
+    unwindDo:[
+      "A grounding routine — same walk, same ritual — for stability",
+      "Finishing a small, tangible project start to end",
+      "Structure and gentle discipline, which paradoxically frees you"
+    ],
+    wings:{
+      a:{label:"4w3", tag:"The Aristocrat", note:"More ambitious, expressive and image-aware — feelings turned into output.",
+         stressTweak:"You may perform your emotions for others — do one thing privately, off-stage.",
+         unwindTweak:"A finished creative piece grounds you; ship something small and imperfect."},
+      b:{label:"4w5", tag:"The Bohemian", note:"More withdrawn, cerebral and unconventional — the introspective observer.",
+         stressTweak:"You can disappear into feeling and analysis — a physical, external task pulls you out.",
+         unwindTweak:"Quiet, self-directed structure restores you more than more introspection does."}
+    }
+  },
+  {
+    n:5, name:"The Investigator", desc:"Perceptive, private, cerebral",
+    stressTo:7, growthTo:8,
+    stressSigns:[
+      "Your mind races and scatters across too many inputs",
+      "You get distractible, impulsive, or scattered to escape overwhelm",
+      "You hoard energy and hide, feeling drained and depleted"
+    ],
+    stressDo:[
+      "Narrow to a single question or task and close the other tabs",
+      "Get out of your head and into your body — a walk, cold water, breath",
+      "Set a clear stop-point so 'just a bit more research' doesn't run forever"
+    ],
+    unwindGrowth:[
+      "Take decisive action instead of waiting until you're fully ready",
+      "Speak up and assert what you need with confidence",
+      "Engage the world physically, trusting you have enough"
+    ],
+    unwindDo:[
+      "Protected solo time to refill — genuinely restorative for you",
+      "Deep-dive into one subject you love, with no obligation to share it",
+      "Then, one small bold action to prove capability beats endless prep"
+    ],
+    wings:{
+      a:{label:"5w4", tag:"The Iconoclast", note:"More creative, emotional and independent — knowledge with feeling.",
+         stressTweak:"You can retreat into melancholy analysis — a concrete, doable step breaks the loop.",
+         unwindTweak:"Creative solitude recharges you; give the ideas a form, don't just think them."},
+      b:{label:"5w6", tag:"The Problem Solver", note:"More loyal, practical and anxious — knowledge for security.",
+         stressTweak:"Worst-case thinking multiplies under stress — name the fear and test it against reality.",
+         unwindTweak:"Trusted routine and one reliable person steady you more than more information."}
+    }
+  },
+  {
+    n:6, name:"The Loyalist", desc:"Committed, alert, security-seeking",
+    stressTo:3, growthTo:9,
+    stressSigns:[
+      "You go into overdrive, proving yourself and cutting corners",
+      "You get competitive, image-focused, and can't switch off",
+      "Anxiety turns into frantic doing to outrun the worry"
+    ],
+    stressDo:[
+      "Slow down and question the worst-case story your mind is telling",
+      "Name the fear specifically, then check it against actual evidence",
+      "Do one thing at your own pace, not to prove anything to anyone"
+    ],
+    unwindGrowth:[
+      "Trust yourself and let things be okay without vigilance",
+      "Settle into the present instead of scanning for threats",
+      "Go with the flow and accept support without suspicion"
+    ],
+    unwindDo:[
+      "Calming, grounding activities — nature, warmth, slow rhythms",
+      "Time with people who feel safe, where you can fully relax your guard",
+      "A no-decisions, no-agenda block where nothing needs solving"
+    ],
+    wings:{
+      a:{label:"6w5", tag:"The Defender", note:"More independent, cerebral and cautious — security through preparation.",
+         stressTweak:"You retreat into analysis and worst-cases — swap research for one reassuring action.",
+         unwindTweak:"Quiet, predictable downtime resets you; limit inputs that feed the anxiety."},
+      b:{label:"6w7", tag:"The Buddy", note:"More outgoing, playful and adventurous — security through connection and fun.",
+         stressTweak:"You may distract with busyness or plans — pause long enough to feel the fear underneath.",
+         unwindTweak:"Light, social fun recharges you; balance it with real rest so you don't run on fumes."}
+    }
+  },
+  {
+    n:7, name:"The Enthusiast", desc:"Spontaneous, versatile, upbeat",
+    stressTo:1, growthTo:5,
+    stressSigns:[
+      "You get critical, rigid, and perfectionistic — nothing measures up",
+      "Frustration and impatience spike; you blame and nitpick",
+      "The usual optimism curdles into 'why won't this work?'"
+    ],
+    stressDo:[
+      "Let yourself feel the uncomfortable emotion instead of escaping it",
+      "Finish one thing fully before chasing the next shiny idea",
+      "Soften the black-and-white 'shoulds' — good enough is allowed"
+    ],
+    unwindGrowth:[
+      "Go deep on one thing rather than wide across many",
+      "Sit with quiet and stillness — there's richness in less",
+      "Observe and reflect before rushing to the next experience"
+    ],
+    unwindDo:[
+      "A calm, single-focus activity — reading, a deep hobby, a long project",
+      "Unscheduled quiet time with no plans to escape into",
+      "Journaling or reflection to actually process, not just move on"
+    ],
+    wings:{
+      a:{label:"7w6", tag:"The Entertainer", note:"More loyal, relational and grounded — fun shared with people.",
+         stressTweak:"Anxiety can hide under the busyness — name what you're avoiding feeling.",
+         unwindTweak:"Wind down with trusted company and a bit of routine, not just more stimulation."},
+      b:{label:"7w8", tag:"The Realist", note:"More assertive, driven and bold — fun pursued with force.",
+         stressTweak:"You push harder and get sharp-edged — step back before you steamroll or over-commit.",
+         unwindTweak:"Channel the energy into one deep pursuit; stillness is your real recharge."}
+    }
+  },
+  {
+    n:8, name:"The Challenger", desc:"Decisive, protective, intense",
+    stressTo:5, growthTo:2,
+    stressSigns:[
+      "You withdraw, go cold, and cut people off to self-protect",
+      "You get secretive and detached, running only on your own counsel",
+      "Vulnerability feels dangerous, so you armour up and isolate"
+    ],
+    stressDo:[
+      "Let one trusted person see that you're not actually fine",
+      "Name the fear under the anger instead of powering through it",
+      "Ease off control — you don't have to hold the whole thing up alone"
+    ],
+    unwindGrowth:[
+      "Let your guard down and lead with care, not just strength",
+      "Use your power to protect and uplift others openly",
+      "Allow softness and receiving — it's strength, not weakness"
+    ],
+    unwindDo:[
+      "Physical outlets to burn off intensity — training, hard exercise",
+      "Time with people you trust enough to be tender with",
+      "Doing something generous for someone with nothing expected back"
+    ],
+    wings:{
+      a:{label:"8w7", tag:"The Maverick", note:"More energetic, bold and pleasure-seeking — force with momentum.",
+         stressTweak:"You may bulldoze or bail when hurt — slow down and admit the softer feeling.",
+         unwindTweak:"Big physical release recharges you; add real downtime so you don't just accelerate."},
+      b:{label:"8w9", tag:"The Bear", note:"More steady, calm and grounded — force with stillness.",
+         stressTweak:"You go quiet and immovable — let someone in before the walls harden.",
+         unwindTweak:"Slow, restorative rest suits you; guard against stubborn stonewalling as 'relaxing'."}
+    }
+  },
+  {
+    n:9, name:"The Peacemaker", desc:"Easygoing, accommodating, steady",
+    stressTo:6, growthTo:3,
+    stressSigns:[
+      "Anxiety and worst-case thinking replace your usual calm",
+      "You get reactive, doubtful, and unable to settle",
+      "You seek reassurance while quietly resisting everything"
+    ],
+    stressDo:[
+      "Name what YOU actually want — not just what keeps the peace",
+      "Take one small action to prove you can affect things",
+      "Ground the anxiety with breath or movement before deciding"
+    ],
+    unwindGrowth:[
+      "Show up and take focused action on your own priorities",
+      "Set a real goal and let yourself matter and be seen",
+      "Engage energetically instead of going along or checking out"
+    ],
+    unwindDo:[
+      "Restful routines that recharge without tipping into numbing out",
+      "A meaningful project you drive, at a pace that energizes you",
+      "Movement and nature to wake up your own presence and wants"
+    ],
+    wings:{
+      a:{label:"9w8", tag:"The Referee", note:"More assertive, grounded and strong — peace with a backbone.",
+         stressTweak:"You suppress until you snap — voice small frustrations early instead of storing them.",
+         unwindTweak:"Physical, active rest suits you; make sure downtime isn't just avoidance."},
+      b:{label:"9w1", tag:"The Dreamer", note:"More orderly, principled and idealistic — peace with purpose.",
+         stressTweak:"Inner criticism joins the worry — be gentle and take one small, imperfect step.",
+         unwindTweak:"Calm, structured routines restore you; guard against merging into everyone else's plans."}
+    }
+  }
+];
+
+const byN = n => TYPES.find(t => t.n === n);
+const wingNums = n => [ n === 1 ? 9 : n - 1, n === 9 ? 1 : n + 1 ];
+
+let sel = { type:null, wing:null }; // wing: 'a' | 'b'
+
+/* ---------- Tiny helpers ---------- */
+const $ = id => document.getElementById(id);
+function on(id, fn){ const el = $(id); if(el) el.addEventListener('click', fn); }
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+  window.scrollTo({ top:0, behavior:'auto' });
+}
+function ul(el, items){
+  el.innerHTML = '';
+  items.forEach(t => { const li = document.createElement('li'); li.textContent = t; el.appendChild(li); });
+}
+
+/* ---------- Build type grid ---------- */
+function buildTypes(){
+  const grid = $('typeGrid');
+  grid.innerHTML = '';
+  TYPES.forEach(t => {
+    const b = document.createElement('button');
+    b.className = 'type-card';
+    b.setAttribute('role','listitem');
+    b.setAttribute('aria-label', 'Type ' + t.n + ', ' + t.name + '. ' + t.desc);
+    b.innerHTML =
+      '<span class="type-num">' + t.n + '</span>' +
+      '<span class="type-name">' + t.name + '</span>' +
+      '<span class="type-desc">' + t.desc + '</span>';
+    b.addEventListener('click', () => { sel.type = t.n; sel.wing = null; buildWings(); show('wing'); });
+    grid.appendChild(b);
+  });
+}
+
+/* ---------- Build wing choices for selected type ---------- */
+function buildWings(){
+  const t = byN(sel.type);
+  $('wingTitle').textContent = 'Type ' + t.n + ' — which wing?';
+  const list = $('wingList');
+  list.innerHTML = '';
+  ['a','b'].forEach(key => {
+    const w = t.wings[key];
+    const b = document.createElement('button');
+    b.className = 'wing-card';
+    b.setAttribute('aria-label', w.label + ', ' + w.tag + '. ' + w.note);
+    b.innerHTML =
+      '<span class="wing-label">' + w.label + '</span>' +
+      '<span class="wing-tag">' + w.tag + '</span>' +
+      '<span class="wing-note">' + w.note + '</span>';
+    b.addEventListener('click', () => { sel.wing = key; renderResults(); show('results'); });
+    list.appendChild(b);
+  });
+}
+
+/* ---------- Render results ---------- */
+function renderResults(){
+  const t = byN(sel.type);
+  const w = t.wings[sel.wing];
+  const st = byN(t.stressTo);
+  const gr = byN(t.growthTo);
+
+  $('resBadge').textContent = 'Your result';
+  $('resTitle').textContent = w.label + ' — ' + w.tag;
+  $('resSub').textContent = 'Type ' + t.n + ', ' + t.name + ' · ' + t.desc;
+  $('resWingBlurb').textContent = w.note;
+
+  $('stressArrow').innerHTML =
+    'When stressed, ' + t.name + 's drift toward the unhealthy side of <b>Type ' + st.n + ' (' + st.name + ')</b>.';
+  ul($('stressSigns'), t.stressSigns);
+  ul($('stressDo'), t.stressDo);
+  $('stressTweak').innerHTML = '<b>' + w.label + ' note:</b> ' + w.stressTweak;
+
+  $('growthArrow').innerHTML =
+    'To unwind and grow, move toward the healthy side of <b>Type ' + gr.n + ' (' + gr.name + ')</b>.';
+  ul($('unwindGrowth'), t.unwindGrowth);
+  ul($('unwindDo'), t.unwindDo);
+  $('unwindTweak').innerHTML = '<b>' + w.label + ' note:</b> ' + w.unwindTweak;
+
+  $('resFoot').textContent =
+    'Your arrows: stress ' + t.n + ' → ' + t.stressTo + ' (' + st.name + '), ' +
+    'growth ' + t.n + ' → ' + t.growthTo + ' (' + gr.name + '). ' +
+    'The wing (' + w.label + ') colours how each shows up.';
+}
+
+/* ---------- Wire up ---------- */
+function init(){
+  buildTypes();
+  on('startBtn', () => show('type'));
+  on('typeBack', () => show('intro'));
+  on('wingBack', () => show('type'));
+  on('againBtn', () => show('type'));
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
