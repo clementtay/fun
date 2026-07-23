@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Holiday Quiz — 20 Questions, One Kind of Traveller</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(34px,8vw,54px);margin:6px 0 4px;line-height:1.02;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .globe{font-size:70px;margin:14px 0 4px}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+
+  /* Progress */
+  .topbar{display:flex;align-items:center;gap:12px;margin:6px 0 20px}
+  .bar{flex:1;height:9px;background:#20234a;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4);transition:width .4s ease}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:bold}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,var(--card),#191b38);border:1px solid var(--line);
+    border-radius:22px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .4s ease both}
+  .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
+  .scn-emoji{font-size:44px;margin:10px 0 2px;text-align:center}
+  .scn-title{font-size:23px;font-weight:bold;margin:6px 0 6px}
+  .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .opt{
+    text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
+    padding:15px 16px;border-radius:15px;cursor:pointer;font-size:16px;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
+  }
+  .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:16.5px}
+  .opt.pick{border-color:var(--b);background:#243b48}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+  .nextbtn{opacity:.35;pointer-events:none;transition:opacity .2s}
+  .nextbtn.ready{opacity:1;pointer-events:auto}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit}
+  .backlink:hover{color:var(--ink)}
+
+  /* Results */
+  .arche{text-align:center;padding:8px 6px 4px}
+  .arche .emoji{font-size:58px}
+  .arche h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 2px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .arche .sub{color:var(--muted);font-size:15px;margin-bottom:4px}
+  .blurb{font-size:16.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:18px;margin:16px 0}
+  .sect-h{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);
+    font-weight:bold;margin:26px 0 10px}
+  .axis{margin:14px 0}
+  .axis .lbls{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px}
+  .axis .lbls b{color:var(--ink)}
+  .axtrack{position:relative;height:12px;background:#20234a;border-radius:99px}
+  .axtrack > span{position:absolute;top:50%;transform:translate(-50%,-50%);height:20px;width:20px;border-radius:50%;
+    background:linear-gradient(90deg,#4ecdc4,#ffd166);box-shadow:0 3px 10px rgba(0,0,0,.4);border:2px solid #12122a;transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .axtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#3a3e70}
+  .axis .read{font-size:14px;color:#cfcbf3;margin-top:7px}
+  .cardlist{display:grid;gap:12px;grid-template-columns:1fr}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+  .mini h4{margin:0 0 4px;font-size:16px}
+  .mini.blind{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}
+  .mini.super{border-color:rgba(78,205,196,.35);background:rgba(78,205,196,.06)}
+  .mini.dest{border-color:rgba(166,133,255,.35);background:rgba(166,133,255,.06)}
+  .mini p{margin:0;font-size:14.5px;color:#d9d5ff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .chip{background:#23264b;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13.5px}
+  .chip b{color:var(--c)}
+  .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;text-align:center}
+  .again{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .again a{text-decoration:none}
+
+  /* Share lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(6,6,18,.86);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .lightbox.on{display:flex;animation:fade .3s ease both}
+  .lb-inner{max-width:420px;width:100%;text-align:center}
+  .lb-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin-bottom:12px}
+  #shareImg{width:100%;max-height:66vh;object-fit:contain;border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
+  .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
+  .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">What Kind of Traveller Are You?</div>
+      <h1>The Holiday Quiz</h1>
+      <div class="globe">🌴</div>
+      <p class="how">Here's how it works: twenty quick questions about how you <b>actually</b> like to travel — where you stay, how you plan, what you chase. No right answers, just your instincts.</p>
+      <p class="tag">By the end I'll read the shape of your choices across six travel dials and hand you your holiday archetype — plus where in the world you'd truly thrive.</p>
+      <button class="btn" id="startBtn">Start packing ▶</button>
+      <div class="disclaimer">Not a real personality test — it's a travel toy. It reads the <em>pattern</em> of your preferences and gives you an archetype. Entertainment, with a suspicious amount of accuracy.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backlink" id="backBtn">‹ back</button>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="count" id="count">1 / 20</div>
+    </div>
+    <div class="card">
+      <div class="scn-num" id="snum">Question 01</div>
+      <div class="scn-emoji" id="semoji"></div>
+      <div class="scn-title" id="stitle"></div>
+      <div class="scn-body" id="sbody"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
+        <button class="btn nextbtn" id="next">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="arche">
+      <div class="emoji" id="rEmoji">🌴</div>
+      <h2 id="rName">Your Traveller Type</h2>
+      <div class="sub" id="rTagline"></div>
+    </div>
+    <div class="blurb" id="rBlurb"></div>
+
+    <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">Your Ideal Trip</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
+
+    <div class="sect-h">Where You'd Thrive</div>
+    <div class="cardlist"><div class="mini dest"><h4 id="rDestH">Destinations for you</h4><p id="rDestP"></p></div></div>
+
+    <div class="sect-h">Your Six Travel Dials</div>
+    <div id="rAxes"></div>
+
+    <div class="sect-h">Your Travel Superpower</div>
+    <div class="cardlist"><div class="mini super"><h4 id="rSuperH"></h4><p id="rSuperP"></p></div></div>
+
+    <div class="sect-h">Your Blind Spots</div>
+    <div class="cardlist" id="rBlind"></div>
+
+    <div class="sect-h">Your Travel Motto</div>
+    <div class="blurb" id="rPrinciple" style="margin-top:0"></div>
+
+    <div class="footnote" id="rConsistency"></div>
+    <div class="again">
+      <button class="btn" id="shareBtn">📸 Share my result</button>
+      <button class="btn ghost" id="restartBtn">Retake the quiz ↺</button>
+      <a class="btn ghost" href="trolley.html">🚃 Try the Trolley Test</a>
+    </div>
+    <div class="footnote">Built as a travel toy. Share your type, compare with friends, plan your next trip.</div>
+  </section>
+
+  <!-- SHARE LIGHTBOX -->
+  <div id="shareBox" class="lightbox">
+    <div class="lb-inner">
+      <div class="lb-title">Your shareable card</div>
+      <img id="shareImg" alt="Your Holiday Quiz result card">
+      <div class="lb-hint" id="lbHint">Tap “Share” to send it, “Save” to download, or long-press the image.</div>
+      <div class="lb-btns">
+        <button class="btn" id="lbShare">📤 Share</button>
+        <button class="btn ghost" id="lbSave">⬇ Save</button>
+        <button class="backlink" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SIX TRAVEL DIALS (each answer nudges some of them)
+   pace   : Rest & recharge (−)   ↔  Action & thrills (+)
+   setting: Nature & wild (−)      ↔  City & buzz (+)
+   budget : Frugal & lean (−)      ↔  Comfort & luxury (+)
+   plan   : Go with the flow (−)   ↔  Plan every day (+)
+   social : Quiet & solo (−)       ↔  Lively & social (+)
+   culture: Switch off (−)         ↔  Learn & explore (+)
+   ============================================================ */
+
+const SCEN = [
+ {t:"Your flight just landed. What's the first thing you want to do?", emoji:"🛬",
+  s:"Bags collected, you step out into a new place. Your very first instinct is to…",
+  o:[
+   {act:"Head straight for the beach or pool and do absolutely nothing.", sc:{pace:-2,culture:-1}},
+   {act:"Drop the bags and hit the streets to explore on foot.", sc:{pace:1,setting:1,culture:1}},
+   {act:"Check into somewhere gorgeous and settle in properly.", sc:{budget:2,pace:-1}},
+   {act:"Find the nearest trail, lake, or mountain and go.", sc:{setting:-2,pace:1}}
+  ]},
+
+ {t:"Pick your ideal place to stay.", emoji:"🏨",
+  s:"Same trip, same budget-ish. Which bed calls to you?",
+  o:[
+   {act:"An all-inclusive resort with everything laid on.", sc:{budget:1,pace:-1,plan:1}},
+   {act:"A hostel or guesthouse buzzing with other travellers.", sc:{budget:-2,social:2}},
+   {act:"A remote cabin with no neighbours for miles.", sc:{setting:-2,social:-2}},
+   {act:"A boutique hotel right in the heart of the city.", sc:{setting:2,budget:1}}
+  ]},
+
+ {t:"How much of the trip is planned before you leave?", emoji:"🗺️",
+  s:"Be honest about your pre-departure ritual.",
+  o:[
+   {act:"Every hour booked and optimised. I love a plan.", sc:{plan:2}},
+   {act:"A rough skeleton, the rest improvised on the ground.", sc:{plan:-1}},
+   {act:"Zero plan. I'll figure it all out when I get there.", sc:{plan:-2,pace:1}},
+   {act:"A guided tour — someone else can do the planning.", sc:{plan:1,social:1,budget:1}}
+  ]},
+
+ {t:"Dream view from your window.", emoji:"🪟",
+  s:"You pull back the curtains on the first morning and see…",
+  o:[
+   {act:"Waves rolling onto white sand.", sc:{pace:-1,setting:-1}},
+   {act:"A buzzing city skyline, alive with lights.", sc:{setting:2,social:1}},
+   {act:"Snow-capped mountains and pine forest.", sc:{setting:-2,pace:1}},
+   {act:"A quiet vineyard rolling into the distance.", sc:{setting:-1,pace:-1,budget:1}}
+  ]},
+
+ {t:"Your ideal holiday evening.", emoji:"🌙",
+  s:"The sun's down. Where are you?",
+  o:[
+   {act:"Cocktails and dancing until late.", sc:{social:2,pace:1}},
+   {act:"A long, slow tasting-menu dinner.", sc:{budget:1,culture:1,pace:-1}},
+   {act:"Early night — big day planned tomorrow.", sc:{pace:1,plan:1,social:-1}},
+   {act:"Reading on the balcony with a glass of wine.", sc:{pace:-2,social:-1}}
+  ]},
+
+ {t:"There's a free afternoon. You…", emoji:"⛱️",
+  s:"Nothing's booked. The time is yours.",
+  o:[
+   {act:"Book a museum or a walking history tour.", sc:{culture:2,setting:1}},
+   {act:"Do absolutely nothing by the pool.", sc:{pace:-2,culture:-1}},
+   {act:"Sign up for something with adrenaline.", sc:{pace:2}},
+   {act:"Wander with no map and see what turns up.", sc:{plan:-2,culture:1}}
+  ]},
+
+ {t:"Food on holiday means…", emoji:"🍽️",
+  s:"What's the meal you're most excited about?",
+  o:[
+   {act:"A Michelin-starred splurge, booked weeks ahead.", sc:{budget:2,plan:1,culture:1}},
+   {act:"Street food stalls and hole-in-the-wall gems.", sc:{budget:-2,culture:1,setting:1}},
+   {act:"Whatever the resort buffet is serving, honestly.", sc:{budget:1,pace:-1,plan:1}},
+   {act:"A picnic somewhere with an unbeatable view.", sc:{setting:-1,pace:-1,social:-1}}
+  ]},
+
+ {t:"How do you feel about crowds?", emoji:"👥",
+  s:"A packed plaza, a full bar, a busy market.",
+  o:[
+   {act:"The more the merrier — energy and people-watching.", sc:{social:2,setting:1}},
+   {act:"A lively spot is fine; a full-on mob is not.", sc:{social:1}},
+   {act:"Give me empty trails and quiet corners.", sc:{social:-2,setting:-1}}
+  ]},
+
+ {t:"Your holiday budget philosophy.", emoji:"💳",
+  s:"When the trip is on, how do you spend?",
+  o:[
+   {act:"Go all out — I'm worth the upgrade.", sc:{budget:2}},
+   {act:"Spend where it counts, save where it doesn't.", sc:{culture:1}},
+   {act:"Shoestring — the less I spend, the longer I travel.", sc:{budget:-2,plan:-1}}
+  ]},
+
+ {t:"Pick a souvenir to bring home.", emoji:"🎁",
+  s:"What actually ends up in your suitcase?",
+  o:[
+   {act:"Photos of an epic summit or a dive.", sc:{pace:2,setting:-1}},
+   {act:"A local craft from a market you haggled at.", sc:{budget:-1,culture:1,social:1}},
+   {act:"Something lovely from the hotel boutique.", sc:{budget:2}},
+   {act:"A tan and zero responsibilities.", sc:{pace:-2,culture:-1}}
+  ]},
+
+ {t:"How active is your perfect day?", emoji:"🥾",
+  s:"Rate the effort you actually want.",
+  o:[
+   {act:"20,000 steps and a summit by lunch.", sc:{pace:2,setting:-1}},
+   {act:"A gentle stroll, then a long lunch.", sc:{pace:-1,budget:1}},
+   {act:"Horizontal. All day.", sc:{pace:-2}},
+   {act:"A packed itinerary of sights to tick off.", sc:{culture:2,plan:1}}
+  ]},
+
+ {t:"Who's on the trip?", emoji:"🧳",
+  s:"Your favourite travel company is…",
+  o:[
+   {act:"Just me — solo and free.", sc:{social:-2,plan:-1}},
+   {act:"A big group of friends.", sc:{social:2}},
+   {act:"My partner, somewhere romantic.", sc:{budget:1,social:-1,pace:-1}},
+   {act:"Whoever I happen to meet along the way.", sc:{social:1,plan:-2}}
+  ]},
+
+ {t:"What tugs at you most?", emoji:"✨",
+  s:"One image to sum up your dream trip.",
+  o:[
+   {act:"Turquoise water and a hammock.", sc:{pace:-2,setting:-1,culture:-1}},
+   {act:"Ancient ruins and old cobbled streets.", sc:{culture:2,setting:1}},
+   {act:"A mountain trail or a wild, empty coastline.", sc:{setting:-2,pace:1}},
+   {act:"Rooftop bars and neon nightlife.", sc:{setting:2,social:2}}
+  ]},
+
+ {t:"Your relationship with an itinerary.", emoji:"📋",
+  s:"Once you're actually there…",
+  o:[
+   {act:"I live by it, minute to minute.", sc:{plan:2}},
+   {act:"A gentle guide I ignore half the time.", sc:{plan:-1}},
+   {act:"Itinerary? I follow my mood.", sc:{plan:-2}},
+   {act:"I'd honestly rather a guide handled it all.", sc:{plan:1,budget:1,social:1}}
+  ]},
+
+ {t:"The weather you're chasing.", emoji:"🌡️",
+  s:"You'd book a flight tomorrow for…",
+  o:[
+   {act:"Hot sun, all day, every day.", sc:{pace:-1,setting:-1}},
+   {act:"Crisp mountain air, maybe some snow.", sc:{setting:-2,pace:1}},
+   {act:"Doesn't matter — I'll be in galleries and cafés.", sc:{culture:2,setting:1}},
+   {act:"Mild and pleasant, perfect for wandering.", sc:{culture:1,plan:-1}}
+  ]},
+
+ {t:"Pick one activity for the trip.", emoji:"🎯",
+  s:"You get to do exactly one. Choose.",
+  o:[
+   {act:"Scuba, surf, or ski.", sc:{pace:2,setting:-1}},
+   {act:"A cooking class or a wine tasting.", sc:{culture:1,budget:1,social:1}},
+   {act:"A full spa day.", sc:{pace:-2,budget:1}},
+   {act:"A guided city tour of the highlights.", sc:{culture:1,plan:1,social:1}}
+  ]},
+
+ {t:"How much do you want to learn on holiday?", emoji:"📚",
+  s:"Be honest about your brain's setting.",
+  o:[
+   {act:"Loads — history, language, how locals live.", sc:{culture:2,plan:1}},
+   {act:"A few fun facts, nothing that feels like homework.", sc:{culture:1}},
+   {act:"Nothing. My brain is fully switched off.", sc:{culture:-2,pace:-1}}
+  ]},
+
+ {t:"Downtime looks like…", emoji:"😌",
+  s:"When the day winds down, you're…",
+  o:[
+   {act:"Still going — I'll rest when I'm home.", sc:{pace:1,culture:1}},
+   {act:"Balancing sights with a bit of beach time.", sc:{setting:-1,culture:1}},
+   {act:"Long lazy mornings with no alarm.", sc:{pace:-2,plan:-1}},
+   {act:"Being pampered — spa, room service, robe.", sc:{budget:2,pace:-1}}
+  ]},
+
+ {t:"Getting around a new place.", emoji:"🚕",
+  s:"Your preferred way to move through a city or region.",
+  o:[
+   {act:"Walk everywhere and get lost on purpose.", sc:{plan:-1,culture:1,pace:1}},
+   {act:"Rent a car and road-trip it.", sc:{plan:-1,setting:-1}},
+   {act:"Private transfers, zero hassle.", sc:{budget:2,social:-1}},
+   {act:"Public transport, just like a local.", sc:{budget:-1,culture:1,setting:1}}
+  ]},
+
+ {t:"The holiday you'd (quietly) brag about.", emoji:"📸",
+  s:"Which sentence would you most love to say afterward?",
+  o:[
+   {act:"“We hiked to a glacier at dawn.”", sc:{setting:-2,pace:2}},
+   {act:"“The suite had its own butler.”", sc:{budget:2,social:-1}},
+   {act:"“I ate my way through six night markets.”", sc:{budget:-1,culture:1,social:1,setting:1}},
+   {act:"“I didn't check my phone for a week.”", sc:{pace:-2,social:-1,culture:-1}}
+  ]}
+];
+
+/* ---------- scoring ---------- */
+const AXES = [
+  {k:'pace',    negL:'Rest & recharge', posL:'Action & thrills', neg:'Relaxer',      pos:'Adventurer'},
+  {k:'setting', negL:'Nature & wild',   posL:'City & buzz',      neg:'Naturalist',   pos:'Urbanite'},
+  {k:'budget',  negL:'Frugal & lean',   posL:'Comfort & luxury', neg:'Shoestringer', pos:'Indulger'},
+  {k:'plan',    negL:'Go with the flow',posL:'Plan every day',   neg:'Improviser',   pos:'Planner'},
+  {k:'social',  negL:'Quiet & solo',    posL:'Lively & social',  neg:'Lone wolf',    pos:'Mingler'},
+  {k:'culture', negL:'Switch off',      posL:'Learn & explore',  neg:'Unwinder',     pos:'Explorer'}
+];
+
+function computeMax(){
+  const max={};
+  AXES.forEach(a=>max[a.k]=0);
+  SCEN.forEach(q=>{
+    AXES.forEach(a=>{
+      let m=0;
+      q.o.forEach(opt=>{ if(opt.sc[a.k]!==undefined) m=Math.max(m,Math.abs(opt.sc[a.k])); });
+      max[a.k]+=m;
+    });
+  });
+  return max;
+}
+
+let RESULT=null;
+let CURRENT_ARCH=null;
+function diagnose(){
+  const tot={}, max=computeMax();
+  AXES.forEach(a=>tot[a.k]=0);
+  answers.forEach((ai,qi)=>{
+    const sc=SCEN[qi].o[ai].sc;
+    for(const k in sc) tot[k]+=sc[k];
+  });
+  // normalized -1..1 and 0..100
+  const norm={}, pct={};
+  AXES.forEach(a=>{ const n = max[a.k]?tot[a.k]/max[a.k]:0; norm[a.k]=n; pct[a.k]=Math.round((n+1)/2*100); });
+  RESULT={tot,norm,pct};
+  renderResults();
+}
+
+/* ---------- archetype selection ---------- */
+function archetype(n){
+  const A=[];
+  A.push({key:'beach', score:(-n.pace)*1.0 + (-n.culture)*0.5 + n.social*0.3 + n.budget*0.15, emoji:'🏖️', name:'The Beach Lounger',
+    tag:'Sun, sand, and a gloriously empty schedule',
+    dest:"Sun-soaked coastlines made for doing nothing: the Maldives, Bali's beach clubs, the Greek islands, Phuket, or a Caribbean all-inclusive.",
+    blurb:"Your holiday has one job: to melt the year off your shoulders. While others sprint between landmarks, you've found the perfect lounger and you're not moving from it. A book, a cold drink, the sound of the sea — that's the whole itinerary, and it's a good one. You understand something the busy travellers forget: rest is not the thing you do between the trip, rest is the trip."});
+  A.push({key:'explorer', score:n.setting + n.culture + n.plan*0.4, emoji:'🏛️', name:'The City & Culture Explorer',
+    tag:'Ruins by day, rooftop by night',
+    dest:"Dense, layered cities you can read like a book: Rome, Istanbul, Kyoto, Mexico City, Lisbon, or Marrakech.",
+    blurb:"You travel to feed your curiosity. Give you a city with a few thousand years of history, a museum that closes too early, and a neighbourhood the guidebook missed, and you're perfectly happy. You come home knowing things — the name of the emperor, the story behind the square, the best café nobody tells you about. For you a trip isn't measured in tans but in what you saw, tasted, and finally understood."});
+  A.push({key:'adventurer', score:n.pace*1.2 + (-n.setting)*0.5 + (-n.budget)*0.2, emoji:'🧗', name:'The Adrenaline Adventurer',
+    tag:'If it gets the heart racing, you\'re in',
+    dest:"Places that double as a playground: Queenstown, the Swiss Alps, Costa Rica, Patagonia, or Nepal's trekking routes.",
+    blurb:"A holiday where you sit still is a holiday wasted. You want the summit, the rapids, the dawn start, the story you can only tell because you were slightly terrified at the time. Comfort is negotiable; the view from the top is not. You'll happily trade a soft bed for a hard trail if the trail ends somewhere unforgettable. Your souvenirs are scars, photos, and a resting heart rate the rest of us can only envy."});
+  A.push({key:'luxury', score:n.budget*1.3 + (-n.pace)*0.25, emoji:'🥂', name:'The Luxury Escapist',
+    tag:'Life\'s short; book the suite',
+    dest:"Somewhere that pampers without apology: an overwater villa, a Santorini caldera suite, a Dubai resort, or a private safari lodge.",
+    blurb:"You don't travel to rough it — you travel to be looked after beautifully. The thread count matters, the service matters, the view from the infinity pool very much matters. And why not? You work hard, and a holiday is where that work quietly pays for itself in robes, spa treatments, and a dinner you didn't have to plan. You've learned that the right kind of comfort isn't indulgence — it's the entire point."});
+  A.push({key:'backpacker', score:(-n.budget)*1.1 + (-n.plan)*0.5 + n.social*0.4, emoji:'🎒', name:'The Budget Backpacker',
+    tag:'Less spent, more seen',
+    dest:"Big adventures that go easy on the wallet: Southeast Asia overland, the Balkans, Central America, or an Interrail loop through Europe.",
+    blurb:"For you, money spent is time bought — every dollar you don't drop on a fancy hotel is another week on the road. You'll take the night bus, sleep in the dorm, eat where the locals eat, and end up with better stories than anyone in the five-star down the street. Plans are loose because the best bits are never planned: the person you met, the town you'd never heard of, the detour that became the whole trip. Freedom, it turns out, is cheap."});
+  A.push({key:'nature', score:(-n.setting)*1.1 + (-n.social)*0.5 + (-n.budget)*0.2, emoji:'🏔️', name:'The Nature Wanderer',
+    tag:'Out where the signal drops',
+    dest:"Wild, quiet, enormous places: the Scottish Highlands, Norway's fjords, the Canadian Rockies, New Zealand's South Island, or Iceland.",
+    blurb:"Cities exhaust you; wilderness restores you. You'd trade any skyline for a ridgeline, any nightclub for a night sky. Give you a trail, a lake, a forest with no one else in it, and you feel more yourself than you do all year. It's not about adrenaline so much as space — room to breathe, to walk, to hear nothing but weather and birds. You go far to get away, and the farther the better. The best Wi-Fi is no Wi-Fi at all."});
+  A.push({key:'foodie', score:n.social + n.culture*0.6 + n.setting*0.5, emoji:'🍜', name:'The Foodie & Nightlife Traveller',
+    tag:'You taste a place to know it',
+    dest:"Cities that come alive after dark and eat well doing it: Bangkok, Tokyo, Barcelona, Mexico City, or New Orleans.",
+    blurb:"You travel with your appetite — for food, for music, for the buzz of a place at night. The best way to understand a city, in your view, is to eat your way through it and stay out late enough to see who it really is. You collect night markets, hole-in-the-wall legends, and the kind of evening that starts with dinner and ends somewhere you didn't expect. Sociable, curious, and always hungry, you find the pulse of a place and put your finger right on it."});
+  A.push({key:'wellness', score:(-n.pace)*0.85 + (-n.social)*1.15 + (-n.setting)*0.25, emoji:'🧘', name:'The Wellness Retreater',
+    tag:'You come back a slightly better human',
+    dest:"Calm, restorative escapes: a Balinese yoga retreat, a Kerala Ayurveda resort, an alpine spa town, or a quiet lakeside cabin.",
+    blurb:"Your holiday is a reset button. You go to slow your breathing, quiet your mind, and undo whatever the year has done to you. Yoga at sunrise, a long massage, a walk in silence, real sleep — that's your idea of luxury, and it's a wise one. You're not chasing thrills or ticking off sights; you're chasing calm, and you know exactly where to find it. You return not with a tan or a story, but with something rarer: a steadier version of yourself."});
+  A.push({key:'generalist', score:0.32 - variance(n), emoji:'🌍', name:'The Free-Spirited Generalist',
+    tag:'A bit of everything, and you mean it',
+    dest:"Do-it-all destinations that flex to your mood: Portugal, Japan, New Zealand, Italy, or a well-chosen city-plus-coast combo.",
+    blurb:"You refuse to be pinned to one kind of trip. Some days you want the museum, some days the beach; sometimes you'll splurge, sometimes you'll slum it happily. You read each destination on its own terms and take it as it comes, which makes you the easiest person alive to travel with and the hardest to predict. Your gift is range — you can find the good in a hostel or a five-star, a mountain or a metro. Wherever you land, you make it work."});
+  A.sort((x,y)=>y.score-x.score);
+  return A[0];
+}
+function variance(n){ // how far from center overall (0 = perfectly balanced)
+  const vals=AXES.map(a=>Math.abs(n[a.k]));
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* ---------- narrative helpers ---------- */
+function axisRead(a,n){
+  const v=n[a.k]; const s=Math.abs(v);
+  const strong = s>0.55;
+  const mild = s>0.2;
+  if(!mild) return "You sit right in the middle here — it swings with the trip, and you like it that way.";
+  const lean = strong ? "strongly" : "moderately";
+  const map={
+    pace:{pos:"You want a holiday that moves — activity, momentum, a day worth photographing.",neg:"You travel to slow down; the point is to rest, not to rack up steps."},
+    setting:{pos:"You're drawn to cities — streets, buildings, buzz, and things to do at every hour.",neg:"You're pulled toward nature — water, mountains, open space, and quiet."},
+    budget:{pos:"You'll pay for comfort; the right room and a bit of pampering are worth it.",neg:"You keep it lean — money saved is more trip, and you wear that proudly."},
+    plan:{pos:"You like a plan — bookings made, days mapped, nothing left to chance.",neg:"You'd rather improvise; the best moments are the ones you didn't schedule."},
+    social:{pos:"You travel toward people — buzz, new faces, and shared nights out.",neg:"You treasure quiet and solitude; the best trips are peaceful ones."},
+    culture:{pos:"You want to come home knowing more — history, food, how a place really works.",neg:"You travel to switch your brain off, not to study; downtime is the goal."}
+  };
+  return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
+}
+
+/* Brief "what your ideal trip is like" synthesis for the results page. */
+function travelProfile(n){
+  const P = {
+    pace:{pos:"want a trip with momentum and things to do",
+          neg:"want a trip that lets you properly slow down"},
+    setting:{pos:"are happiest surrounded by a city's buzz",
+             neg:"are happiest out in nature, away from the crowds"},
+    budget:{pos:"will happily pay for comfort and a bit of pampering",
+            neg:"travel lean and stretch every dollar into more trip"},
+    plan:{pos:"like the days mapped out and the bookings made",
+          neg:"prefer to improvise and let the trip surprise you"},
+    social:{pos:"travel toward people, energy, and shared nights out",
+            neg:"treasure quiet, solitude, and a slower crowd"},
+    culture:{pos:"want to come home knowing the place inside out",
+             neg:"want to switch your brain off and just unwind"}
+  };
+  const CLOSE = {
+    pace:{pos:"Give you a full day and you'll fill it.",neg:"Give you an empty afternoon and you'll savour it."},
+    setting:{pos:"Drop you in a great city and you're home.",neg:"Point you at the horizon and you're gone."},
+    budget:{pos:"You'd rather do it well than do it cheap.",neg:"You'd rather do it long than do it lavish."},
+    plan:{pos:"You like knowing what's next.",neg:"You like not knowing what's next."},
+    social:{pos:"The more people, the better the trip.",neg:"The quieter it is, the more it recharges you."},
+    culture:{pos:"You read a place like a book.",neg:"You let a place just wash over you."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "Your ideal trip is hard to pin down — and that's the charm. Across twenty questions you leaned every which way, balancing beach with sights, comfort with thrift, planning with improvisation. In short: you're an all-rounder who reads each destination on its own terms and takes it exactly as it comes.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "Your ideal trip is one where "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
+function blindSpots(n){
+  const out=[];
+  if(n.plan>0.4) out.push(["Over-planned to a fault","Your itineraries are a thing of beauty — but a trip booked to the minute leaves no room for the happy accident. Some of the best travel memories only happen when you leave a day gloriously empty."]);
+  if(n.plan<-0.4) out.push(["Winging it too hard","Spontaneity is your superpower, but 'we'll figure it out' can mean sold-out trains and the last dodgy room in town. A little planning buys you more freedom, not less."]);
+  if(n.pace>0.45) out.push(["Forgetting to actually rest","You pack days so full you come home needing a holiday from your holiday. Building in real downtime isn't lazy — it's what stops the trip from becoming a to-do list."]);
+  if(n.pace<-0.45) out.push(["Missing the place entirely","So much lounging is bliss — but a beautiful, layered destination can slip by while you nap. You don't have to hustle, but one great meal or view a day is worth waking up for."]);
+  if(n.budget>0.45) out.push(["Comfort bubble","Splurging is lovely, but the fanciest resorts can wall you off from the actual place. Some of the best moments cost nothing and happen where the tour buses don't go."]);
+  if(n.budget<-0.45) out.push(["False economy","Stretching every dollar is a skill — but occasionally the cheapest option costs you the day, the sleep, or the memory. Now and then, pay for the good thing."]);
+  if(n.social>0.45) out.push(["Never quite alone","You thrive in company, but the loudest trips can drown out the place itself. A quiet morning by yourself often shows you a side of a destination the group never sees."]);
+  if(n.social<-0.45) out.push(["The closed door","Solitude recharges you — just don't let it seal you off entirely. A single conversation with a local or fellow traveller can rewrite an entire trip."]);
+  if(n.culture<-0.45) out.push(["Switching off the story","Total downtime is well earned — but you're standing in places thick with history and flavour. A touch of curiosity, now and then, turns a nice trip into a memorable one."]);
+  if(n.setting>0.5) out.push(["City tunnel vision","You love the buzz, but an hour outside almost every city is somewhere wild and beautiful. Don't let the skyline be the only view you bring home."]);
+  if(out.length===0) out.push(["The comfortable middle","You balance every impulse, which makes you a dream to travel with — but it can also mean never fully leaning into what you'd love most. Sometimes it's worth committing to one kind of trip and doing it all the way."]);
+  return out.slice(0,3);
+}
+
+function superpower(n){
+  const c=[];
+  c.push([Math.abs(n.pace), n.pace>0?["Boundless energy","You wring every drop out of a trip. Where others flag, you're already planning the next thing — and you come home with twice the stories."]:["The art of rest","You actually know how to switch off, a skill most travellers never master. You return genuinely recharged, not more exhausted than you left."]]);
+  c.push([Math.abs(n.plan), n.plan>0?["Master logistician","You make hard trips look effortless. Connections line up, bookings hold, and the group happily follows because you've quietly handled everything."]:["Fearless improviser","You're unshakeable when plans fall apart, because you never leaned on them. A cancelled train is just the start of a better story."]]);
+  c.push([Math.abs(n.social), n.social>0?["Instant connector","You make friends at the bar, the hostel, the bus stop. You turn a place full of strangers into a place full of people you know."]:["Comfortable in your own company","You don't need a crowd to have a great time. That self-sufficiency lets you go where and when you like, on nobody's terms but your own."]]);
+  c.push([Math.abs(n.culture), n.culture>0?["A curious mind","You dig beneath the surface of a place and come home genuinely richer for it. Travel makes you smarter, and it shows."]:null]);
+  c.push([Math.abs(n.budget), n.budget<0?["Champagne trips on a lemonade budget","You've mastered the art of seeing the world for less. You'll travel longer and farther than anyone, and barely feel it in your wallet."]:null]);
+  const best=c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0])[0];
+  return best[1];
+}
+
+function principle(arch,n){
+  const P={
+    beach:"“A holiday is for resting. Everything else is just a nice bonus.”",
+    explorer:"“I don't want to see a place — I want to understand it.”",
+    adventurer:"“I'll sleep when I'm home. Right now there's a summit with my name on it.”",
+    luxury:"“Life's too short for a bad room. Book the suite.”",
+    backpacker:"“Every dollar I don't spend is another week on the road.”",
+    nature:"“The best Wi-Fi is no Wi-Fi. Take me somewhere the signal drops.”",
+    foodie:"“You don't really know a place until you've eaten your way through it.”",
+    wellness:"“I travel to come back a slightly better version of myself.”",
+    generalist:"“The best trip is the one you take as it comes.”"
+  };
+  return P[arch.key]||P.generalist;
+}
+
+/* ---------- state ---------- */
+let i = 0;
+const answers = new Array(SCEN.length).fill(null); // stores chosen option index
+
+const $ = id => document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+
+function start(){ i=0; render(); show('quiz'); }
+function restart(){ answers.fill(null); i=0; show('intro'); }
+
+function render(){
+  const q = SCEN[i];
+  $('snum').textContent = 'Question ' + String(i+1).padStart(2,'0');
+  $('semoji').textContent = q.emoji || '';
+  $('stitle').textContent = q.t;
+  $('sbody').textContent = q.s;
+  $('count').textContent = (i+1)+' / '+SCEN.length;
+  $('fill').style.width = ((i)/SCEN.length*100)+'%';
+  const box = $('opts'); box.innerHTML='';
+  q.o.forEach((opt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(answers[i]===idx?' pick':'');
+    b.innerHTML='<span class="opt-do">'+esc(opt.act)+'</span>';
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  if(answers[i]!==null){
+    $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+  } else {
+    $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
+  }
+  $('next').textContent = (i===SCEN.length-1)?'See my result ▶':'Next ▶';
+}
+
+function choose(idx){
+  answers[i]=idx;
+  document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+}
+
+function next(){
+  if(answers[i]===null) return;
+  if(i===SCEN.length-1){ diagnose(); show('results'); return; }
+  i++; render();
+}
+function prev(){
+  if(i===0){ show('intro'); return; }
+  i--; render();
+}
+
+/* ---------- render results ---------- */
+function renderResults(){
+  const {norm,pct}=RESULT;
+  const arch=archetype(norm);
+  CURRENT_ARCH=arch;
+  $('rEmoji').textContent=arch.emoji;
+  $('rName').textContent=arch.name;
+  $('rTagline').textContent=arch.tag;
+  $('rBlurb').textContent=arch.blurb;
+  $('rProfile').textContent=travelProfile(norm);
+  $('rDestP').textContent=arch.dest;
+
+  // chips: dominant traits
+  const chips=$('rChips'); chips.innerHTML='';
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ranked.forEach(r=>{
+    const label = r.v>=0 ? r.a.pos : r.a.neg;
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML='<b>'+label+'</b>';
+    chips.appendChild(el);
+  });
+
+  // axes
+  const box=$('rAxes'); box.innerHTML='';
+  AXES.forEach(a=>{
+    const p=pct[a.k];
+    const d=document.createElement('div'); d.className='axis';
+    d.innerHTML =
+      '<div class="lbls"><span>'+a.negL+'</span><span>'+a.posL+'</span></div>'+
+      '<div class="axtrack"><span style="left:0%"></span><div class="mid"></div></div>'+
+      '<div class="read">'+axisRead(a,norm)+'</div>';
+    box.appendChild(d);
+    // animate knob
+    requestAnimationFrame(()=>{ d.querySelector('.axtrack > span').style.left = p+'%'; });
+  });
+
+  // superpower
+  const sp=superpower(norm);
+  $('rSuperH').textContent=sp[0]; $('rSuperP').textContent=sp[1];
+
+  // blind spots
+  const bl=$('rBlind'); bl.innerHTML='';
+  blindSpots(norm).forEach(b=>{
+    const d=document.createElement('div'); d.className='mini blind';
+    d.innerHTML='<h4>'+b[0]+'</h4><p>'+b[1]+'</p>'; bl.appendChild(d);
+  });
+
+  // principle
+  $('rPrinciple').textContent=principle(arch,norm);
+
+  // versatility note
+  const v=variance(norm);
+  $('rConsistency').textContent = v>0.4
+    ? "You have a strongly defined travel style — you know exactly the kind of trip you love, and you go all in on it."
+    : "You're a versatile traveller — your preferences flex with the destination, which means almost any trip can be a great one.";
+}
+
+/* ============================================================
+   SHAREABLE RESULT CARD  (rendered on a canvas)
+   ============================================================ */
+let CARD_BLOB=null;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' '); const lines=[]; let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawShareCard(){
+  const W=1080, H=1350;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const {norm,pct}=RESULT, arch=CURRENT_ARCH;
+
+  // background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232653'); bg.addColorStop(.45,'#131427'); bg.addColorStop(1,'#0c0d1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // subtle glow
+  const glow=ctx.createRadialGradient(W/2,180,60,W/2,180,700);
+  glow.addColorStop(0,'rgba(120,110,220,.28)'); glow.addColorStop(1,'rgba(120,110,220,0)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,W,340);
+  // border frame
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,24,24,W-48,H-48,36); ctx.stroke();
+
+  ctx.textAlign='center';
+
+  // kicker
+  ctx.fillStyle='#ffd166'; ctx.font='bold 26px "Trebuchet MS",Arial';
+  ctx.fillText('T H E   H O L I D A Y   Q U I Z', W/2, 92);
+
+  // emoji
+  ctx.font='120px "Segoe UI Emoji","Apple Color Emoji",serif';
+  ctx.fillText(arch.emoji, W/2, 232);
+
+  // archetype name (gradient)
+  ctx.font='bold 74px "Trebuchet MS",Arial';
+  const nameLines=wrapLines(ctx,arch.name,W-160);
+  let ny=310;
+  nameLines.forEach(ln=>{
+    const tw=ctx.measureText(ln).width;
+    const g=ctx.createLinearGradient(W/2-tw/2,0,W/2+tw/2,0);
+    g.addColorStop(0,'#ffd166'); g.addColorStop(.5,'#ff6b6b'); g.addColorStop(1,'#a685ff');
+    ctx.fillStyle=g; ctx.fillText(ln,W/2,ny); ny+=80;
+  });
+  // tagline
+  ctx.fillStyle='#b9b4e6'; ctx.font='italic 30px "Trebuchet MS",Arial';
+  const tagLines=wrapLines(ctx,'“'+arch.tag+'”',W-200);
+  tagLines.forEach(ln=>{ ctx.fillText(ln, W/2, ny+8); ny+=42; });
+  let y=ny+40;
+
+  // signature trait chips (top 3 axes)
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ctx.font='bold 30px "Trebuchet MS",Arial';
+  const labels=ranked.map(r=> r.v>=0 ? r.a.pos : r.a.neg);
+  const padX=28, gap=18, chipH=64;
+  const widths=labels.map(l=>ctx.measureText(l).width+padX*2);
+  const totalW=widths.reduce((s,w)=>s+w,0)+gap*(labels.length-1);
+  let cx=(W-totalW)/2;
+  const chipCols=['#ff6b6b','#4ecdc4','#a685ff'];
+  labels.forEach((l,idx)=>{
+    const w=widths[idx];
+    ctx.fillStyle='rgba(255,255,255,.05)';
+    roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.fill();
+    ctx.strokeStyle=chipCols[idx]; ctx.lineWidth=2; roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.stroke();
+    ctx.fillStyle='#f4f1ff'; ctx.textAlign='center';
+    ctx.fillText(l, cx+w/2, y+chipH/2+11);
+    cx+=w+gap;
+  });
+  y+=chipH+70;
+
+  // "MY TRAVEL PROFILE" heading
+  ctx.fillStyle='#ffd166'; ctx.font='bold 24px "Trebuchet MS",Arial';
+  ctx.fillText('M Y   T R A V E L   P R O F I L E', W/2, y);
+  y+=44;
+
+  // six dials
+  const dialL=90, dialR=W-90, dialW=dialR-dialL;
+  const rowH=66;
+  ctx.textBaseline='alphabetic';
+  AXES.forEach(a=>{
+    ctx.font='500 22px "Trebuchet MS",Arial';
+    ctx.textAlign='left'; ctx.fillStyle='#8f8bc0';
+    ctx.fillText(a.negL, dialL, y);
+    ctx.textAlign='right';
+    ctx.fillText(a.posL, dialR, y);
+    // track
+    const ty=y+22;
+    ctx.fillStyle='#22254a';
+    roundRect(ctx,dialL,ty,dialW,12,6); ctx.fill();
+    // mid tick
+    ctx.fillStyle='#3a3e70'; ctx.fillRect(dialL+dialW/2-1,ty-3,2,18);
+    // knob
+    const kx=dialL + dialW*(pct[a.k]/100);
+    const kg=ctx.createLinearGradient(kx-14,0,kx+14,0);
+    kg.addColorStop(0,'#4ecdc4'); kg.addColorStop(1,'#ffd166');
+    ctx.fillStyle=kg;
+    ctx.beginPath(); ctx.arc(kx,ty+6,14,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0c0d1c'; ctx.lineWidth=3; ctx.stroke();
+    y+=rowH;
+  });
+
+  y+=6;
+  // motto quote box
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const quote=principle(arch,norm);
+  ctx.font='italic 30px "Trebuchet MS",Arial';
+  const qLines=wrapLines(ctx,quote,W-220);
+  const boxH=qLines.length*44+56;
+  ctx.fillStyle='rgba(255,255,255,.04)';
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.stroke();
+  ctx.fillStyle='#efeaff';
+  let qy=y+52;
+  qLines.forEach(ln=>{ ctx.fillText(ln,W/2,qy); qy+=44; });
+  y+=boxH+56;
+
+  // footer
+  ctx.fillStyle='#7d79ad'; ctx.font='22px "Trebuchet MS",Arial';
+  ctx.fillText('20 questions · 6 travel dials · a travel toy', W/2, H-46);
+
+  return cv;
+}
+
+function openShare(){
+  if(!RESULT||!CURRENT_ARCH) return;
+  const cv=drawShareCard();
+  $('shareImg').src=cv.toDataURL('image/png');
+  cv.toBlob(b=>{ CARD_BLOB=b; }, 'image/png');
+  // hide native share button if unsupported
+  $('lbShare').style.display = (navigator.share||navigator.canShare) ? '' : 'none';
+  $('shareBox').classList.add('on');
+}
+function closeShare(){ $('shareBox').classList.remove('on'); }
+
+function ensureBlob(){
+  return new Promise(res=>{
+    if(CARD_BLOB) return res(CARD_BLOB);
+    drawShareCard().toBlob(b=>{ CARD_BLOB=b; res(b); }, 'image/png');
+  });
+}
+
+async function nativeShare(){
+  const blob=await ensureBlob();
+  const file=new File([blob],'holiday-quiz-result.png',{type:'image/png'});
+  const text='I got “'+CURRENT_ARCH.name+'” on The Holiday Quiz.';
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'My Holiday Quiz result', text});
+      return;
+    }
+    if(navigator.share){ await navigator.share({title:'My Holiday Quiz result', text}); return; }
+  }catch(e){ /* user cancelled or blocked — fall through */ }
+  downloadCard();
+}
+
+async function downloadCard(){
+  const blob=await ensureBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='holiday-quiz-result.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  $('lbHint').textContent='Saved! If nothing downloaded, long-press the image above to save it.';
+}
+
+/* ---------- wire up all controls (no inline handlers) ---------- */
+function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
+function init(){
+  on('startBtn', start);
+  on('backBtn', prev);
+  on('next', next);
+  on('shareBtn', openShare);
+  on('restartBtn', restart);
+  on('lbShare', nativeShare);
+  on('lbSave', downloadCard);
+  on('lbClose', closeShare);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+</script>
+</body>
+</html>
