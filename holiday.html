@@ -234,7 +234,7 @@ const SCEN = [
    {act:"Head straight for the beach or pool and do absolutely nothing.", sc:{pace:-2,culture:-1}},
    {act:"Drop the bags and hit the streets to explore on foot.", sc:{pace:1,setting:1,culture:1}},
    {act:"Check into somewhere gorgeous and settle in properly.", sc:{budget:2,pace:-1}},
-   {act:"Find the nearest trail, lake, or mountain and go.", sc:{setting:-2,pace:1}}
+   {act:"Find the nearest trail, lake, or mountain and go.", sc:{setting:-2,pace:1,budget:-1}}
   ]},
 
  {t:"Pick your ideal place to stay.", emoji:"🏨",
@@ -251,7 +251,7 @@ const SCEN = [
   o:[
    {act:"Every hour booked and optimised. I love a plan.", sc:{plan:2}},
    {act:"A rough skeleton, the rest improvised on the ground.", sc:{plan:-1}},
-   {act:"Zero plan. I'll figure it all out when I get there.", sc:{plan:-2,pace:1}},
+   {act:"Zero plan. I'll figure it all out when I get there.", sc:{plan:-2,pace:1,budget:-1}},
    {act:"A guided tour — someone else can do the planning.", sc:{plan:1,social:1,budget:1}}
   ]},
 
@@ -260,7 +260,7 @@ const SCEN = [
   o:[
    {act:"Waves rolling onto white sand.", sc:{pace:-1,setting:-1}},
    {act:"A buzzing city skyline, alive with lights.", sc:{setting:2,social:1}},
-   {act:"Snow-capped mountains and pine forest.", sc:{setting:-2,pace:1}},
+   {act:"Snow-capped mountains and pine forest.", sc:{setting:-2,pace:1,budget:-1}},
    {act:"A quiet vineyard rolling into the distance.", sc:{setting:-1,pace:-1,budget:1}}
   ]},
 
@@ -269,7 +269,7 @@ const SCEN = [
   o:[
    {act:"Cocktails and dancing until late.", sc:{social:2,pace:1}},
    {act:"A long, slow tasting-menu dinner.", sc:{budget:1,culture:1,pace:-1}},
-   {act:"Early night — big day planned tomorrow.", sc:{pace:1,plan:1,social:-1}},
+   {act:"Early night — big day planned tomorrow.", sc:{pace:1,plan:1,social:-1,budget:-1}},
    {act:"Reading on the balcony with a glass of wine.", sc:{pace:-2,social:-1}}
   ]},
 
@@ -313,13 +313,13 @@ const SCEN = [
    {act:"Photos of an epic summit or a dive.", sc:{pace:2,setting:-1}},
    {act:"A local craft from a market you haggled at.", sc:{budget:-1,culture:1,social:1}},
    {act:"Something lovely from the hotel boutique.", sc:{budget:2}},
-   {act:"A tan and zero responsibilities.", sc:{pace:-2,culture:-1}}
+   {act:"A tan and zero responsibilities.", sc:{pace:-2,culture:-1,budget:-1}}
   ]},
 
  {t:"How active is your perfect day?", emoji:"🥾",
   s:"Rate the effort you actually want.",
   o:[
-   {act:"20,000 steps and a summit by lunch.", sc:{pace:2,setting:-1}},
+   {act:"20,000 steps and a summit by lunch.", sc:{pace:2,setting:-1,budget:-1}},
    {act:"A gentle stroll, then a long lunch.", sc:{pace:-1,budget:1}},
    {act:"Horizontal. All day.", sc:{pace:-2}},
    {act:"A packed itinerary of sights to tick off.", sc:{culture:2,plan:1}}
@@ -328,7 +328,7 @@ const SCEN = [
  {t:"Who's on the trip?", emoji:"🧳",
   s:"Your favourite travel company is…",
   o:[
-   {act:"Just me — solo and free.", sc:{social:-2,plan:-1}},
+   {act:"Just me — solo and free.", sc:{social:-2,plan:-1,budget:-1}},
    {act:"A big group of friends.", sc:{social:2}},
    {act:"My partner, somewhere romantic.", sc:{budget:1,social:-1,pace:-1}},
    {act:"Whoever I happen to meet along the way.", sc:{social:1,plan:-2}}
@@ -348,7 +348,7 @@ const SCEN = [
   o:[
    {act:"I live by it, minute to minute.", sc:{plan:2}},
    {act:"A gentle guide I ignore half the time.", sc:{plan:-1}},
-   {act:"Itinerary? I follow my mood.", sc:{plan:-2}},
+   {act:"Itinerary? I follow my mood.", sc:{plan:-2,budget:-1}},
    {act:"I'd honestly rather a guide handled it all.", sc:{plan:1,budget:1,social:1}}
   ]},
 
@@ -381,7 +381,7 @@ const SCEN = [
  {t:"Downtime looks like…", emoji:"😌",
   s:"When the day winds down, you're…",
   o:[
-   {act:"Still going — I'll rest when I'm home.", sc:{pace:1,culture:1}},
+   {act:"Still going — I'll rest when I'm home.", sc:{pace:1,culture:1,budget:-1}},
    {act:"Balancing sights with a bit of beach time.", sc:{setting:-1,culture:1}},
    {act:"Long lazy mornings with no alarm.", sc:{pace:-2,plan:-1}},
    {act:"Being pampered — spa, room service, robe.", sc:{budget:2,pace:-1}}
@@ -390,7 +390,7 @@ const SCEN = [
  {t:"Getting around a new place.", emoji:"🚕",
   s:"Your preferred way to move through a city or region.",
   o:[
-   {act:"Walk everywhere and get lost on purpose.", sc:{plan:-1,culture:1,pace:1}},
+   {act:"Walk everywhere and get lost on purpose.", sc:{plan:-1,culture:1,pace:1,budget:-1}},
    {act:"Rent a car and road-trip it.", sc:{plan:-1,setting:-1}},
    {act:"Private transfers, zero hassle.", sc:{budget:2,social:-1}},
    {act:"Public transport, just like a local.", sc:{budget:-1,culture:1,setting:1}}
@@ -399,7 +399,7 @@ const SCEN = [
  {t:"The holiday you'd (quietly) brag about.", emoji:"📸",
   s:"Which sentence would you most love to say afterward?",
   o:[
-   {act:"“We hiked to a glacier at dawn.”", sc:{setting:-2,pace:2}},
+   {act:"“We hiked to a glacier at dawn.”", sc:{setting:-2,pace:2,budget:-1}},
    {act:"“The suite had its own butler.”", sc:{budget:2,social:-1}},
    {act:"“I ate my way through six night markets.”", sc:{budget:-1,culture:1,social:1,setting:1}},
    {act:"“I didn't check my phone for a week.”", sc:{pace:-2,social:-1,culture:-1}}
