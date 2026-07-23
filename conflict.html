@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Conflict Style Quiz — 18 Questions, One Way You Fight</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(34px,8vw,54px);margin:6px 0 4px;line-height:1.02;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .globe{font-size:70px;margin:14px 0 4px}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+
+  /* Progress */
+  .topbar{display:flex;align-items:center;gap:12px;margin:6px 0 20px}
+  .bar{flex:1;height:9px;background:#20234a;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4);transition:width .4s ease}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:bold}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,var(--card),#191b38);border:1px solid var(--line);
+    border-radius:22px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .4s ease both}
+  .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
+  .scn-emoji{font-size:44px;margin:10px 0 2px;text-align:center}
+  .scn-title{font-size:23px;font-weight:bold;margin:6px 0 6px}
+  .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .opt{
+    text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
+    padding:15px 16px;border-radius:15px;cursor:pointer;font-size:16px;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
+  }
+  .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:16.5px}
+  .opt.pick{border-color:var(--b);background:#243b48}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+  .nextbtn{opacity:.35;pointer-events:none;transition:opacity .2s}
+  .nextbtn.ready{opacity:1;pointer-events:auto}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit}
+  .backlink:hover{color:var(--ink)}
+
+  /* Results */
+  .arche{text-align:center;padding:8px 6px 4px}
+  .arche .emoji{font-size:58px}
+  .arche h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 2px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .arche .sub{color:var(--muted);font-size:15px;margin-bottom:4px}
+  .blurb{font-size:16.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:18px;margin:16px 0}
+  .sect-h{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);
+    font-weight:bold;margin:26px 0 10px}
+  .axis{margin:14px 0}
+  .axis .lbls{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px}
+  .axis .lbls b{color:var(--ink)}
+  .axtrack{position:relative;height:12px;background:#20234a;border-radius:99px}
+  .axtrack > span{position:absolute;top:50%;transform:translate(-50%,-50%);height:20px;width:20px;border-radius:50%;
+    background:linear-gradient(90deg,#4ecdc4,#ffd166);box-shadow:0 3px 10px rgba(0,0,0,.4);border:2px solid #12122a;transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .axtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#3a3e70}
+  .axis .read{font-size:14px;color:#cfcbf3;margin-top:7px}
+  .cardlist{display:grid;gap:12px;grid-template-columns:1fr}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+  .mini h4{margin:0 0 4px;font-size:16px}
+  .mini.blind{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}
+  .mini.super{border-color:rgba(78,205,196,.35);background:rgba(78,205,196,.06)}
+  .mini.dest{border-color:rgba(166,133,255,.35);background:rgba(166,133,255,.06)}
+  .mini p{margin:0;font-size:14.5px;color:#d9d5ff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .chip{background:#23264b;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13.5px}
+  .chip b{color:var(--c)}
+  .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;text-align:center}
+  .again{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .again a{text-decoration:none}
+
+  /* Share lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(6,6,18,.86);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .lightbox.on{display:flex;animation:fade .3s ease both}
+  .lb-inner{max-width:420px;width:100%;text-align:center}
+  .lb-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin-bottom:12px}
+  #shareImg{width:100%;max-height:66vh;object-fit:contain;border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
+  .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
+  .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">What Do You Do When It Gets Tense?</div>
+      <h1>Conflict Style</h1>
+      <div class="globe">⚔️</div>
+      <p class="how">Here's how it works: eighteen quick, real-life scrapes — a partner forgets, a coworker takes credit, a friend cancels again — and you pick what you'd <b>actually</b> do, not what you'd like to think you'd do.</p>
+      <p class="tag">By the end I'll read the shape of your choices across six conflict dials and hand you your conflict archetype — plus where your style works and where it quietly costs you.</p>
+      <button class="btn" id="startBtn">Start the fight ▶</button>
+      <div class="disclaimer">Not a real personality test — it's a conflict toy, loosely riffing on Thomas-Kilmann. It reads the <em>pattern</em> of your instincts and hands you an archetype. Entertainment, with a suspicious amount of accuracy.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backlink" id="backBtn">‹ back</button>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="count" id="count">1 / 18</div>
+    </div>
+    <div class="card">
+      <div class="scn-num" id="snum">Question 01</div>
+      <div class="scn-emoji" id="semoji"></div>
+      <div class="scn-title" id="stitle"></div>
+      <div class="scn-body" id="sbody"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
+        <button class="btn nextbtn" id="next">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="arche">
+      <div class="emoji" id="rEmoji">⚔️</div>
+      <h2 id="rName">Your Conflict Type</h2>
+      <div class="sub" id="rTagline"></div>
+    </div>
+    <div class="blurb" id="rBlurb"></div>
+
+    <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">How You Handle Conflict</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
+
+    <div class="sect-h">Where Your Style Works</div>
+    <div class="cardlist"><div class="mini dest"><h4 id="rDestH">Where your style works — and where to grow</h4><p id="rDestP"></p></div></div>
+
+    <div class="sect-h">Your Six Conflict Dials</div>
+    <div id="rAxes"></div>
+
+    <div class="sect-h">Your Conflict Superpower</div>
+    <div class="cardlist"><div class="mini super"><h4 id="rSuperH"></h4><p id="rSuperP"></p></div></div>
+
+    <div class="sect-h">Your Blind Spots</div>
+    <div class="cardlist" id="rBlind"></div>
+
+    <div class="sect-h">Your Conflict Motto</div>
+    <div class="blurb" id="rPrinciple" style="margin-top:0"></div>
+
+    <div class="footnote" id="rConsistency"></div>
+    <div class="again">
+      <button class="btn" id="shareBtn">📸 Share my result</button>
+      <button class="btn ghost" id="restartBtn">Retake the quiz ↺</button>
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+    </div>
+    <div class="footnote">Built as a conflict toy. Share your type, compare with the people you argue with, and maybe argue better.</div>
+  </section>
+
+  <!-- SHARE LIGHTBOX -->
+  <div id="shareBox" class="lightbox">
+    <div class="lb-inner">
+      <div class="lb-title">Your shareable card</div>
+      <img id="shareImg" alt="Your Conflict Style result card">
+      <div class="lb-hint" id="lbHint">Tap “Share” to send it, “Save” to download, or long-press the image.</div>
+      <div class="lb-btns">
+        <button class="btn" id="lbShare">📤 Share</button>
+        <button class="btn ghost" id="lbSave">⬇ Save</button>
+        <button class="backlink" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SIX CONFLICT DIALS (each answer nudges some of them)
+   assert  : Accommodating (−)     ↔  Assertive (+)
+   style   : Tactful & soft (−)     ↔  Blunt & direct (+)
+   temp    : Cool & calm (−)        ↔  Fiery & heated (+)
+   goal    : Keep the peace (−)     ↔  Win the point (+)
+   approach: Avoid & retreat (−)    ↔  Confront head-on (+)
+   ground  : Flex & compromise (−)  ↔  Hold the line (+)
+   ============================================================ */
+
+const SCEN = [
+ {t:"Your partner forgets something that mattered to you.", emoji:"🎂",
+  s:"The anniversary, the errand, the thing you asked twice about — gone. How do you react?",
+  o:[
+   {act:"Let it go — everyone forgets things sometimes.", sc:{assert:-2,approach:-1,goal:-1}},
+   {act:"Bring it up calmly later, once you've cooled off.", sc:{temp:-1,style:-1,approach:1}},
+   {act:"Tell them right away exactly how much it stung.", sc:{assert:1,approach:2,style:1}},
+   {act:"Go quiet and let them work out what's wrong.", sc:{approach:-2,temp:-1,assert:-1}}
+  ]},
+
+ {t:"A coworker presents your idea as their own.", emoji:"🏆",
+  s:"There it is in the meeting — your work, their name on it. You…",
+  o:[
+   {act:"Call it out right then, in front of everyone.", sc:{assert:2,approach:2,temp:1,goal:1}},
+   {act:"Have a quiet word with them afterward.", sc:{style:-1,approach:1,temp:-1}},
+   {act:"Let it slide — the truth comes out eventually.", sc:{assert:-2,approach:-2,goal:-1}},
+   {act:"Loop in your manager and lay out the facts.", sc:{assert:1,goal:1,style:1,ground:1}}
+  ]},
+
+ {t:"The bill is wrong — you've been overcharged.", emoji:"🧾",
+  s:"A charge on the tab that shouldn't be there. Your move?",
+  o:[
+   {act:"Flag it politely and ask them to fix it.", sc:{assert:1,style:-1,temp:-1}},
+   {act:"Firmly insist — you're not paying until it's right.", sc:{assert:2,goal:2,ground:2}},
+   {act:"Just pay it; it's not worth the fuss.", sc:{assert:-2,approach:-2,goal:-2}},
+   {act:"Get heated — this is daylight robbery.", sc:{temp:2,style:1,approach:1}}
+  ]},
+
+ {t:"A friend cancels on you — again, last minute.", emoji:"📵",
+  s:"Third time this month. The text lands an hour before. You…",
+  o:[
+   {act:"Say nothing, but quietly start pulling back.", sc:{approach:-2,assert:-1,temp:-1}},
+   {act:"Tell them straight that this is becoming a pattern.", sc:{style:2,assert:1,approach:1}},
+   {act:"Make a light joke about it and let it slide.", sc:{goal:-1,style:-1,approach:-1}},
+   {act:"Have an honest talk about what you actually need.", sc:{approach:1,temp:-1,ground:-1}}
+  ]},
+
+ {t:"Someone picks apart your idea in a meeting.", emoji:"📊",
+  s:"You pitched it, and they've just shredded it publicly. You…",
+  o:[
+   {act:"Defend it hard, right there on the spot.", sc:{assert:2,approach:2,goal:2,temp:1}},
+   {act:"Thank them and genuinely weigh whether they're right.", sc:{assert:-1,goal:-1,ground:-1}},
+   {act:"Stay quiet now, revisit it with them privately.", sc:{approach:-1,temp:-1,style:-1}},
+   {act:"Push back calmly, walking through your reasoning.", sc:{assert:1,temp:-1,ground:1}}
+  ]},
+
+ {t:"Someone crosses a clear boundary.", emoji:"🚧",
+  s:"They borrowed your thing / entered your space without asking. You…",
+  o:[
+   {act:"Let it go this once and hope it doesn't repeat.", sc:{assert:-2,goal:-1,approach:-1}},
+   {act:"Make it very clear that's not okay with you.", sc:{assert:2,style:1,ground:2,approach:1}},
+   {act:"Hint that you noticed and hope they take it.", sc:{approach:-1,style:-2}},
+   {act:"Ask them directly why they didn't check first.", sc:{approach:1,temp:-1,assert:1}}
+  ]},
+
+ {t:"The group's about to decide, and you disagree.", emoji:"🗳️",
+  s:"Where to eat, which direction the project goes — the room's leaning the wrong way. You…",
+  o:[
+   {act:"Go along with the group to keep things smooth.", sc:{assert:-2,goal:-1,ground:-2}},
+   {act:"Make your case and try to win them over.", sc:{assert:2,goal:2,approach:1}},
+   {act:"Float a compromise everyone can live with.", sc:{ground:-2,goal:-1,temp:-1}},
+   {act:"Say your piece once, then accept the outcome.", sc:{assert:1,approach:1,ground:-1}}
+  ]},
+
+ {t:"The neighbours are loud, late, again.", emoji:"🔊",
+  s:"It's midnight and the wall is thumping. You…",
+  o:[
+   {act:"Knock and firmly ask them to keep it down.", sc:{assert:2,approach:2,temp:1}},
+   {act:"Slide a polite note under their door.", sc:{style:-1,approach:-1,temp:-1}},
+   {act:"Put in earplugs and suffer through it.", sc:{assert:-2,approach:-2,goal:-1}},
+   {act:"Ask nicely, but make clear you'll escalate.", sc:{assert:1,ground:1}}
+  ]},
+
+ {t:"Someone cuts right in front of you in line.", emoji:"🚶",
+  s:"They just slid in like the queue wasn't there. You…",
+  o:[
+   {act:"Say 'excuse me — the line starts back there.'", sc:{assert:1,approach:1,style:1}},
+   {act:"Let it go; it's not worth the confrontation.", sc:{assert:-2,approach:-2,temp:-1}},
+   {act:"Loudly call them out so everyone hears.", sc:{assert:2,temp:2,style:1,approach:1}},
+   {act:"Sigh audibly but say nothing.", sc:{approach:-1,assert:-1}}
+  ]},
+
+ {t:"A text argument is heating up fast.", emoji:"💬",
+  s:"The replies are getting sharper by the second. You…",
+  o:[
+   {act:"Fire back immediately, while it's hot.", sc:{temp:2,approach:2,assert:1}},
+   {act:"Put the phone down and reply when you're calm.", sc:{temp:-2,approach:-1}},
+   {act:"Call instead — this shouldn't be over text.", sc:{approach:1,temp:-1,ground:-1}},
+   {act:"Leave it on read and cool right off.", sc:{approach:-2,temp:-1,assert:-1}}
+  ]},
+
+ {t:"A family member drops a hot take at dinner.", emoji:"🍽️",
+  s:"Politics, life choices, the usual landmine. The table tenses. You…",
+  o:[
+   {act:"Steer the subject somewhere safe.", sc:{goal:-2,approach:-2,assert:-1}},
+   {act:"Engage and debate it out fully.", sc:{assert:2,approach:2,goal:1,ground:1}},
+   {act:"State your view once, calmly, then move on.", sc:{temp:-1,assert:1,ground:-1}},
+   {act:"Push back hard — some things you won't let slide.", sc:{temp:1,ground:2,style:1,approach:1}}
+  ]},
+
+ {t:"Your roommate never does the dishes.", emoji:"🧽",
+  s:"The sink's a monument again, and it's not yours. You…",
+  o:[
+   {act:"Just do them yourself and seethe quietly.", sc:{assert:-2,approach:-2,temp:-1}},
+   {act:"Put up a chore chart and hold them to it.", sc:{assert:1,ground:1,style:1}},
+   {act:"Sit them down for a direct conversation.", sc:{approach:1,style:1,temp:-1}},
+   {act:"Snap when it finally boils over.", sc:{temp:2,approach:1,assert:1}}
+  ]},
+
+ {t:"Your boss gives you feedback that feels unfair.", emoji:"📝",
+  s:"The criticism doesn't match what actually happened. You…",
+  o:[
+   {act:"Nod and accept it to avoid the trouble.", sc:{assert:-2,goal:-1,approach:-1}},
+   {act:"Respectfully push back with specific examples.", sc:{assert:1,temp:-1,ground:1,approach:1}},
+   {act:"Defend yourself firmly — this is just wrong.", sc:{assert:2,goal:2,approach:2,temp:1}},
+   {act:"Say nothing now, but stew on it for days.", sc:{approach:-2,temp:-1}}
+  ]},
+
+ {t:"You're haggling over a price.", emoji:"💰",
+  s:"A car, a salary, a market stall — there's room to move. You…",
+  o:[
+   {act:"Name a firm number and refuse to budge.", sc:{assert:2,goal:2,ground:2}},
+   {act:"Split the difference quickly and move on.", sc:{ground:-2,goal:-1,temp:-1}},
+   {act:"Pay the asking price — haggling's awkward.", sc:{assert:-2,approach:-2,goal:-1}},
+   {act:"Push for the best deal and be ready to walk.", sc:{assert:1,goal:1,approach:1}}
+  ]},
+
+ {t:"Someone raises their voice at you.", emoji:"📢",
+  s:"The volume just jumped and it's aimed your way. You…",
+  o:[
+   {act:"Raise yours right back.", sc:{temp:2,assert:2,approach:1}},
+   {act:"Stay calm and deliberately lower your tone.", sc:{temp:-2,style:-1}},
+   {act:"Shut down and go quiet.", sc:{approach:-2,assert:-1,temp:-1}},
+   {act:"Firmly ask them not to shout at you.", sc:{assert:1,approach:1,temp:-1}}
+  ]},
+
+ {t:"You made a mistake — and got called out for it.", emoji:"🙈",
+  s:"It was your slip, and now it's public. You…",
+  o:[
+   {act:"Own it immediately and apologise.", sc:{assert:-1,goal:-2,ground:-2}},
+   {act:"Explain the context — it wasn't all on you.", sc:{assert:1,ground:1,goal:1}},
+   {act:"Get defensive and push straight back.", sc:{assert:2,temp:1,approach:1,goal:1}},
+   {act:"Go quiet, take it, and dwell on it later.", sc:{approach:-2,temp:-1}}
+  ]},
+
+ {t:"Two friends both want you to take their side.", emoji:"🎭",
+  s:"They've fallen out and you're stuck in the middle. You…",
+  o:[
+   {act:"Stay neutral and refuse to pick a side.", sc:{approach:-1,goal:-1,ground:-1}},
+   {act:"Try to broker a truce between them.", sc:{ground:-2,goal:-1,style:-1}},
+   {act:"Back whoever's clearly in the right.", sc:{assert:1,ground:2,goal:1}},
+   {act:"Steer clear of both until it blows over.", sc:{approach:-2,assert:-1}}
+  ]},
+
+ {t:"Someone's wrong on the internet, right at you.", emoji:"🌐",
+  s:"A reply lands under your post and it's off-base. You…",
+  o:[
+   {act:"Scroll past — it's not worth your energy.", sc:{approach:-2,assert:-1,temp:-1}},
+   {act:"Fire back a sharp, blunt correction.", sc:{style:2,assert:1,temp:1,approach:1}},
+   {act:"Write a measured, reasoned reply.", sc:{temp:-1,style:-1,ground:1}},
+   {act:"Dive in and argue it until you win.", sc:{assert:2,goal:2,temp:1,approach:2}}
+  ]}
+];
+
+/* ---------- scoring ---------- */
+const AXES = [
+  {k:'assert',  negL:'Accommodating',     posL:'Assertive',        neg:'Yielder',    pos:'Asserter'},
+  {k:'style',   negL:'Tactful & soft',    posL:'Blunt & direct',   neg:'Diplomat',   pos:'Straight-shooter'},
+  {k:'temp',    negL:'Cool & calm',       posL:'Fiery & heated',   neg:'Cool head',  pos:'Hot head'},
+  {k:'goal',    negL:'Keep the peace',    posL:'Win the point',    neg:'Peacemaker', pos:'Competitor'},
+  {k:'approach',negL:'Avoid & retreat',   posL:'Confront head-on', neg:'Avoider',    pos:'Confronter'},
+  {k:'ground',  negL:'Flex & compromise', posL:'Hold the line',    neg:'Pragmatist', pos:'Principled'}
+];
+
+function computeMax(){
+  const max={};
+  AXES.forEach(a=>max[a.k]=0);
+  SCEN.forEach(q=>{
+    AXES.forEach(a=>{
+      let m=0;
+      q.o.forEach(opt=>{ if(opt.sc[a.k]!==undefined) m=Math.max(m,Math.abs(opt.sc[a.k])); });
+      max[a.k]+=m;
+    });
+  });
+  return max;
+}
+
+let RESULT=null;
+let CURRENT_ARCH=null;
+function diagnose(){
+  const tot={}, max=computeMax();
+  AXES.forEach(a=>tot[a.k]=0);
+  answers.forEach((ai,qi)=>{
+    const sc=SCEN[qi].o[ai].sc;
+    for(const k in sc) tot[k]+=sc[k];
+  });
+  // normalized -1..1 and 0..100
+  const norm={}, pct={};
+  AXES.forEach(a=>{ const n = max[a.k]?tot[a.k]/max[a.k]:0; norm[a.k]=n; pct[a.k]=Math.round((n+1)/2*100); });
+  RESULT={tot,norm,pct};
+  renderResults();
+}
+
+/* ---------- archetype selection ---------- */
+function archetype(n){
+  const A=[];
+  A.push({key:'competitor', score:n.assert*1.0 + n.goal*0.9 + n.approach*0.5 + n.temp*0.2, emoji:'🥊', name:'The Competitor',
+    tag:'You came to win, and you usually do',
+    dest:"Your style shines when speed and clarity matter — a negotiation, a crisis, a moment when someone has to say the hard thing and mean it. Where it costs you: relationships that need tending, not winning. Not every disagreement is a scoreboard. Ask more often whether being right is worth being alone in the room."});
+  A.push({key:'collaborator', score:n.approach*0.8 + n.assert*0.45 + (-n.goal)*0.5 + (-n.temp)*0.35, emoji:'🤝', name:'The Collaborator',
+    tag:'You go straight at the problem, not the person',
+    dest:"Your style shines on problems worth solving properly — where both sides have something real at stake and there's time to dig for the answer that actually works for everyone. Where it costs you: not everything deserves a summit. Some conflicts are small, or not yours, and grinding for the perfect resolution can exhaust the very people you're trying to include."});
+  A.push({key:'compromiser', score:(-n.ground)*1.1 + n.assert*0.2 + (-n.temp)*0.2, emoji:'⚖️', name:'The Compromiser',
+    tag:'Meet in the middle, shake on it, move on',
+    dest:"Your style shines when time is short and 'good enough for everyone' beats 'perfect for no one' — quick deals, split decisions, keeping a group moving. Where it costs you: some things shouldn't be split down the middle. Reaching for the fast trade can mean nobody ever names the real issue, and you settle for less than the situation deserved."});
+  A.push({key:'avoider', score:(-n.approach)*1.1 + (-n.assert)*0.45 + (-n.temp)*0.2, emoji:'🚪', name:'The Avoider',
+    tag:'Some fights just aren\'t worth having',
+    dest:"Your style shines when a conflict is trivial, someone's just venting, or tempers need to cool before anything useful can happen — you don't take the bait. Where it costs you: dodged conflicts don't disappear, they compound. The dishes, the pattern, the boundary — left unsaid long enough, small things curdle into resentment nobody saw coming."});
+  A.push({key:'accommodator', score:(-n.assert)*1.0 + (-n.goal)*0.6 + (-n.ground)*0.35, emoji:'🕊️', name:'The Accommodator',
+    tag:'Keeping the peace is its own kind of strength',
+    dest:"Your style shines when the relationship matters more than the point, when you're wrong, or when giving ground now buys goodwill later — you're generous and easy to be around. Where it costs you: yielding every time teaches people your needs come last. A quiet cost adds up. Sometimes the kindest thing is to actually say what you want."});
+  A.push({key:'diplomat', score:(-n.style)*1.0 + (-n.temp)*0.5 + n.approach*0.25 + n.assert*0.15, emoji:'🎩', name:'The Diplomat',
+    tag:'You can say the hard thing without the sting',
+    dest:"Your style shines in delicate rooms — where the message is tough but the relationship is precious, and how you say it matters as much as what you say. Where it costs you: softness can blur the point. Wrap a message carefully enough and people miss it entirely. Now and then the kind thing is to be a little blunter than feels comfortable."});
+  A.push({key:'firebrand', score:n.temp*1.2 + n.style*0.5 + n.approach*0.3, emoji:'🔥', name:'The Firebrand',
+    tag:'You feel it hot and you show it',
+    dest:"Your style shines when something needs energy and honesty — you don't fake calm, and people always know exactly where they stand with you. Where it costs you: heat lands harder than you intend. In the moment it feels like passion; from the other side it can feel like being run over. The point survives better when the temperature drops a few degrees first."});
+  A.push({key:'broker', score:(-n.goal)*0.8 + (-n.temp)*0.6 + n.approach*0.35 + (-n.assert)*0.2, emoji:'🌿', name:'The Peace Broker',
+    tag:'You lower the temperature in the room',
+    dest:"Your style shines when things are overheating and someone needs to hold the calm — you're the one who de-escalates, finds the shared ground, and gets everyone breathing again. Where it costs you: not every fire needs putting out. Sometimes a conflict has to burn a little to clear the air, and rushing to soothe it can bury a problem that needed to be felt."});
+  A.push({key:'generalist', score:0.3 - variance(n), emoji:'🎚️', name:'The Adaptive Negotiator',
+    tag:'You read the room and shift to fit it',
+    dest:"Your style shines almost anywhere, because you don't have just one — you compete when you must, yield when it's wise, and dodge what isn't worth it. Where it costs you: range can slide into having no line at all. Being able to do everything sometimes means never fully committing to the response a moment truly called for."});
+  A.sort((x,y)=>y.score-x.score);
+  return A[0];
+}
+function variance(n){ // how far from center overall (0 = perfectly balanced)
+  const vals=AXES.map(a=>Math.abs(n[a.k]));
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* ---------- narrative helpers ---------- */
+function axisRead(a,n){
+  const v=n[a.k]; const s=Math.abs(v);
+  const strong = s>0.55;
+  const mild = s>0.2;
+  if(!mild) return "You sit right in the middle here — it swings with the situation, and you like it that way.";
+  const lean = strong ? "strongly" : "moderately";
+  const map={
+    assert:{pos:"You state what you want plainly and stand your ground.",neg:"You bend toward others' needs and rarely force the issue."},
+    style:{pos:"You say it straight — no cushioning, no guessing where you stand.",neg:"You soften the message and choose your words with care."},
+    temp:{pos:"Conflict lights you up — you feel it hot and fast.",neg:"You stay cool when things heat up and keep your head."},
+    goal:{pos:"You're in it to win the point, not just to smooth things over.",neg:"You'd rather keep the peace than score the win."},
+    approach:{pos:"You face tension head-on and deal with it now.",neg:"You'd rather step back and let the heat pass."},
+    ground:{pos:"You hold your position and don't fold easily.",neg:"You flex, trade, and look for the middle ground."}
+  };
+  return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
+}
+
+/* Brief "how you handle conflict" synthesis for the results page. */
+function conflictProfile(n){
+  const P = {
+    assert:{pos:"say what you want plainly and stand your ground",
+            neg:"bend toward others and rarely force the issue"},
+    style:{pos:"deliver the message straight, no cushioning",
+           neg:"soften your words and choose them with care"},
+    temp:{pos:"feel conflict hot and fast",
+          neg:"keep a cool head when things heat up"},
+    goal:{pos:"play to win the point",
+          neg:"play to keep the peace"},
+    approach:{pos:"face the tension head-on",
+              neg:"step back and let the heat pass"},
+    ground:{pos:"hold your line and don't fold",
+            neg:"flex and hunt for the middle ground"}
+  };
+  const CLOSE = {
+    assert:{pos:"When it matters, you speak up.",neg:"You'd sooner yield than fight."},
+    style:{pos:"People never wonder where you stand.",neg:"You rarely leave a bruise."},
+    temp:{pos:"You run hot, and you know it.",neg:"You're the calm one in the storm."},
+    goal:{pos:"You'd rather be right than smooth.",neg:"You'd rather be smooth than right."},
+    approach:{pos:"You'd rather have it out than let it fester.",neg:"You'd rather let it pass than have it out."},
+    ground:{pos:"You don't move off your mark easily.",neg:"You'll always look for the deal."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "Your conflict style is hard to pin down — and that's the point. Across eighteen scrapes you leaned every which way, holding the line here, folding there, charging in one moment and stepping back the next. In short: you're an adapter who reads each clash on its own terms and meets it exactly as it comes.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "When things get tense, "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
+function blindSpots(n){
+  const out=[];
+  if(n.assert>0.4) out.push(["Steamroller risk","You push hard and get your way — but a room full of people who quietly folded isn't the same as a room that agreed. Pause sometimes to check whether you won the point or just out-forced it."]);
+  if(n.assert<-0.4) out.push(["The silent resentment","Giving in keeps the peace in the moment, but every swallowed 'no' leaves a residue. Say what you need before it curdles — people can't meet a need you never voiced."]);
+  if(n.temp>0.45) out.push(["Running too hot","Your passion is real, but heat clouds the actual point. What feels like conviction from the inside can feel like being steamrolled from the outside. Cooling off first rarely costs you the argument."]);
+  if(n.temp<-0.45) out.push(["Too cool to read","Staying calm is a gift — but a face that gives away nothing can read as not caring. Sometimes people need to see that it matters to you, not just hear that it does."]);
+  if(n.approach>0.45) out.push(["Picking every battle","You clear the air fast, which is healthy — until it isn't. Not every slight is a hill. Chasing down every friction can wear people out and turn small moments into standoffs."]);
+  if(n.approach<-0.45) out.push(["The avoidance tax","Dodging a conflict feels like keeping the peace, but unspoken things don't vanish — they compound. The dishes, the pattern, the boundary: named early they're small, buried they fester."]);
+  if(n.goal>0.45) out.push(["Winning the point, losing the room","You're good at being right — but a relationship is not a debate you can win. Sometimes the person matters more than the point, and the scoreboard is the wrong thing to be watching."]);
+  if(n.goal<-0.45) out.push(["Peace at any price","Smoothing things over is a real skill, but harmony bought by never raising the hard thing is a loan, not a gift. Some problems only go away once someone's brave enough to name them."]);
+  if(n.style>0.5) out.push(["Bluntness bruises","Straight talk saves everyone guessing — but the same words that feel honest to you can land as a slap. A little cushioning isn't dishonest; it's just aiming for the ears, not the jaw."]);
+  if(n.ground<-0.5) out.push(["Folding too fast","You'll always find the middle, which keeps things moving — but reach for the compromise too quickly and nobody ever names what they actually wanted. Some things shouldn't be split down the middle."]);
+  if(out.length===0) out.push(["The comfortable middle","You balance every instinct, which makes you steady in a storm — but it can also mean never fully committing to the response a moment truly needed. Sometimes it's worth picking a lane and meaning it."]);
+  return out.slice(0,3);
+}
+
+function superpower(n){
+  const c=[];
+  c.push([Math.abs(n.assert), n.assert>0?["The clear ask","You say what you need out loud, so nobody has to guess. That plainness cuts through the fog most conflicts drown in — people know exactly where they stand with you."]:["The gift of grace","You give ground easily and hold no scorecard. People relax around you, because being with you never feels like a contest they have to win."]]);
+  c.push([Math.abs(n.temp), n.temp<0?["Grace under fire","You stay steady while everyone else loses it. When the room heats up, you're the thermostat, not the flame — and that calm is worth more than any argument."]:["Honest fire","You don't fake calm you don't feel. People always know it's real with you, and that raw honesty can move a room in a way careful words never will."]]);
+  c.push([Math.abs(n.approach), n.approach>0?["Clears the air","You'd rather have the hard conversation than live under the cloud of it. Things don't fester around you, because you deal with them while they're still small."]:["Knows what to let go","You don't take every bait, and that restraint saves a hundred pointless fights. You can feel the difference between what matters and what will pass on its own."]]);
+  c.push([Math.abs(n.goal), n.goal<0?["The peacemaker's touch","You instinctively look for what keeps people whole, not what wins. In a world full of scorekeepers, you're the one who remembers the relationship is the point."]:null]);
+  c.push([Math.abs(n.ground), n.ground>0?["A principled backbone","You know where your line is and you don't slide off it under pressure. People trust you precisely because you can't be nudged into agreeing to things you don't."]:["The dealmaker","You can always find the middle nobody else could see. Where others dig in, you find the trade — and everyone walks away with something they can live with."]]);
+  const best=c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0])[0];
+  return best[1];
+}
+
+function principle(arch,n){
+  const P={
+    competitor:"“If it's worth arguing about, it's worth winning.”",
+    collaborator:"“Let's not fight each other — let's fight the problem.”",
+    compromiser:"“Nobody gets everything. Let's find what everybody can live with.”",
+    avoider:"“Not every hill is worth dying on. Most aren't even hills.”",
+    accommodator:"“I'd rather keep you than win this.”",
+    diplomat:"“The hard thing still needs saying — just kindly.”",
+    firebrand:"“You'll always know exactly how I feel about it.”",
+    broker:"“Lower your voice, and let's actually sort this out.”",
+    generalist:"“Every conflict is different. So am I.”"
+  };
+  return P[arch.key]||P.generalist;
+}
+
+/* ---------- state ---------- */
+let i = 0;
+const answers = new Array(SCEN.length).fill(null); // stores chosen option index
+
+const $ = id => document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+
+function start(){ i=0; render(); show('quiz'); }
+function restart(){ answers.fill(null); i=0; show('intro'); }
+
+function render(){
+  const q = SCEN[i];
+  $('snum').textContent = 'Question ' + String(i+1).padStart(2,'0');
+  $('semoji').textContent = q.emoji || '';
+  $('stitle').textContent = q.t;
+  $('sbody').textContent = q.s;
+  $('count').textContent = (i+1)+' / '+SCEN.length;
+  $('fill').style.width = ((i)/SCEN.length*100)+'%';
+  const box = $('opts'); box.innerHTML='';
+  q.o.forEach((opt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(answers[i]===idx?' pick':'');
+    b.innerHTML='<span class="opt-do">'+esc(opt.act)+'</span>';
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  if(answers[i]!==null){
+    $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+  } else {
+    $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
+  }
+  $('next').textContent = (i===SCEN.length-1)?'See my result ▶':'Next ▶';
+}
+
+function choose(idx){
+  answers[i]=idx;
+  document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+}
+
+function next(){
+  if(answers[i]===null) return;
+  if(i===SCEN.length-1){ diagnose(); show('results'); return; }
+  i++; render();
+}
+function prev(){
+  if(i===0){ show('intro'); return; }
+  i--; render();
+}
+
+/* ---------- render results ---------- */
+function renderResults(){
+  const {norm,pct}=RESULT;
+  const arch=archetype(norm);
+  CURRENT_ARCH=arch;
+  $('rEmoji').textContent=arch.emoji;
+  $('rName').textContent=arch.name;
+  $('rTagline').textContent=arch.tag;
+  $('rBlurb').textContent=arch.blurb||"";
+  $('rProfile').textContent=conflictProfile(norm);
+  $('rDestP').textContent=arch.dest;
+
+  // chips: dominant traits
+  const chips=$('rChips'); chips.innerHTML='';
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ranked.forEach(r=>{
+    const label = r.v>=0 ? r.a.pos : r.a.neg;
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML='<b>'+label+'</b>';
+    chips.appendChild(el);
+  });
+
+  // axes
+  const box=$('rAxes'); box.innerHTML='';
+  AXES.forEach(a=>{
+    const p=pct[a.k];
+    const d=document.createElement('div'); d.className='axis';
+    d.innerHTML =
+      '<div class="lbls"><span>'+a.negL+'</span><span>'+a.posL+'</span></div>'+
+      '<div class="axtrack"><span style="left:0%"></span><div class="mid"></div></div>'+
+      '<div class="read">'+axisRead(a,norm)+'</div>';
+    box.appendChild(d);
+    // animate knob
+    requestAnimationFrame(()=>{ d.querySelector('.axtrack > span').style.left = p+'%'; });
+  });
+
+  // superpower
+  const sp=superpower(norm);
+  $('rSuperH').textContent=sp[0]; $('rSuperP').textContent=sp[1];
+
+  // blind spots
+  const bl=$('rBlind'); bl.innerHTML='';
+  blindSpots(norm).forEach(b=>{
+    const d=document.createElement('div'); d.className='mini blind';
+    d.innerHTML='<h4>'+b[0]+'</h4><p>'+b[1]+'</p>'; bl.appendChild(d);
+  });
+
+  // principle
+  $('rPrinciple').textContent=principle(arch,norm);
+
+  // versatility note
+  const v=variance(norm);
+  $('rConsistency').textContent = v>0.4
+    ? "You have a strongly defined conflict style — you know exactly how you handle a clash, and you handle it that way every time."
+    : "You're an adaptive fighter — your response flexes with the situation, which means almost any conflict is one you can meet on its own terms.";
+}
+
+/* ============================================================
+   SHAREABLE RESULT CARD  (rendered on a canvas)
+   ============================================================ */
+let CARD_BLOB=null;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' '); const lines=[]; let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawShareCard(){
+  const W=1080, H=1350;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const {norm,pct}=RESULT, arch=CURRENT_ARCH;
+
+  // background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232653'); bg.addColorStop(.45,'#131427'); bg.addColorStop(1,'#0c0d1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // subtle glow
+  const glow=ctx.createRadialGradient(W/2,180,60,W/2,180,700);
+  glow.addColorStop(0,'rgba(120,110,220,.28)'); glow.addColorStop(1,'rgba(120,110,220,0)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,W,340);
+  // border frame
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,24,24,W-48,H-48,36); ctx.stroke();
+
+  ctx.textAlign='center';
+
+  // kicker
+  ctx.fillStyle='#ffd166'; ctx.font='bold 26px "Trebuchet MS",Arial';
+  ctx.fillText('C O N F L I C T   S T Y L E', W/2, 92);
+
+  // emoji
+  ctx.font='120px "Segoe UI Emoji","Apple Color Emoji",serif';
+  ctx.fillText(arch.emoji, W/2, 232);
+
+  // archetype name (gradient)
+  ctx.font='bold 74px "Trebuchet MS",Arial';
+  const nameLines=wrapLines(ctx,arch.name,W-160);
+  let ny=310;
+  nameLines.forEach(ln=>{
+    const tw=ctx.measureText(ln).width;
+    const g=ctx.createLinearGradient(W/2-tw/2,0,W/2+tw/2,0);
+    g.addColorStop(0,'#ffd166'); g.addColorStop(.5,'#ff6b6b'); g.addColorStop(1,'#a685ff');
+    ctx.fillStyle=g; ctx.fillText(ln,W/2,ny); ny+=80;
+  });
+  // tagline
+  ctx.fillStyle='#b9b4e6'; ctx.font='italic 30px "Trebuchet MS",Arial';
+  const tagLines=wrapLines(ctx,'“'+arch.tag+'”',W-200);
+  tagLines.forEach(ln=>{ ctx.fillText(ln, W/2, ny+8); ny+=42; });
+  let y=ny+40;
+
+  // signature trait chips (top 3 axes)
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ctx.font='bold 30px "Trebuchet MS",Arial';
+  const labels=ranked.map(r=> r.v>=0 ? r.a.pos : r.a.neg);
+  const padX=28, gap=18, chipH=64;
+  const widths=labels.map(l=>ctx.measureText(l).width+padX*2);
+  const totalW=widths.reduce((s,w)=>s+w,0)+gap*(labels.length-1);
+  let cx=(W-totalW)/2;
+  const chipCols=['#ff6b6b','#4ecdc4','#a685ff'];
+  labels.forEach((l,idx)=>{
+    const w=widths[idx];
+    ctx.fillStyle='rgba(255,255,255,.05)';
+    roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.fill();
+    ctx.strokeStyle=chipCols[idx]; ctx.lineWidth=2; roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.stroke();
+    ctx.fillStyle='#f4f1ff'; ctx.textAlign='center';
+    ctx.fillText(l, cx+w/2, y+chipH/2+11);
+    cx+=w+gap;
+  });
+  y+=chipH+70;
+
+  // "MY CONFLICT PROFILE" heading
+  ctx.fillStyle='#ffd166'; ctx.font='bold 24px "Trebuchet MS",Arial';
+  ctx.fillText('M Y   C O N F L I C T   P R O F I L E', W/2, y);
+  y+=44;
+
+  // six dials
+  const dialL=90, dialR=W-90, dialW=dialR-dialL;
+  const rowH=66;
+  ctx.textBaseline='alphabetic';
+  AXES.forEach(a=>{
+    ctx.font='500 22px "Trebuchet MS",Arial';
+    ctx.textAlign='left'; ctx.fillStyle='#8f8bc0';
+    ctx.fillText(a.negL, dialL, y);
+    ctx.textAlign='right';
+    ctx.fillText(a.posL, dialR, y);
+    // track
+    const ty=y+22;
+    ctx.fillStyle='#22254a';
+    roundRect(ctx,dialL,ty,dialW,12,6); ctx.fill();
+    // mid tick
+    ctx.fillStyle='#3a3e70'; ctx.fillRect(dialL+dialW/2-1,ty-3,2,18);
+    // knob
+    const kx=dialL + dialW*(pct[a.k]/100);
+    const kg=ctx.createLinearGradient(kx-14,0,kx+14,0);
+    kg.addColorStop(0,'#4ecdc4'); kg.addColorStop(1,'#ffd166');
+    ctx.fillStyle=kg;
+    ctx.beginPath(); ctx.arc(kx,ty+6,14,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0c0d1c'; ctx.lineWidth=3; ctx.stroke();
+    y+=rowH;
+  });
+
+  y+=6;
+  // motto quote box
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const quote=principle(arch,norm);
+  ctx.font='italic 30px "Trebuchet MS",Arial';
+  const qLines=wrapLines(ctx,quote,W-220);
+  const boxH=qLines.length*44+56;
+  ctx.fillStyle='rgba(255,255,255,.04)';
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.stroke();
+  ctx.fillStyle='#efeaff';
+  let qy=y+52;
+  qLines.forEach(ln=>{ ctx.fillText(ln,W/2,qy); qy+=44; });
+  y+=boxH+56;
+
+  // footer
+  ctx.fillStyle='#7d79ad'; ctx.font='22px "Trebuchet MS",Arial';
+  ctx.fillText('18 questions · 6 conflict dials · a conflict toy', W/2, H-46);
+
+  return cv;
+}
+
+function openShare(){
+  if(!RESULT||!CURRENT_ARCH) return;
+  const cv=drawShareCard();
+  $('shareImg').src=cv.toDataURL('image/png');
+  cv.toBlob(b=>{ CARD_BLOB=b; }, 'image/png');
+  // hide native share button if unsupported
+  $('lbShare').style.display = (navigator.share||navigator.canShare) ? '' : 'none';
+  $('shareBox').classList.add('on');
+}
+function closeShare(){ $('shareBox').classList.remove('on'); }
+
+function ensureBlob(){
+  return new Promise(res=>{
+    if(CARD_BLOB) return res(CARD_BLOB);
+    drawShareCard().toBlob(b=>{ CARD_BLOB=b; res(b); }, 'image/png');
+  });
+}
+
+async function nativeShare(){
+  const blob=await ensureBlob();
+  const file=new File([blob],'conflict-style-result.png',{type:'image/png'});
+  const text='I got “'+CURRENT_ARCH.name+'” on the Conflict Style quiz.';
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'My Conflict Style result', text});
+      return;
+    }
+    if(navigator.share){ await navigator.share({title:'My Conflict Style result', text}); return; }
+  }catch(e){ /* user cancelled or blocked — fall through */ }
+  downloadCard();
+}
+
+async function downloadCard(){
+  const blob=await ensureBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='conflict-style-result.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  $('lbHint').textContent='Saved! If nothing downloaded, long-press the image above to save it.';
+}
+
+/* ---------- wire up all controls (no inline handlers) ---------- */
+function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
+function init(){
+  on('startBtn', start);
+  on('backBtn', prev);
+  on('next', next);
+  on('shareBtn', openShare);
+  on('restartBtn', restart);
+  on('lbShare', nativeShare);
+  on('lbSave', downloadCard);
+  on('lbClose', closeShare);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+</script>
+</body>
+</html>
