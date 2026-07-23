@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
+<title>Care Languages Navigator — Speak Their Language</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Hub link */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+
+  /* Intro */
+  .hero{text-align:center;padding:26px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(32px,7.5vw,52px);margin:8px 0 4px;line-height:1.04;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:12px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:16px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+  .disclaimer a{color:var(--c)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+  .mt{margin-top:22px}
+
+  /* Section heads */
+  .step-h{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin:4px 0 4px}
+  .step-title{font-size:24px;font-weight:bold;margin:0 0 4px}
+  .step-sub{color:var(--muted);font-size:15px;margin:0 0 18px}
+
+  /* Type grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:380px){.grid{grid-template-columns:1fr}}
+  .type-card{
+    text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;
+    padding:16px 15px;cursor:pointer;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+    display:flex;flex-direction:column;gap:2px;min-height:118px;
+  }
+  .type-card:hover,.type-card:focus-visible{border-color:#5b60a8;background:#23264b;transform:translateY(-2px);outline:none}
+  .type-num{font-size:30px;font-weight:bold;line-height:1}
+  .type-name{font-weight:bold;font-size:15.5px;margin-top:6px}
+  .type-desc{font-size:13px;color:var(--muted);line-height:1.35}
+
+  /* Wing choices */
+  .wing-card{
+    display:block;width:100%;text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;padding:18px 18px;
+    cursor:pointer;font-family:inherit;margin-bottom:14px;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+  }
+  .wing-card:hover,.wing-card:focus-visible{border-color:var(--b);background:#20304a;transform:translateY(-1px);outline:none}
+  .wing-label{font-weight:bold;font-size:20px;color:#fff}
+  .wing-tag{font-size:14px;color:var(--c);font-weight:bold;margin-left:8px}
+  .wing-note{display:block;margin-top:7px;font-size:14.5px;color:#d9d5ff;line-height:1.4}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px;flex-wrap:wrap}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit;padding:6px 2px}
+  .backlink:hover,.backlink:focus-visible{color:var(--ink);outline:none}
+
+  /* Results */
+  .res-head{text-align:center;padding:6px 6px 2px}
+  .res-head .badge{display:inline-block;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--c);font-weight:bold}
+  .res-head h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 4px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .res-head .sub{color:var(--muted);font-size:15.5px;margin:0 auto;max-width:520px}
+  .wing-blurb{font-size:15.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:15px 17px;margin:16px 0 6px}
+
+  .panel{border-radius:20px;padding:18px 18px 20px;margin:18px 0;border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--card),#191b38);box-shadow:0 16px 40px rgba(0,0,0,.3);
+    animation:pop .4s ease both}
+  .panel.stress{border-color:rgba(255,107,107,.32)}
+  .panel.unwind{border-color:rgba(78,205,196,.32)}
+  .panel-h{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+  .panel-h .ic{font-size:26px;line-height:1}
+  .panel-h h3{margin:0;font-size:21px}
+  .panel.stress .panel-h h3{color:#ffb3b3}
+  .panel.unwind .panel-h h3{color:#bff6ee}
+  .arrow-line{font-size:14px;color:#d9d5ff;margin:2px 0 12px}
+  .arrow-line b{color:var(--ink)}
+  .sub-h{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:bold;margin:16px 0 8px}
+  .panel.stress .sub-h{color:var(--a)}
+  .panel.unwind .sub-h{color:var(--b)}
+  ul.tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+  ul.tips li{position:relative;padding-left:24px;font-size:15.5px;color:#e9e6ff;line-height:1.45}
+  ul.tips li::before{content:"";position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:50%}
+  .panel.stress ul.tips li::before{background:var(--a)}
+  .panel.unwind ul.tips li::before{background:var(--b)}
+  .tweak{margin-top:14px;font-size:14.5px;line-height:1.45;border-radius:12px;padding:11px 14px}
+  .panel.stress .tweak{background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.26);color:#ffe0e0}
+  .panel.unwind .tweak{background:rgba(78,205,196,.10);border:1px solid rgba(78,205,196,.26);color:#d6fff9}
+  .tweak b{color:#fff}
+
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin:22px auto 0;max-width:540px;line-height:1.5}
+  .footlinks{text-align:center;margin-top:10px}
+  @media (prefers-reduced-motion: reduce){
+    .screen,.panel,.type-card,.wing-card,.btn{animation:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">Care Languages Navigator</div>
+      <h1>Speak Their Language</h1>
+      <p class="tag">Pick the way you most naturally give and receive love, and get concrete guidance
+        for recognizing — and actually speaking — the other four languages the people you love use.</p>
+      <p class="how">Most of us have one <b>primary care language</b> we reach for first, and we tend to
+        love others in that same language. But the people around us may be listening on a
+        <b>different channel</b>. This tool helps you translate.</p>
+      <div class="center mt">
+        <button class="btn" id="startBtn">Pick my language →</button>
+      </div>
+      <p class="disclaimer">This is a reflective tool inspired by the popular love-languages framework —
+        a friendly way to notice how you and your people prefer to be cared for. It's for self-reflection,
+        not clinical or relationship advice.</p>
+    </div>
+  </section>
+
+  <!-- TYPE PICKER -->
+  <section id="type" class="screen">
+    <div class="step-h">Step 1 of 2</div>
+    <p class="step-title">What's your primary language?</p>
+    <p class="step-sub">Pick the one that most makes you feel loved — the way you most naturally show it, too.</p>
+    <div class="grid" id="typeGrid"></div>
+    <div class="nav">
+      <button class="backlink" id="typeBack">← Back</button>
+    </div>
+  </section>
+
+  <!-- WING PICKER -->
+  <section id="wing" class="screen">
+    <div class="step-h">Step 2 of 2</div>
+    <p class="step-title" id="wingTitle">Who are you reaching?</p>
+    <p class="step-sub">The guidance shifts depending on who you're trying to connect with. Pick one.</p>
+    <div id="wingList"></div>
+    <div class="nav">
+      <button class="backlink" id="wingBack">← Pick a different language</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="res-head">
+      <span class="badge" id="resBadge"></span>
+      <h2 id="resTitle"></h2>
+      <p class="sub" id="resSub"></p>
+    </div>
+    <div class="wing-blurb" id="resWingBlurb"></div>
+
+    <div class="panel stress">
+      <div class="panel-h"><span class="ic">💞</span><h3>Your language</h3></div>
+      <p class="arrow-line" id="stressArrow"></p>
+      <div class="sub-h">How you naturally show it</div>
+      <ul class="tips" id="stressSigns"></ul>
+      <div class="sub-h">What makes you feel loved</div>
+      <ul class="tips" id="stressDo"></ul>
+      <div class="tweak" id="stressTweak"></div>
+    </div>
+
+    <div class="panel unwind">
+      <div class="panel-h"><span class="ic">🗣️</span><h3>Speak the others</h3></div>
+      <p class="arrow-line" id="growthArrow"></p>
+      <div class="sub-h">Spot what they need</div>
+      <ul class="tips" id="unwindGrowth"></ul>
+      <div class="sub-h">Speak their language</div>
+      <ul class="tips" id="unwindDo"></ul>
+      <div class="tweak" id="unwindTweak"></div>
+    </div>
+
+    <p class="footnote" id="resFoot"></p>
+    <div class="footlinks nav" style="justify-content:center">
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+      <button class="btn ghost" id="againBtn">Pick a different language / focus</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- Data model: 5 care languages, each with two panels and two reaching-focus variants ---------- */
+const TYPES = [
+  {
+    name:"Words of Affirmation", emoji:"💬",
+    desc:"You feel most loved through spoken and written appreciation",
+    stressSigns:[
+      "You praise generously and specifically — you notice effort and say so",
+      "You reach for the encouraging text, the note, the honest 'I'm proud of you'",
+      "You process care in words: hearing it, saying it, writing it down"
+    ],
+    stressDo:[
+      "Specific spoken appreciation lands deepest — 'I love how you handled that'",
+      "Encouragement when you're doubting yourself means everything",
+      "A favour done in silence, or a gift with no note, can feel oddly hollow"
+    ],
+    unwindGrowth:[
+      "Acts of Service: they say 'I love you' by doing — watch what they quietly fix",
+      "Quality Time: they feel loved by your full, undistracted presence",
+      "Gifts: a small token tells them they were on your mind",
+      "Physical Touch: a hug or hand on the arm reaches them before words do"
+    ],
+    unwindDo:[
+      "Service person: do the chore before they ask — let the deed be the message",
+      "Quality Time person: put the phone away and give them an unhurried hour",
+      "Gifts person: bring back the little thing that made you think of them",
+      "Touch person: greet them with a real hug and sit close, not across the room"
+    ],
+    wings:{
+      a:{label:"A partner", tag:"One-on-one",
+         note:"Guidance tuned for a romantic partner — the person you share daily life with.",
+         stressTweak:"A specific daily 'I love you because…' beats any once-a-year speech.",
+         unwindTweak:"When your partner's language differs, trust the deed, the hug, or the gift — they're saying it their way."},
+      b:{label:"Friends & family", tag:"The wider circle",
+         note:"Guidance tuned for friends, parents, siblings, and chosen family.",
+         stressTweak:"A genuine text naming something you admire lands far harder than a quick 'thanks'.",
+         unwindTweak:"Not everyone says it back in words — read a parent's packed lunch or a friend's favour as the love note it is."}
+    }
+  },
+  {
+    name:"Acts of Service", emoji:"🤲",
+    desc:"You feel most loved when people do helpful things for you",
+    stressSigns:[
+      "You show love by doing — you fix, carry, cook, and handle what needs handling",
+      "You notice the undone task and quietly take care of it",
+      "'Let me get that for you' is your natural way of saying 'I care'"
+    ],
+    stressDo:[
+      "Someone easing your load without being asked lands deepest",
+      "Follow-through matters — a promise kept feels like real love",
+      "Empty words or a gift while the sink's still full can feel like a dodge"
+    ],
+    unwindGrowth:[
+      "Words: they light up at spoken praise — say the appreciation out loud",
+      "Quality Time: they want you present, not just productive around them",
+      "Gifts: a thoughtful object is how they register being cared for",
+      "Physical Touch: closeness and contact reassure them more than any task"
+    ],
+    unwindDo:[
+      "Words person: tell them plainly what you admire — don't just do for them",
+      "Quality Time person: stop working and simply be with them, fully",
+      "Gifts person: pick up the small something that fits them exactly",
+      "Touch person: pause the doing for a long hug or a hand held"
+    ],
+    wings:{
+      a:{label:"A partner", tag:"One-on-one",
+         note:"Guidance tuned for a romantic partner — the person you share daily life with.",
+         stressTweak:"Share the invisible load — the mental to-do list, not just the visible chores.",
+         unwindTweak:"When your partner speaks in words or touch, let yourself receive it — you don't have to earn love by doing."},
+      b:{label:"Friends & family", tag:"The wider circle",
+         note:"Guidance tuned for friends, parents, siblings, and chosen family.",
+         stressTweak:"A reliable 'I've got it handled' is your love language — and they feel it.",
+         unwindTweak:"Others may show up with words or time instead of help — that counts, even if the dishes stay."}
+    }
+  },
+  {
+    name:"Quality Time", emoji:"⏳",
+    desc:"You feel most loved through undivided, present attention",
+    stressSigns:[
+      "You give love by showing up fully — phone away, eyes up, really there",
+      "You plan the walk, the long dinner, the unhurried catch-up",
+      "Being interrupted or half-listened-to stings more than most things"
+    ],
+    stressDo:[
+      "Someone choosing time with you over their to-do list lands deepest",
+      "Undistracted conversation feels like being truly seen",
+      "Sitting together while they scroll can feel lonelier than being alone"
+    ],
+    unwindGrowth:[
+      "Words: they need to hear it, not just share the moment — say it aloud",
+      "Acts of Service: they feel your care through what you do for them",
+      "Gifts: a token proves you thought of them while you were apart",
+      "Physical Touch: presence plus contact — sit close, not just nearby"
+    ],
+    unwindDo:[
+      "Words person: use your time together to voice what you appreciate",
+      "Service person: fold your care into a helpful act, not just company",
+      "Gifts person: bring a small marker of your time apart back to them",
+      "Touch person: close the physical gap — a hand, a lean, a hug"
+    ],
+    wings:{
+      a:{label:"A partner", tag:"One-on-one",
+         note:"Guidance tuned for a romantic partner — the person you share daily life with.",
+         stressTweak:"Protect a regular no-phones ritual — a walk, a meal — that's just the two of you.",
+         unwindTweak:"When your partner shows love by doing or giving, count it as time invested in you, even without the hours."},
+      b:{label:"Friends & family", tag:"The wider circle",
+         note:"Guidance tuned for friends, parents, siblings, and chosen family.",
+         stressTweak:"A planned one-on-one hangout means more to you than a big crowded group.",
+         unwindTweak:"Busy people may show love in quick favours or texts — let those bridge the gaps between real time together."}
+    }
+  },
+  {
+    name:"Gifts", emoji:"🎁",
+    desc:"You feel most loved through thoughtful, tangible tokens",
+    stressSigns:[
+      "You love finding the thing that's so them and handing it over",
+      "You remember what people mentioned wanting months ago",
+      "It's never the price — it's the thought the object proves"
+    ],
+    stressDo:[
+      "A small, well-chosen gift that shows you 'got' them lands deepest",
+      "Being remembered on the day matters — a marked occasion means love",
+      "A forgotten birthday, or a generic last-minute grab, can really sting"
+    ],
+    unwindGrowth:[
+      "Words: they treasure what you say more than what you give — say it",
+      "Acts of Service: a helpful deed is their kind of present",
+      "Quality Time: your presence is the gift they actually want",
+      "Physical Touch: a warm hug can mean more to them than any package"
+    ],
+    unwindDo:[
+      "Words person: attach real words — the note matters more than the wrapping",
+      "Service person: 'gift' them an errand run or a chore taken off their plate",
+      "Quality Time person: give an experience to share, not just an object",
+      "Touch person: hand it over with a hug, or skip the gift for closeness"
+    ],
+    wings:{
+      a:{label:"A partner", tag:"One-on-one",
+         note:"Guidance tuned for a romantic partner — the person you share daily life with.",
+         stressTweak:"Keep a running note of things they mention — the 'you remembered!' moment is the whole point.",
+         unwindTweak:"When your partner shows love in words or time, receive it as the gift it is — not everyone wraps their care."},
+      b:{label:"Friends & family", tag:"The wider circle",
+         note:"Guidance tuned for friends, parents, siblings, and chosen family.",
+         stressTweak:"Mark the dates — a small remembered token on the right day says you were thinking of them.",
+         unwindTweak:"Some people rarely give objects but show up in other ways — read the favour or the visit as their kind of present."}
+    }
+  },
+  {
+    name:"Physical Touch", emoji:"🤗",
+    desc:"You feel most loved through warmth, closeness, and contact",
+    stressSigns:[
+      "You reach out — a hug, a hand on the shoulder, sitting shoulder to shoulder",
+      "Physical closeness is how you both give comfort and feel safe",
+      "A warm greeting hug can reset a whole hard day for you"
+    ],
+    stressDo:[
+      "A genuine hug or held hand lands deeper than almost any words",
+      "Being physically close during hard moments says 'I'm here' best",
+      "Distance, or a stiff greeting, can read as coldness even when it isn't"
+    ],
+    unwindGrowth:[
+      "Words: they need to hear the affection, not just feel it — say it",
+      "Acts of Service: they read care in what you do, not the contact",
+      "Quality Time: presence and attention reassure them most",
+      "Gifts: a tangible token is how they register being thought of"
+    ],
+    unwindDo:[
+      "Words person: pair the closeness with spoken affection",
+      "Service person: show love by handling something for them",
+      "Quality Time person: offer unhurried, undistracted presence",
+      "Gifts person: bring back a small token from your time apart"
+    ],
+    wings:{
+      a:{label:"A partner", tag:"One-on-one",
+         note:"Guidance tuned for a romantic partner — the person you share daily life with.",
+         stressTweak:"Everyday non-sexual touch — a hand at the back, a long hug — keeps you feeling connected.",
+         unwindTweak:"When your partner isn't a toucher, don't read the distance as distance — their words or deeds are the same message."},
+      b:{label:"Friends & family", tag:"The wider circle",
+         note:"Guidance tuned for friends, parents, siblings, and chosen family.",
+         stressTweak:"Respect that not everyone is a hugger — offer, read the response, and let warmth be mutual.",
+         unwindTweak:"Some loved ones show care with a favour or a gift instead of a hug — receive it as the closeness they can give."}
+    }
+  }
+];
+
+const byName = name => TYPES.find(t => t.name === name);
+
+let sel = { type:null, wing:null }; // type: language name, wing: 'a' | 'b'
+
+/* ---------- Tiny helpers ---------- */
+const $ = id => document.getElementById(id);
+function on(id, fn){ const el = $(id); if(el) el.addEventListener('click', fn); }
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+  window.scrollTo({ top:0, behavior:'auto' });
+}
+function ul(el, items){
+  el.innerHTML = '';
+  items.forEach(t => { const li = document.createElement('li'); li.textContent = t; el.appendChild(li); });
+}
+
+/* ---------- Build language grid ---------- */
+function buildTypes(){
+  const grid = $('typeGrid');
+  grid.innerHTML = '';
+  TYPES.forEach(t => {
+    const b = document.createElement('button');
+    b.className = 'type-card';
+    b.setAttribute('aria-label', t.name + '. ' + t.desc);
+    b.innerHTML =
+      '<span class="type-num">' + t.emoji + '</span>' +
+      '<span class="type-name">' + t.name + '</span>' +
+      '<span class="type-desc">' + t.desc + '</span>';
+    b.addEventListener('click', () => { sel.type = t.name; sel.wing = null; buildWings(); show('wing'); });
+    grid.appendChild(b);
+  });
+}
+
+/* ---------- Build reaching-focus choices for selected language ---------- */
+function buildWings(){
+  const t = byName(sel.type);
+  $('wingTitle').textContent = t.name + ' — who are you reaching?';
+  const list = $('wingList');
+  list.innerHTML = '';
+  ['a','b'].forEach(key => {
+    const w = t.wings[key];
+    const b = document.createElement('button');
+    b.className = 'wing-card';
+    b.setAttribute('aria-label', w.label + ', ' + w.tag + '. ' + w.note);
+    b.innerHTML =
+      '<span class="wing-label">' + w.label + '</span>' +
+      '<span class="wing-tag">' + w.tag + '</span>' +
+      '<span class="wing-note">' + w.note + '</span>';
+    b.addEventListener('click', () => { sel.wing = key; renderResults(); show('results'); });
+    list.appendChild(b);
+  });
+}
+
+/* ---------- Render results ---------- */
+function renderResults(){
+  const t = byName(sel.type);
+  const w = t.wings[sel.wing];
+
+  $('resBadge').textContent = 'Your care language';
+  $('resTitle').textContent = t.name;
+  $('resSub').textContent = t.desc;
+  $('resWingBlurb').textContent = w.note;
+
+  $('stressArrow').innerHTML =
+    'This is how you most naturally <b>give</b> love — and how you most want to <b>receive</b> it.';
+  ul($('stressSigns'), t.stressSigns);
+  ul($('stressDo'), t.stressDo);
+  $('stressTweak').innerHTML = '<b>' + w.label + ':</b> ' + w.stressTweak;
+
+  $('growthArrow').innerHTML =
+    'The people you love may be listening on a different channel. Here’s how to recognize and speak the <b>other four</b>.';
+  ul($('unwindGrowth'), t.unwindGrowth);
+  ul($('unwindDo'), t.unwindDo);
+  $('unwindTweak').innerHTML = '<b>' + w.label + ':</b> ' + w.unwindTweak;
+
+  $('resFoot').textContent =
+    'Your primary language is ' + t.name + ', focused on ' + w.label.toLowerCase() + '. ' +
+    'Most people speak several languages at once — this simply names the one you reach for first, ' +
+    'so you can meet others in theirs.';
+}
+
+/* ---------- Wire up ---------- */
+function init(){
+  buildTypes();
+  on('startBtn', () => show('type'));
+  on('typeBack', () => show('intro'));
+  on('wingBack', () => show('type'));
+  on('againBtn', () => show('type'));
+}
+document.addEventListener('DOMContentLoaded', init);
+
+/* keyboard: number keys pick a card on the current screen, Enter starts */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); show('type');} return; }
+  if(scr.id==='results')return;
+  if(/^[1-9]$/.test(e.key)){ var cards=scr.querySelectorAll('.type-card,.wing-card,.ctx-card'); var c=cards[+e.key-1]; if(c){e.preventDefault(); c.click();} }
+});
+</script>
+</body>
+</html>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>Enneagram Navigator — Stress &amp; Unwind Guide</title>
 <style>
   :root{
@@ -25,6 +26,9 @@
   @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 
   /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none;display:inline-block;padding:8px 10px}
+  .hublink a:hover,.hublink a:focus-visible{color:var(--ink);outline:none}
   .hero{text-align:center;padding:26px 8px 10px}
   .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
   h1{font-size:clamp(32px,7.5vw,52px);margin:8px 0 4px;line-height:1.04;
@@ -134,6 +138,7 @@
 
   <!-- INTRO -->
   <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
     <div class="hero">
       <div class="kicker">Enneagram Navigator</div>
       <h1>Stress &amp; Unwind</h1>
@@ -157,7 +162,7 @@
     <div class="step-h">Step 1 of 2</div>
     <p class="step-title">What's your type?</p>
     <p class="step-sub">Pick the core number you most identify with.</p>
-    <div class="grid" id="typeGrid" role="list"></div>
+    <div class="grid" id="typeGrid"></div>
     <div class="nav">
       <button class="backlink" id="typeBack">← Back</button>
     </div>
@@ -205,6 +210,7 @@
 
     <p class="footnote" id="resFoot"></p>
     <div class="footlinks nav" style="justify-content:center">
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
       <button class="btn ghost" id="againBtn">Pick a different type / wing</button>
     </div>
   </section>
@@ -529,7 +535,6 @@ function buildTypes(){
   TYPES.forEach(t => {
     const b = document.createElement('button');
     b.className = 'type-card';
-    b.setAttribute('role','listitem');
     b.setAttribute('aria-label', 'Type ' + t.n + ', ' + t.name + '. ' + t.desc);
     b.innerHTML =
       '<span class="type-num">' + t.n + '</span>' +
@@ -599,6 +604,15 @@ function init(){
   on('againBtn', () => show('type'));
 }
 document.addEventListener('DOMContentLoaded', init);
+
+/* keyboard: number keys pick a card on the current screen, Enter starts */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); show('type');} return; }
+  if(scr.id==='results')return;
+  if(/^[1-9]$/.test(e.key)){ var cards=scr.querySelectorAll('.type-card,.wing-card,.ctx-card'); var c=cards[+e.key-1]; if(c){e.preventDefault(); c.click();} }
+});
 </script>
 </body>
 </html>

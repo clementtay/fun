@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
+<title>The Decision Dial — 18 Questions, One Way You Decide</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(34px,8vw,54px);margin:6px 0 4px;line-height:1.02;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .globe{font-size:70px;margin:14px 0 4px}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+
+  /* Progress */
+  .topbar{display:flex;align-items:center;gap:12px;margin:6px 0 20px}
+  .bar{flex:1;height:9px;background:#20234a;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4);transition:width .4s ease}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:bold}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,var(--card),#191b38);border:1px solid var(--line);
+    border-radius:22px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .4s ease both}
+  .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
+  .scn-emoji{font-size:44px;margin:10px 0 2px;text-align:center}
+  .scn-title{font-size:23px;font-weight:bold;margin:6px 0 6px}
+  .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .opt{
+    text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
+    padding:15px 16px;border-radius:15px;cursor:pointer;font-size:16px;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
+  }
+  .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:16.5px}
+  .opt.pick{border-color:var(--b);background:#243b48}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+  .nextbtn{opacity:.35;pointer-events:none;transition:opacity .2s}
+  .nextbtn.ready{opacity:1;pointer-events:auto}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit}
+  .backlink:hover{color:var(--ink)}
+
+  /* Results */
+  .arche{text-align:center;padding:8px 6px 4px}
+  .arche .emoji{font-size:58px}
+  .arche h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 2px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .arche .sub{color:var(--muted);font-size:15px;margin-bottom:4px}
+  .blurb{font-size:16.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:18px;margin:16px 0}
+  .sect-h{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);
+    font-weight:bold;margin:26px 0 10px}
+  .axis{margin:14px 0}
+  .axis .lbls{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px}
+  .axis .lbls b{color:var(--ink)}
+  .axtrack{position:relative;height:12px;background:#20234a;border-radius:99px}
+  .axtrack > span{position:absolute;top:50%;transform:translate(-50%,-50%);height:20px;width:20px;border-radius:50%;
+    background:linear-gradient(90deg,#4ecdc4,#ffd166);box-shadow:0 3px 10px rgba(0,0,0,.4);border:2px solid #12122a;transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .axtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#3a3e70}
+  .axis .read{font-size:14px;color:#cfcbf3;margin-top:7px}
+  .cardlist{display:grid;gap:12px;grid-template-columns:1fr}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+  .mini h4{margin:0 0 4px;font-size:16px}
+  .mini.blind{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}
+  .mini.super{border-color:rgba(78,205,196,.35);background:rgba(78,205,196,.06)}
+  .mini.dest{border-color:rgba(166,133,255,.35);background:rgba(166,133,255,.06)}
+  .mini p{margin:0;font-size:14.5px;color:#d9d5ff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .chip{background:#23264b;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13.5px}
+  .chip b{color:var(--c)}
+  .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;text-align:center}
+  .again{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .again a{text-decoration:none}
+
+  /* Share lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(6,6,18,.86);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .lightbox.on{display:flex;animation:fade .3s ease both}
+  .lb-inner{max-width:420px;width:100%;text-align:center}
+  .lb-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin-bottom:12px}
+  #shareImg{width:100%;max-height:66vh;object-fit:contain;border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
+  .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
+  .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.opt:focus-visible,.btn:focus-visible,.backlink:focus-visible,.nextbtn:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">How Do You Decide?</div>
+      <h1>The Decision Dial</h1>
+      <div class="globe">🎲</div>
+      <p class="how">Here's how it works: eighteen quick scenarios about how you <b>actually</b> make choices — big buys, tough calls, forks in the road. No right answers, just your instincts.</p>
+      <p class="tag">By the end I'll read the shape of your choices across six decision dials and hand you your decision-making archetype — plus the calls you were built to nail.</p>
+      <button class="btn" id="startBtn">Start deciding ▶</button>
+      <div class="disclaimer">Not a real personality test — it's a decision toy. It reads the <em>pattern</em> of how you choose and hands you an archetype. Entertainment, with a suspicious amount of accuracy.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backlink" id="backBtn">‹ back</button>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="count" id="count">1 / 18</div>
+    </div>
+    <div class="card">
+      <div class="scn-num" id="snum">Question 01</div>
+      <div class="scn-emoji" id="semoji"></div>
+      <div class="scn-title" id="stitle"></div>
+      <div class="scn-body" id="sbody"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
+        <button class="btn nextbtn" id="next">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="arche">
+      <div class="emoji" id="rEmoji">🎲</div>
+      <h2 id="rName">Your Decision Type</h2>
+      <div class="sub" id="rTagline"></div>
+    </div>
+    <div class="blurb" id="rBlurb"></div>
+
+    <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">How You Decide</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
+
+    <div class="sect-h">Decisions You Nail</div>
+    <div class="cardlist"><div class="mini dest"><h4 id="rDestH">Where you shine</h4><p id="rDestP"></p></div></div>
+
+    <div class="sect-h">Your Six Decision Dials</div>
+    <div id="rAxes"></div>
+
+    <div class="sect-h">Your Decision Superpower</div>
+    <div class="cardlist"><div class="mini super"><h4 id="rSuperH"></h4><p id="rSuperP"></p></div></div>
+
+    <div class="sect-h">Your Blind Spots</div>
+    <div class="cardlist" id="rBlind"></div>
+
+    <div class="sect-h">Your Decision Motto</div>
+    <div class="blurb" id="rPrinciple" style="margin-top:0"></div>
+
+    <div class="footnote" id="rConsistency"></div>
+    <div class="again">
+      <button class="btn" id="shareBtn">📸 Share my result</button>
+      <button class="btn ghost" id="restartBtn">Retake the quiz ↺</button>
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+    </div>
+    <div class="footnote">Built as a decision toy. Share your type, compare with friends, know your next call.</div>
+  </section>
+
+  <!-- SHARE LIGHTBOX -->
+  <div id="shareBox" class="lightbox">
+    <div class="lb-inner">
+      <div class="lb-title">Your shareable card</div>
+      <img id="shareImg" alt="Your Decision Dial result card">
+      <div class="lb-hint" id="lbHint">Tap “Share” to send it, “Save” to download, or long-press the image.</div>
+      <div class="lb-btns">
+        <button class="btn" id="lbShare">📤 Share</button>
+        <button class="btn ghost" id="lbSave">⬇ Save</button>
+        <button class="backlink" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SIX DECISION DIALS (each answer nudges some of them)
+   mode   : Gut & instinct (−)     ↔  Data & analysis (+)
+   speed  : Decide fast (−)        ↔  Take your time (+)
+   input  : Decide solo (−)        ↔  Seek consensus (+)
+   risk   : Play it safe (−)       ↔  Bet bold (+)
+   anchor : Heart & values (−)     ↔  Head & logic (+)
+   commit : Keep options open (−)  ↔  Lock it in (+)
+   ============================================================ */
+
+const SCEN = [
+ {t:"A gadget you've wanted for months just dropped 30%.", emoji:"🛒",
+  s:"The deal ends tonight. Your finger hovers over 'Buy now'. You…",
+  o:[
+   {act:"Buy it. It feels right and the price won't last.", sc:{mode:-1,speed:-2,risk:1}},
+   {act:"Open three tabs of reviews and a spreadsheet first.", sc:{mode:2,speed:1,anchor:1}},
+   {act:"Text two friends who own it before committing.", sc:{input:2,speed:1}},
+   {act:"Sleep on it — a real want survives the night.", sc:{speed:2,commit:-1,anchor:1}}
+  ]},
+
+ {t:"Two solid job offers land in the same week.", emoji:"💼",
+  s:"Both are good. One safe and known, one riskier and thrilling. You…",
+  o:[
+   {act:"Build a weighted pros-and-cons matrix.", sc:{mode:2,anchor:2,speed:1}},
+   {act:"Go with the one that makes your gut light up.", sc:{mode:-2,anchor:-2}},
+   {act:"Take the bold one — regret the leaps you don't take.", sc:{risk:2,commit:1}},
+   {act:"Take the safe one — a bird in the hand.", sc:{risk:-2,anchor:1}}
+  ]},
+
+ {t:"The group can't agree on where to eat.", emoji:"🍜",
+  s:"Six people, six opinions, and everyone's getting hangry. You…",
+  o:[
+   {act:"Just pick a place and march everyone there.", sc:{speed:-2,input:-2,commit:2}},
+   {act:"Run a quick vote and go with the majority.", sc:{input:2,mode:1}},
+   {act:"Pull up ratings and filter by distance and price.", sc:{mode:2,speed:1}},
+   {act:"Go wherever, honestly — you're easy either way.", sc:{commit:-2,anchor:-1}}
+  ]},
+
+ {t:"A relationship has been quietly running out of road.", emoji:"💔",
+  s:"You've felt it for a while. Deciding whether to end it, you…",
+  o:[
+   {act:"Trust the feeling — you've known for months.", sc:{mode:-2,anchor:-2,speed:-1}},
+   {act:"Talk it through with a close friend first.", sc:{input:2,speed:1}},
+   {act:"Weigh it coldly: what's changed, what's fixable.", sc:{mode:2,anchor:2}},
+   {act:"Keep it open a while longer — no rush to close a door.", sc:{commit:-2,speed:2,risk:-1}}
+  ]},
+
+ {t:"A once-in-a-lifetime chance needs a yes by tomorrow.", emoji:"🎢",
+  s:"Big upside, real downside, and the clock is ticking. You…",
+  o:[
+   {act:"Say yes — you'd rather regret a bet than a maybe.", sc:{risk:2,speed:-1,commit:1}},
+   {act:"Say no — the downside is too real to ignore.", sc:{risk:-2,anchor:1}},
+   {act:"Cram every scrap of data into the hours you have.", sc:{mode:2,speed:1}},
+   {act:"Phone three people you trust before you answer.", sc:{input:2,mode:1}}
+  ]},
+
+ {t:"A tough call at work lands on your desk.", emoji:"⚖️",
+  s:"There's no obviously right answer and people are waiting. You…",
+  o:[
+   {act:"Make the call quickly and own it.", sc:{speed:-2,commit:2,input:-1}},
+   {act:"Gather the team and build consensus first.", sc:{input:2,speed:1}},
+   {act:"Ask for the numbers before you say anything.", sc:{mode:2,anchor:2}},
+   {act:"Go with what feels fair, not just what's optimal.", sc:{anchor:-2,mode:-1}}
+  ]},
+
+ {t:"How much do you research before a big purchase?", emoji:"🔍",
+  s:"Say, a car, a laptop, a mattress. Your true process is…",
+  o:[
+   {act:"Weeks of spreadsheets, forums, and comparisons.", sc:{mode:2,speed:2}},
+   {act:"A quick look, then I trust my gut.", sc:{mode:-2,speed:-1}},
+   {act:"I buy whatever my most-informed friend bought.", sc:{input:2,mode:1}},
+   {act:"I pick a good-enough option and stop looking.", sc:{speed:-1,commit:1,mode:-1}}
+  ]},
+
+ {t:"You've made a choice. How settled is it?", emoji:"🔒",
+  s:"Once you've decided something, in your heart you…",
+  o:[
+   {act:"Lock it in and never look back.", sc:{commit:2,speed:-1}},
+   {act:"Keep a mental exit open, just in case.", sc:{commit:-2,risk:-1}},
+   {act:"Second-guess it for days afterward.", sc:{commit:-1,speed:2,mode:1}},
+   {act:"Commit, but happily change course with new facts.", sc:{commit:1,mode:1,anchor:1}}
+  ]},
+
+ {t:"Your investment app shows a scary-but-tempting bet.", emoji:"📈",
+  s:"High risk, high reward. Your instinct is to…",
+  o:[
+   {act:"Put a chunk in — fortune favours the bold.", sc:{risk:2,speed:-1}},
+   {act:"Keep it all in the safe, boring index fund.", sc:{risk:-2,anchor:1}},
+   {act:"Model the downside before I touch it.", sc:{mode:2,anchor:2,risk:-1}},
+   {act:"See what people I respect are doing.", sc:{input:2,mode:1}}
+  ]},
+
+ {t:"When you decide, what do you trust most?", emoji:"🧭",
+  s:"At the core of a hard call, your compass points to…",
+  o:[
+   {act:"Logic and evidence — feelings mislead.", sc:{anchor:2,mode:2}},
+   {act:"My values and what feels right.", sc:{anchor:-2,mode:-1}},
+   {act:"A blend — head and heart both get a vote.", sc:{input:1,speed:1}},
+   {act:"Whatever the people I love need from me.", sc:{anchor:-2,input:1}}
+  ]},
+
+ {t:"A flash sale on a big-ticket item, timer at 09:59.", emoji:"⏳",
+  s:"Ten minutes to decide on something not-cheap. You…",
+  o:[
+   {act:"Grab it — hesitation is how deals slip away.", sc:{speed:-2,risk:1,mode:-1}},
+   {act:"Skim reviews as fast as humanly possible.", sc:{mode:1,speed:1}},
+   {act:"Let it expire. Pressure isn't a reason to buy.", sc:{speed:2,risk:-1,anchor:1}},
+   {act:"Fire off a 'should I?' text and wait.", sc:{input:2}}
+  ]},
+
+ {t:"Planning a big trip or event, you…", emoji:"🗓️",
+  s:"There are a hundred choices to make. Your style is…",
+  o:[
+   {act:"Lock every detail in early and stop worrying.", sc:{commit:2,speed:-1,anchor:1}},
+   {act:"Keep plans loose so I can pivot on a whim.", sc:{commit:-2,speed:1}},
+   {act:"Crowdsource every decision from the group chat.", sc:{input:2,speed:1}},
+   {act:"Research the top option for each thing, then book.", sc:{mode:2,anchor:1}}
+  ]},
+
+ {t:"How fast do you usually decide?", emoji:"⚡",
+  s:"Be honest about your natural clock speed.",
+  o:[
+   {act:"Fast. First instinct, minimal fuss.", sc:{speed:-2,mode:-1}},
+   {act:"Slow. I need to sit with things.", sc:{speed:2}},
+   {act:"Depends who else it affects — then I slow down.", sc:{input:2,speed:1}},
+   {act:"Fast on small stuff, glacial on the big stuff.", sc:{speed:1,mode:1}}
+  ]},
+
+ {t:"A decision went badly. Looking back, you…", emoji:"🪞",
+  s:"The choice flopped. Your honest reaction is…",
+  o:[
+   {act:"Onward — a bad outcome isn't a bad decision.", sc:{commit:2,risk:1,speed:-1}},
+   {act:"Replay every step to find where I went wrong.", sc:{mode:2,speed:2}},
+   {act:"Ask others what they'd have done differently.", sc:{input:2}},
+   {act:"Trust that my gut will read it better next time.", sc:{mode:-2,anchor:-1}}
+  ]},
+
+ {t:"Someone asks your advice on their tough call.", emoji:"🗣️",
+  s:"They're stuck. Your instinct as an advisor is to…",
+  o:[
+   {act:"Help them list the facts and think it through.", sc:{mode:2,anchor:2}},
+   {act:"Ask how each option makes them feel.", sc:{anchor:-2,mode:-1}},
+   {act:"Tell them what I'd do, plainly.", sc:{input:-2,commit:1,speed:-1}},
+   {act:"Suggest they poll a few more people first.", sc:{input:2,speed:1}}
+  ]},
+
+ {t:"How do you feel about keeping options open?", emoji:"🚪",
+  s:"Doors you could still walk through later…",
+  o:[
+   {act:"Love them open — commitment can wait.", sc:{commit:-2,risk:-1}},
+   {act:"Hate them open — indecision drains me.", sc:{commit:2,speed:-1}},
+   {act:"Open until the data says close, then decisive.", sc:{mode:2,commit:1}},
+   {act:"Open until my gut says 'this one', then all in.", sc:{mode:-2,anchor:-1,commit:1}}
+  ]},
+
+ {t:"Picking what to watch tonight.", emoji:"📺",
+  s:"A low-stakes but oddly revealing choice. You…",
+  o:[
+   {act:"Pick in ten seconds and press play.", sc:{speed:-2,commit:1,mode:-1}},
+   {act:"Check the ratings and runtime first.", sc:{mode:2,speed:1}},
+   {act:"Let whoever's with me decide.", sc:{input:2,commit:-1}},
+   {act:"Scroll for 40 minutes, then rewatch a favourite.", sc:{speed:2,commit:-2,risk:-1}}
+  ]},
+
+ {t:"The bold move or the sure thing?", emoji:"🎯",
+  s:"One sentence to sum up your default setting.",
+  o:[
+   {act:"“Go big — the safe path rarely thrills.”", sc:{risk:2,commit:1}},
+   {act:"“Steady wins — I protect the downside first.”", sc:{risk:-2,anchor:1}},
+   {act:"“Show me the numbers and I'll tell you which.”", sc:{mode:2,anchor:2}},
+   {act:"“Whatever my people are behind — that's my move.”", sc:{input:2,anchor:-1}}
+  ]}
+];
+
+/* ---------- scoring ---------- */
+const AXES = [
+  {k:'mode',   negL:'Gut & instinct',    posL:'Data & analysis',  neg:'Intuitive',   pos:'Analyst'},
+  {k:'speed',  negL:'Decide fast',       posL:'Take your time',   neg:'Snap',        pos:'Deliberator'},
+  {k:'input',  negL:'Decide solo',       posL:'Seek consensus',   neg:'Lone caller', pos:'Consulter'},
+  {k:'risk',   negL:'Play it safe',      posL:'Bet bold',         neg:'Cautious',    pos:'Bold'},
+  {k:'anchor', negL:'Heart & values',    posL:'Head & logic',     neg:'Feeler',      pos:'Reasoner'},
+  {k:'commit', negL:'Keep options open', posL:'Lock it in',       neg:'Flexible',    pos:'Committer'}
+];
+
+function computeMax(){
+  const max={};
+  AXES.forEach(a=>max[a.k]=0);
+  SCEN.forEach(q=>{
+    AXES.forEach(a=>{
+      let m=0;
+      q.o.forEach(opt=>{ if(opt.sc[a.k]!==undefined) m=Math.max(m,Math.abs(opt.sc[a.k])); });
+      max[a.k]+=m;
+    });
+  });
+  return max;
+}
+
+let RESULT=null;
+let CURRENT_ARCH=null;
+function diagnose(){
+  const tot={}, max=computeMax();
+  AXES.forEach(a=>tot[a.k]=0);
+  answers.forEach((ai,qi)=>{
+    const sc=SCEN[qi].o[ai].sc;
+    for(const k in sc) tot[k]+=sc[k];
+  });
+  // normalized -1..1 and 0..100
+  const norm={}, pct={};
+  AXES.forEach(a=>{ const n = max[a.k]?tot[a.k]/max[a.k]:0; norm[a.k]=n; pct[a.k]=Math.round((n+1)/2*100); });
+  RESULT={tot,norm,pct};
+  renderResults();
+}
+
+/* ---------- archetype selection ---------- */
+function archetype(n){
+  const A=[];
+  A.push({key:'strategist', score:n.mode*1.0 + n.anchor*0.8 + n.speed*0.4 + n.commit*0.2, emoji:'♟️', name:'The Strategist',
+    tag:'Every move mapped three steps ahead',
+    dest:"High-stakes calls with time to think: career pivots, big investments, business bets, and any decision where the data rewards patience.",
+    blurb:"You treat a big decision the way a chess player treats a board — quietly, several moves ahead, weighing consequences others haven't noticed yet. You gather the facts, model the outcomes, and arrive with a plan that holds up under pressure. Where others react, you calculate. It means you rarely get blindsided, and when you commit, you commit for reasons you can defend. Slow to move, maybe — but almost never wrong about where the pieces will land."});
+  A.push({key:'gutcaller', score:(-n.mode)*1.1 + (-n.speed)*0.7 + (-n.anchor)*0.5, emoji:'⚡', name:'The Gut-Caller',
+    tag:'You know the answer before the question finishes',
+    dest:"Fast, human calls where instinct beats analysis: reading a room, hiring on feel, creative bets, and moments the data can't reach in time.",
+    blurb:"You decide with your gut, and your gut is annoyingly good. While others are still opening spreadsheets, you've already felt the right answer and moved on it. It's not carelessness — it's a lifetime of pattern-matching firing faster than you can explain. You trust the signal, act on it, and rarely look back. Sometimes you can't say why a choice is right, only that it is. And more often than the analysts would like to admit, you're the one who called it first."});
+  A.push({key:'deliberator', score:n.speed*1.2 + n.commit*(-0.4) + n.mode*0.3, emoji:'⏳', name:'The Deliberator',
+    tag:'Measure twice, thrice, then measure again',
+    dest:"Decisions that reward care and reversibility: major purchases, long commitments, and any call where a night's sleep genuinely improves the answer.",
+    blurb:"You refuse to be rushed, and you're right to be. You sit with a choice, turn it over, sleep on it, and let the noise settle until the real answer surfaces. Pressure doesn't stampede you; deadlines don't panic you into a move you'll regret. The cost is that you can circle a decision long after the facts are in — but the payoff is that when you finally choose, it's considered, deliberate, and built to last. You'd rather be late and right than fast and sorry."});
+  A.push({key:'maverick', score:n.risk*1.3 + (-n.input)*0.5 + (-n.speed)*0.3, emoji:'🚀', name:'The Maverick',
+    tag:'You\'d rather regret a leap than a maybe',
+    dest:"Bold, high-upside bets: starting things, backing yourself, seizing narrow windows, and any call where the biggest risk is not taking one.",
+    blurb:"You make the bold call and you make it alone. Where others see downside, you see a door — and you'd rather walk through it and find out than stand safely wondering. You back yourself, move on narrow windows, and accept that some bets won't land, because the ones that do change everything. Committees slow you down; caution bores you. It's a nerve most people don't have, and it means you've grabbed chances others talked themselves out of. Fortune, in your experience, genuinely favours the bold."});
+  A.push({key:'consensus', score:n.input*1.3 + (-n.risk)*0.3 + (-n.mode)*0.2, emoji:'🤝', name:'The Consensus-Builder',
+    tag:'The best calls are made together',
+    dest:"Decisions that touch other people: team calls, family plans, anything where buy-in matters as much as the answer and nobody should be blindsided.",
+    blurb:"You don't decide in a vacuum — you decide in a circle. Before you commit, you want to hear the room: what your people think, what they'd worry about, what you might be missing. It makes your choices wiser and, crucially, makes everyone feel part of them. You know a decision people helped make is one they'll actually stand behind. The risk is deferring so long the moment passes — but at your best, you turn a hard call into a shared one, and carry the whole group with you."});
+  A.push({key:'pragmatist', score:(-n.speed)*0.5 + n.commit*0.9 + (-n.risk)*0.4 + (-n.mode)*0.3, emoji:'🔧', name:'The Pragmatist',
+    tag:'Good enough, decided, done',
+    dest:"Everyday and operational calls: the endless small choices that pile up, where a fast, sensible decision beats a perfect one that never arrives.",
+    blurb:"You have zero patience for agonising over choices that don't deserve it. Good enough is good enough — you pick a sensible option, lock it in, and get on with your life. You've noticed what the perfectionists haven't: most decisions are reversible, most are low-stakes, and the real cost is the hours spent dithering. So you satisfice, you commit, and you free up your energy for the calls that actually matter. Unfussy, decisive, and quietly efficient, you get more done because you waste no time deciding to do it."});
+  A.push({key:'analyst', score:n.mode*1.3 + n.anchor*0.9 + (-n.risk)*0.3, emoji:'📊', name:'The Analyst',
+    tag:'In data we trust',
+    dest:"Complex, quantifiable calls: budgets, comparisons, anything with spreadsheets, and decisions where the person with the best evidence usually wins.",
+    blurb:"For you, a decision is a problem to be solved, and problems have data. You don't guess when you can measure, and you don't feel your way to an answer you could calculate. Reviews, numbers, side-by-side comparisons — you build the evidence until the right choice is simply obvious. Emotion, you've found, is a poor guide and a worse excuse. It makes you rigorous and hard to fool, the person whose homework everyone else quietly relies on. When the facts are clear, so is your mind."});
+  A.push({key:'balanced', score:0.3 - variance(n), emoji:'🎲', name:'The Balanced Decider',
+    tag:'The right tool for each kind of call',
+    dest:"Almost anything — you flex your method to the moment: gut for the fast calls, data for the big ones, the group when it counts, yourself when it doesn't.",
+    blurb:"You refuse to decide the same way every time — and that's the whole trick. Some calls you make in a heartbeat; others you sleep on for a week. Sometimes you trust the numbers, sometimes the feeling, sometimes the room. You read what each decision actually needs and reach for the right tool, which makes you steady under pressure and hard to knock off balance. Your gift is range: you can move fast without being reckless and think deep without being paralysed. Wherever the call lands, you meet it on its own terms."});
+  A.sort((x,y)=>y.score-x.score);
+  return A[0];
+}
+function variance(n){ // how far from center overall (0 = perfectly balanced)
+  const vals=AXES.map(a=>Math.abs(n[a.k]));
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* ---------- narrative helpers ---------- */
+function axisRead(a,n){
+  const v=n[a.k]; const s=Math.abs(v);
+  const strong = s>0.55;
+  const mild = s>0.2;
+  if(!mild) return "You sit right in the middle here — it swings with the decision, and you like it that way.";
+  const lean = strong ? "strongly" : "moderately";
+  const map={
+    mode:{pos:"You reach for evidence — reviews, numbers, comparisons — before you commit.",neg:"You trust your instinct; the right answer tends to arrive as a feeling."},
+    speed:{pos:"You take your time; a choice worth making is worth sitting with.",neg:"You decide fast — first instinct, minimal fuss, on to the next thing."},
+    input:{pos:"You decide with others; the room's read makes your calls wiser.",neg:"You call it solo; too many voices just cloud your own judgement."},
+    risk:{pos:"You lean bold — big upside is worth a real chance of a miss.",neg:"You protect the downside first; a sure thing beats a shiny maybe."},
+    anchor:{pos:"You anchor on logic; feelings, you've found, make unreliable guides.",neg:"You anchor on values; a choice has to feel right, not just add up."},
+    commit:{pos:"You lock decisions in and move on; open loops drain you.",neg:"You keep options open; commitment can wait until it has to."}
+  };
+  return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
+}
+
+/* Brief "how you decide" synthesis for the results page. */
+function decisionProfile(n){
+  const P = {
+    mode:{pos:"reach for the data before you commit",
+          neg:"trust your gut to find the answer first"},
+    speed:{pos:"give a choice room to breathe before you call it",
+           neg:"decide fast and rarely look back"},
+    input:{pos:"pull others in before you settle it",
+           neg:"make the call on your own terms"},
+    risk:{pos:"lean into the bold bet when the upside is real",
+          neg:"protect the downside before anything else"},
+    anchor:{pos:"let logic and evidence steer the wheel",
+            neg:"let your values and gut have the final word"},
+    commit:{pos:"lock it in and move on without a backward glance",
+            neg:"keep your options open until the last responsible moment"}
+  };
+  const CLOSE = {
+    mode:{pos:"Show you the numbers and you'll show you the answer.",neg:"You feel the right call before you can explain it."},
+    speed:{pos:"You'd rather be late and right than fast and sorry.",neg:"You'd rather move now than agonise later."},
+    input:{pos:"A decision your people share is one they'll stand behind.",neg:"When it's your call, you make it yours."},
+    risk:{pos:"You'd rather regret a leap than a maybe.",neg:"You'd rather be safe than sorry."},
+    anchor:{pos:"If it doesn't add up, it doesn't happen.",neg:"If it doesn't feel right, it doesn't happen."},
+    commit:{pos:"Once you've decided, the door is closed.",neg:"You like knowing you can still change your mind."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "How you decide is hard to pin down — and that's the strength. Across eighteen scenarios you leaned every which way, balancing gut with data, speed with care, boldness with caution. In short: you're an all-rounder who reads each decision on its own terms and reaches for whatever it actually needs.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "You're the kind of decider who "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
+function blindSpots(n){
+  const out=[];
+  if(n.mode>0.4) out.push(["Analysis paralysis","Your rigour is a gift — but not every choice deserves a spreadsheet. Some calls are best made on instinct in ten seconds, and drowning the small ones in data just burns time you'll never get back."]);
+  if(n.mode<-0.4) out.push(["Gut without a check","Your instincts are sharp, but even sharp instincts have blind spots and biases. On the truly big calls, a quick sanity-check against the actual numbers costs little and catches the rare gut-punch you'd have missed."]);
+  if(n.speed>0.45) out.push(["Deciding too slowly","Sitting with a choice is wise — until the moment passes while you deliberate. Some doors close on their own, and 'I need more time' can quietly become the decision you didn't mean to make."]);
+  if(n.speed<-0.45) out.push(["Too quick on the trigger","Snap calls keep you moving, but the big, irreversible ones deserve a night's sleep. Speed is a superpower on small stuff and a liability on the choices you can't take back."]);
+  if(n.input>0.45) out.push(["Decision by committee","Gathering views makes you wiser — but ask enough people and you'll get enough opinions to justify anything. Some calls are simply yours to make, and outsourcing them too often just diffuses the responsibility."]);
+  if(n.input<-0.45) out.push(["The closed door","Deciding solo keeps you fast and clear — just don't seal yourself off entirely. One outside perspective can flag the obvious thing you're too close to see, and the people affected often deserve a say."]);
+  if(n.risk>0.45) out.push(["Betting past the point","Boldness has won you things caution never would — but not every window needs leaping through. Occasionally the safe, boring option really is the right one, and knowing when to fold is its own kind of nerve."]);
+  if(n.risk<-0.45) out.push(["Playing it too safe","Protecting the downside is smart, but the safest choice has a cost too: the upside you never reach for. Now and then the bird in the hand is worth less than the two you talked yourself out of."]);
+  if(n.anchor>0.45) out.push(["Logic that skips the heart","Reasoning things out serves you well — but some decisions are about people, and people don't fit in a formula. The 'optimal' answer isn't always the right one when values and feelings are what's really at stake."]);
+  if(n.commit>0.5) out.push(["Locked in too early","Deciding and moving on is a strength — but committing before the facts are in can trap you in a call you'd have changed. The best deciders stay willing to reverse when the ground shifts under them."]);
+  if(n.commit<-0.5) out.push(["Never quite committing","Keeping options open feels safe, but a door left ajar forever is its own kind of prison. At some point the freedom to choose becomes the inability to, and the best option expires while you're still weighing it."]);
+  if(out.length===0) out.push(["The comfortable middle","You balance every impulse, which makes you steady and hard to rattle — but it can also mean never fully backing the instinct you'd love most. Sometimes it's worth committing hard to one way of deciding and seeing it all the way through."]);
+  return out.slice(0,3);
+}
+
+function superpower(n){
+  const c=[];
+  c.push([Math.abs(n.speed), n.speed>0?["Unhurried judgement","You don't panic under a deadline. You give a choice the time it truly needs and arrive with an answer that holds up — while everyone around you is still flinching at the clock."]:["Decisive momentum","You call it and move, while others are still circling. That speed compounds: you make ten good decisions in the time it takes most people to agonise over one."]]);
+  c.push([Math.abs(n.mode), n.mode>0?["Evidence-proof judgement","You build your calls on facts, not vibes, which makes them remarkably hard to fool. When you say a choice is right, you can show your work — and you usually can."]:["Instinct that lands","You read situations faster than analysis can, and you're right far more than luck would explain. Your gut is a finely-tuned instrument most people never learn to trust."]]);
+  c.push([Math.abs(n.input), n.input>0?["The consensus-builder","You turn hard calls into shared ones. People back your decisions because they helped shape them — and a choice everyone owns is a choice that actually sticks."]:["Clear-headed independence","You don't need a committee to know your own mind. That self-trust lets you decide fast and cleanly, on your terms, without waiting for permission."]]);
+  c.push([Math.abs(n.risk), n.risk>0?["Nerve when it counts","You take the bold bet others talk themselves out of. Some won't land — but the ones that do are the moves that change everything, and you're the one who dares to make them."]:["Downside radar","You see the trap before you step in it. That instinct for what could go wrong has quietly saved you from more bad calls than you'll ever get credit for."]]);
+  c.push([Math.abs(n.commit), n.commit>0?["Follow-through","Once you decide, it's decided — no relitigating, no second-guessing, no open loops draining your energy. You commit cleanly and get on with making it work."]:null]);
+  const best=c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0])[0];
+  return best[1];
+}
+
+function principle(arch,n){
+  const P={
+    strategist:"“I don't want to win the move — I want to win the game.”",
+    gutcaller:"“If I have to explain why, I've already overthought it.”",
+    deliberator:"“I'd rather be late and right than fast and sorry.”",
+    maverick:"“I'd rather regret a leap than a maybe.”",
+    consensus:"“The best decision is the one we all get behind.”",
+    pragmatist:"“Good enough, decided, done. Next.”",
+    analyst:"“Show me the data and I'll show you the answer.”",
+    balanced:"“Every decision gets the method it deserves.”"
+  };
+  return P[arch.key]||P.balanced;
+}
+
+/* ---------- state ---------- */
+let i = 0;
+const answers = new Array(SCEN.length).fill(null); // stores chosen option index
+
+const $ = id => document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+
+function start(){ i=0; render(); show('quiz'); }
+function restart(){ answers.fill(null); i=0; show('intro'); }
+
+function render(){
+  const q = SCEN[i];
+  $('snum').textContent = 'Question ' + String(i+1).padStart(2,'0');
+  $('semoji').textContent = q.emoji || '';
+  $('stitle').textContent = q.t;
+  $('sbody').textContent = q.s;
+  $('count').textContent = (i+1)+' / '+SCEN.length;
+  $('fill').style.width = ((i+1)/SCEN.length*100)+'%';
+  const box = $('opts'); box.innerHTML='';
+  q.o.forEach((opt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(answers[i]===idx?' pick':'');
+    b.innerHTML='<span class="opt-do">'+esc(opt.act)+'</span>';
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  if(answers[i]!==null){
+    $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+  } else {
+    $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
+  }
+  $('next').textContent = (i===SCEN.length-1)?'See my result ▶':'Next ▶';
+}
+
+function choose(idx){
+  answers[i]=idx;
+  document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+}
+
+function next(){
+  if(answers[i]===null) return;
+  if(i===SCEN.length-1){ diagnose(); show('results'); return; }
+  i++; render();
+}
+function prev(){
+  if(i===0){ show('intro'); return; }
+  i--; render();
+}
+
+/* ---------- render results ---------- */
+function renderResults(){
+  const {norm,pct}=RESULT;
+  const arch=archetype(norm);
+  CURRENT_ARCH=arch;
+  $('rEmoji').textContent=arch.emoji;
+  $('rName').textContent=arch.name;
+  $('rTagline').textContent=arch.tag;
+  $('rBlurb').textContent=arch.blurb;
+  $('rProfile').textContent=decisionProfile(norm);
+  $('rDestP').textContent=arch.dest;
+
+  // chips: dominant traits
+  const chips=$('rChips'); chips.innerHTML='';
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ranked.forEach(r=>{
+    const label = r.v>=0 ? r.a.pos : r.a.neg;
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML='<b>'+label+'</b>';
+    chips.appendChild(el);
+  });
+
+  // axes
+  const box=$('rAxes'); box.innerHTML='';
+  AXES.forEach(a=>{
+    const p=pct[a.k];
+    const d=document.createElement('div'); d.className='axis';
+    d.innerHTML =
+      '<div class="lbls"><span>'+a.negL+'</span><span>'+a.posL+'</span></div>'+
+      '<div class="axtrack"><span style="left:0%"></span><div class="mid"></div></div>'+
+      '<div class="read">'+axisRead(a,norm)+'</div>';
+    box.appendChild(d);
+    // animate knob
+    requestAnimationFrame(()=>{ d.querySelector('.axtrack > span').style.left = p+'%'; });
+  });
+
+  // superpower
+  const sp=superpower(norm);
+  $('rSuperH').textContent=sp[0]; $('rSuperP').textContent=sp[1];
+
+  // blind spots
+  const bl=$('rBlind'); bl.innerHTML='';
+  blindSpots(norm).forEach(b=>{
+    const d=document.createElement('div'); d.className='mini blind';
+    d.innerHTML='<h4>'+b[0]+'</h4><p>'+b[1]+'</p>'; bl.appendChild(d);
+  });
+
+  // principle
+  $('rPrinciple').textContent=principle(arch,norm);
+
+  // versatility note
+  const v=variance(norm);
+  $('rConsistency').textContent = v>0.4
+    ? "You have a strongly defined decision style — you know exactly how you like to make a call, and you lean into it."
+    : "You're a versatile decider — your method flexes with the decision, which means almost any call can be a good one.";
+}
+
+/* ============================================================
+   SHAREABLE RESULT CARD  (rendered on a canvas)
+   ============================================================ */
+let CARD_BLOB=null;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' '); const lines=[]; let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawShareCard(){
+  const W=1080, H=1350;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const {norm,pct}=RESULT, arch=CURRENT_ARCH;
+
+  // background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232653'); bg.addColorStop(.45,'#131427'); bg.addColorStop(1,'#0c0d1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // subtle glow
+  const glow=ctx.createRadialGradient(W/2,180,60,W/2,180,700);
+  glow.addColorStop(0,'rgba(120,110,220,.28)'); glow.addColorStop(1,'rgba(120,110,220,0)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,W,340);
+  // border frame
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,24,24,W-48,H-48,36); ctx.stroke();
+
+  ctx.textAlign='center';
+
+  // kicker
+  ctx.fillStyle='#ffd166'; ctx.font='bold 26px "Trebuchet MS",Arial';
+  ctx.fillText('T H E   D E C I S I O N   D I A L', W/2, 92);
+
+  // emoji
+  ctx.font='120px "Segoe UI Emoji","Apple Color Emoji",serif';
+  ctx.fillText(arch.emoji, W/2, 232);
+
+  // archetype name (gradient)
+  ctx.font='bold 74px "Trebuchet MS",Arial';
+  const nameLines=wrapLines(ctx,arch.name,W-160);
+  let ny=310;
+  nameLines.forEach(ln=>{
+    const tw=ctx.measureText(ln).width;
+    const g=ctx.createLinearGradient(W/2-tw/2,0,W/2+tw/2,0);
+    g.addColorStop(0,'#ffd166'); g.addColorStop(.5,'#ff6b6b'); g.addColorStop(1,'#a685ff');
+    ctx.fillStyle=g; ctx.fillText(ln,W/2,ny); ny+=80;
+  });
+  // tagline
+  ctx.fillStyle='#b9b4e6'; ctx.font='italic 30px "Trebuchet MS",Arial';
+  const tagLines=wrapLines(ctx,'“'+arch.tag+'”',W-200);
+  tagLines.forEach(ln=>{ ctx.fillText(ln, W/2, ny+8); ny+=42; });
+  let y=ny+40;
+
+  // signature trait chips (top 3 axes)
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ctx.font='bold 30px "Trebuchet MS",Arial';
+  const labels=ranked.map(r=> r.v>=0 ? r.a.pos : r.a.neg);
+  const padX=28, gap=18, chipH=64;
+  const widths=labels.map(l=>ctx.measureText(l).width+padX*2);
+  const totalW=widths.reduce((s,w)=>s+w,0)+gap*(labels.length-1);
+  let cx=(W-totalW)/2;
+  const chipCols=['#ff6b6b','#4ecdc4','#a685ff'];
+  labels.forEach((l,idx)=>{
+    const w=widths[idx];
+    ctx.fillStyle='rgba(255,255,255,.05)';
+    roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.fill();
+    ctx.strokeStyle=chipCols[idx]; ctx.lineWidth=2; roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.stroke();
+    ctx.fillStyle='#f4f1ff'; ctx.textAlign='center';
+    ctx.fillText(l, cx+w/2, y+chipH/2+11);
+    cx+=w+gap;
+  });
+  y+=chipH+70;
+
+  // "MY DECISION PROFILE" heading
+  ctx.fillStyle='#ffd166'; ctx.font='bold 24px "Trebuchet MS",Arial';
+  ctx.fillText('M Y   D E C I S I O N   P R O F I L E', W/2, y);
+  y+=44;
+
+  // six dials
+  const dialL=90, dialR=W-90, dialW=dialR-dialL;
+  const rowH=66;
+  ctx.textBaseline='alphabetic';
+  AXES.forEach(a=>{
+    ctx.font='500 22px "Trebuchet MS",Arial';
+    ctx.textAlign='left'; ctx.fillStyle='#8f8bc0';
+    ctx.fillText(a.negL, dialL, y);
+    ctx.textAlign='right';
+    ctx.fillText(a.posL, dialR, y);
+    // track
+    const ty=y+22;
+    ctx.fillStyle='#22254a';
+    roundRect(ctx,dialL,ty,dialW,12,6); ctx.fill();
+    // mid tick
+    ctx.fillStyle='#3a3e70'; ctx.fillRect(dialL+dialW/2-1,ty-3,2,18);
+    // knob
+    const kx=dialL + dialW*(pct[a.k]/100);
+    const kg=ctx.createLinearGradient(kx-14,0,kx+14,0);
+    kg.addColorStop(0,'#4ecdc4'); kg.addColorStop(1,'#ffd166');
+    ctx.fillStyle=kg;
+    ctx.beginPath(); ctx.arc(kx,ty+6,14,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0c0d1c'; ctx.lineWidth=3; ctx.stroke();
+    y+=rowH;
+  });
+
+  y+=6;
+  // motto quote box
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const quote=principle(arch,norm);
+  ctx.font='italic 30px "Trebuchet MS",Arial';
+  const qLines=wrapLines(ctx,quote,W-220);
+  const boxH=qLines.length*44+56;
+  ctx.fillStyle='rgba(255,255,255,.04)';
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.stroke();
+  ctx.fillStyle='#efeaff';
+  let qy=y+52;
+  qLines.forEach(ln=>{ ctx.fillText(ln,W/2,qy); qy+=44; });
+  y+=boxH+56;
+
+  // footer
+  ctx.fillStyle='#7d79ad'; ctx.font='22px "Trebuchet MS",Arial';
+  ctx.fillText('18 questions · 6 decision dials · a decision toy', W/2, H-46);
+
+  return cv;
+}
+
+function openShare(){
+  if(!RESULT||!CURRENT_ARCH) return;
+  const cv=drawShareCard();
+  $('shareImg').src=cv.toDataURL('image/png');
+  cv.toBlob(b=>{ CARD_BLOB=b; }, 'image/png');
+  // hide native share button if unsupported
+  $('lbShare').style.display = (navigator.share||navigator.canShare) ? '' : 'none';
+  $('shareBox').classList.add('on');
+}
+function closeShare(){ $('shareBox').classList.remove('on'); }
+
+function ensureBlob(){
+  return new Promise(res=>{
+    if(CARD_BLOB) return res(CARD_BLOB);
+    drawShareCard().toBlob(b=>{ CARD_BLOB=b; res(b); }, 'image/png');
+  });
+}
+
+async function nativeShare(){
+  const blob=await ensureBlob();
+  const file=new File([blob],'decision-dial-result.png',{type:'image/png'});
+  const text='I got “'+CURRENT_ARCH.name+'” on The Decision Dial.';
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'My Decision Dial result', text});
+      return;
+    }
+    if(navigator.share){ await navigator.share({title:'My Decision Dial result', text}); return; }
+  }catch(e){ /* user cancelled or blocked — fall through */ }
+  downloadCard();
+}
+
+async function downloadCard(){
+  const blob=await ensureBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='decision-dial-result.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  $('lbHint').textContent='Saved! If nothing downloaded, long-press the image above to save it.';
+}
+
+/* ---------- wire up all controls (no inline handlers) ---------- */
+function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
+function init(){
+  on('startBtn', start);
+  on('backBtn', prev);
+  on('next', next);
+  on('shareBtn', openShare);
+  on('restartBtn', restart);
+  on('lbShare', nativeShare);
+  on('lbSave', downloadCard);
+  on('lbClose', closeShare);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+
+/* keyboard: 1-9 pick option, Enter/Right advance, Left back, R retake */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); if(typeof start==='function')start();} return; }
+  if(scr.id==='quiz'){
+    if(/^[1-9]$/.test(e.key)){ var b=document.querySelectorAll('#opts .opt')[+e.key-1]; if(b){e.preventDefault(); b.click();} }
+    else if(e.key==='Enter'||e.key==='ArrowRight'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); prev(); }
+  } else if(scr.id==='results'){
+    if(e.key==='r'||e.key==='R'){ e.preventDefault(); restart(); }
+  }
+});
+</script>
+</body>
+</html>

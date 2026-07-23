@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
 <title>fun — a collection of little quizzes</title>
 <style>
   :root{
@@ -40,6 +41,10 @@
     background:linear-gradient(90deg,#ffd166,#4ecdc4);box-shadow:0 8px 22px rgba(78,205,196,.25)}
   .footnote{font-size:12.5px;color:var(--muted);margin-top:40px;text-align:center}
   .footnote a{color:var(--b)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.quiz-card:focus-visible{outline:2px solid var(--b);outline-offset:3px;border-color:#5b60a8}
+.group{grid-column:1/-1;margin:16px 2px -4px;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--c);font-weight:bold}
+.group.first{margin-top:6px}
 </style>
 </head>
 <body>
@@ -48,10 +53,12 @@
   <div class="hero">
     <div class="kicker">A collection of little web toys</div>
     <h1>fun</h1>
-    <p class="tag">Quick, playful quizzes that read the shape of your choices and hand you a verdict. Pick one — they take a few minutes and know you a little too well.</p>
+    <p class="tag">Playful quizzes that read the shape of your choices and hand you a verdict, plus pick-your-type guides that give you tailored advice. Pick one — they take a few minutes and know you a little too well.</p>
   </div>
 
   <div class="cards">
+
+    <div class="group first">Quizzes · map your choices</div>
 
     <a class="quiz-card" href="trolley.html">
       <div class="emoji">🚃</div>
@@ -69,12 +76,94 @@
       <span class="go">Start packing ▶</span>
     </a>
 
+    <a class="quiz-card" href="money.html">
+      <div class="emoji">💰</div>
+      <div class="meta">What's Your Money Personality?</div>
+      <h2>The Money Mind</h2>
+      <p>Eighteen questions about how you spend, save, and gamble. Your answers map across six money dials and hand you a money archetype — plus the habit you'd rather not admit to.</p>
+      <span class="go">Check my balance ▶</span>
+    </a>
+
+    <a class="quiz-card" href="decisions.html">
+      <div class="emoji">🎲</div>
+      <div class="meta">How Do You Decide?</div>
+      <h2>The Decision Dial</h2>
+      <p>How do you actually make the call? Map your instincts across six decision dials and meet your decision-making archetype — gut-caller, strategist, or something in between.</p>
+      <span class="go">Make the call ▶</span>
+    </a>
+
+    <a class="quiz-card" href="work.html">
+      <div class="emoji">💼</div>
+      <div class="meta">How Do You Work Best?</div>
+      <h2>Work Mode</h2>
+      <p>Deep focus or buzzy collaboration? Lark or owl? Six work dials read the shape of how you do your best work — and where you'd truly thrive.</p>
+      <span class="go">Clock in ▶</span>
+    </a>
+
+    <a class="quiz-card" href="conflict.html">
+      <div class="emoji">⚔️</div>
+      <div class="meta">What Do You Do When It Gets Tense?</div>
+      <h2>Conflict Style</h2>
+      <p>Fight, fold, or find the middle? Eighteen tense moments map across six conflict dials and reveal how you really handle friction.</p>
+      <span class="go">Enter the ring ▶</span>
+    </a>
+
+    <a class="quiz-card" href="care.html">
+      <div class="emoji">💞</div>
+      <div class="meta">How Do You Show You Care?</div>
+      <h2>Care Styles</h2>
+      <p>Words, actions, time, or touch? Map how you give and receive care across six dials and discover your care archetype — and how you feel most loved.</p>
+      <span class="go">Open your heart ▶</span>
+    </a>
+
+    <a class="quiz-card" href="taste.html">
+      <div class="emoji">🎨</div>
+      <div class="meta">What's Your Aesthetic?</div>
+      <h2>The Taste Test</h2>
+      <p>Minimal or maximal, classic or bold? Eighteen "which draws your eye?" moments map your taste across six dials and name your aesthetic.</p>
+      <span class="go">Find your look ▶</span>
+    </a>
+
+    <div class="group">Guides · pick your type</div>
+
     <a class="quiz-card" href="enneagram.html">
       <div class="emoji">🧭</div>
       <div class="meta">Know Your Stress &amp; Unwind</div>
       <h2>The Enneagram Navigator</h2>
       <p>Pick your Enneagram type and wing to see where you drift under stress — and how to genuinely recharge — mapped along your personal stress and growth arrows.</p>
       <span class="go">Find your path ▶</span>
+    </a>
+
+    <a class="quiz-card" href="chronotype.html">
+      <div class="emoji">🌙</div>
+      <div class="meta">Find Your Energy Rhythm</div>
+      <h2>Chronotype Navigator</h2>
+      <p>Lion, Bear, Wolf, or Dolphin? Pick your sleep chronotype and get a daily schedule that works with your natural energy, not against it.</p>
+      <span class="go">Find my rhythm ▶</span>
+    </a>
+
+    <a class="quiz-card" href="attachment.html">
+      <div class="emoji">🔗</div>
+      <div class="meta">How You Bond &amp; Grow</div>
+      <h2>Attachment Navigator</h2>
+      <p>Secure, anxious, avoidant, or disorganized? Pick your attachment style to see how you show up when triggered — and the moves that carry you toward secure.</p>
+      <span class="go">Choose my style ▶</span>
+    </a>
+
+    <a class="quiz-card" href="care-languages.html">
+      <div class="emoji">💌</div>
+      <div class="meta">Speak Everyone's Language</div>
+      <h2>Care Languages Navigator</h2>
+      <p>Pick your primary care language and learn to recognise — and speak — the other four, so care actually lands with the people you love.</p>
+      <span class="go">Pick my language ▶</span>
+    </a>
+
+    <a class="quiz-card" href="type-compass.html">
+      <div class="emoji">🧩</div>
+      <div class="meta">Your 16-Type Stress &amp; Growth Map</div>
+      <h2>Type Compass</h2>
+      <p>Know your four-letter code? Pick your type to see how you unravel under stress — the grip — and the path that helps you grow.</p>
+      <span class="go">Set my compass ▶</span>
     </a>
 
   </div>

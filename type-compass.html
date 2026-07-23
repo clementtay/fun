@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
+<title>Type Compass — 16-Type Stress &amp; Growth Guide</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Hub link */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+
+  /* Intro */
+  .hero{text-align:center;padding:26px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(32px,7.5vw,52px);margin:8px 0 4px;line-height:1.04;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:12px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:16px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+  .disclaimer a{color:var(--c)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+  .mt{margin-top:22px}
+
+  /* Section heads */
+  .step-h{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin:4px 0 4px}
+  .step-title{font-size:24px;font-weight:bold;margin:0 0 4px}
+  .step-sub{color:var(--muted);font-size:15px;margin:0 0 18px}
+
+  /* Type grid */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media (min-width:620px){.grid{grid-template-columns:repeat(4,1fr)}}
+  .grid-sub{grid-column:1/-1;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin:12px 2px 0;padding-top:10px;border-top:1px solid var(--line)}
+  .grid-sub:first-child{border-top:0;padding-top:0;margin-top:0}
+  .type-card{
+    text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;
+    padding:16px 15px;cursor:pointer;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+    display:flex;flex-direction:column;gap:2px;min-height:118px;
+  }
+  .type-card:hover,.type-card:focus-visible{border-color:#5b60a8;background:#23264b;transform:translateY(-2px);outline:none}
+  .type-num{font-size:24px;font-weight:bold;line-height:1;letter-spacing:1px;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .type-name{font-weight:bold;font-size:15.5px;margin-top:6px}
+  .type-desc{font-size:13px;color:var(--muted);line-height:1.35}
+
+  /* Variant choices */
+  .wing-card{
+    display:block;width:100%;text-align:left;background:linear-gradient(180deg,var(--card),#191b38);
+    border:1px solid var(--line);color:var(--ink);border-radius:18px;padding:18px 18px;
+    cursor:pointer;font-family:inherit;margin-bottom:14px;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;
+  }
+  .wing-card:hover,.wing-card:focus-visible{border-color:var(--b);background:#20304a;transform:translateY(-1px);outline:none}
+  .wing-label{font-weight:bold;font-size:20px;color:#fff}
+  .wing-tag{font-size:14px;color:var(--c);font-weight:bold;margin-left:8px}
+  .wing-note{display:block;margin-top:7px;font-size:14.5px;color:#d9d5ff;line-height:1.4}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px;flex-wrap:wrap}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit;padding:6px 2px}
+  .backlink:hover,.backlink:focus-visible{color:var(--ink);outline:none}
+
+  /* Results */
+  .res-head{text-align:center;padding:6px 6px 2px}
+  .res-head .badge{display:inline-block;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--c);font-weight:bold}
+  .res-head h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 4px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .res-head .sub{color:var(--muted);font-size:15.5px;margin:0 auto;max-width:520px}
+  .wing-blurb{font-size:15.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:15px 17px;margin:16px 0 6px}
+
+  .panel{border-radius:20px;padding:18px 18px 20px;margin:18px 0;border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--card),#191b38);box-shadow:0 16px 40px rgba(0,0,0,.3);
+    animation:pop .4s ease both}
+  .panel.stress{border-color:rgba(255,107,107,.32)}
+  .panel.unwind{border-color:rgba(78,205,196,.32)}
+  .panel-h{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+  .panel-h .ic{font-size:26px;line-height:1}
+  .panel-h h3{margin:0;font-size:21px}
+  .panel.stress .panel-h h3{color:#ffb3b3}
+  .panel.unwind .panel-h h3{color:#bff6ee}
+  .arrow-line{font-size:14px;color:#d9d5ff;margin:2px 0 12px}
+  .arrow-line b{color:var(--ink)}
+  .sub-h{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:bold;margin:16px 0 8px}
+  .panel.stress .sub-h{color:var(--a)}
+  .panel.unwind .sub-h{color:var(--b)}
+  ul.tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+  ul.tips li{position:relative;padding-left:24px;font-size:15.5px;color:#e9e6ff;line-height:1.45}
+  ul.tips li::before{content:"";position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:50%}
+  .panel.stress ul.tips li::before{background:var(--a)}
+  .panel.unwind ul.tips li::before{background:var(--b)}
+  .tweak{margin-top:14px;font-size:14.5px;line-height:1.45;border-radius:12px;padding:11px 14px}
+  .panel.stress .tweak{background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.26);color:#ffe0e0}
+  .panel.unwind .tweak{background:rgba(78,205,196,.10);border:1px solid rgba(78,205,196,.26);color:#d6fff9}
+  .tweak b{color:#fff}
+
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin:22px auto 0;max-width:540px;line-height:1.5}
+  .footlinks{text-align:center;margin-top:10px}
+  @media (prefers-reduced-motion: reduce){
+    .screen,.panel,.type-card,.wing-card,.btn{animation:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">Type Compass</div>
+      <h1>Stress &amp; Growth</h1>
+      <p class="tag">Pick your four-letter type and your identity variant, and get concrete guidance for
+        what happens when you're stressed — and how to actually grow and recharge.</p>
+      <p class="how">Under pressure, every type slips into its <b>grip</b> — the shadow side of its least-used
+        function — and behaves unlike itself. In good conditions it can lean into its <b>growth path</b>.
+        This tool turns those patterns into things you can <b>do</b>.</p>
+      <div class="center mt">
+        <button class="btn" id="startBtn">Choose my type →</button>
+      </div>
+      <p class="disclaimer">This assumes you already know your four-letter type. Not sure?
+        Take a free test like
+        <a href="https://www.16personalities.com/free-personality-test" target="_blank" rel="noopener">16personalities.com</a>
+        first, then come back. This is a reflective tool for self-understanding, not a real assessment or clinical advice.</p>
+    </div>
+  </section>
+
+  <!-- TYPE PICKER -->
+  <section id="type" class="screen">
+    <div class="step-h">Step 1 of 2</div>
+    <p class="step-title">What's your type?</p>
+    <p class="step-sub">Pick the four-letter code you most identify with.</p>
+    <div class="grid" id="typeGrid"></div>
+    <div class="nav">
+      <button class="backlink" id="typeBack">← Back</button>
+    </div>
+  </section>
+
+  <!-- VARIANT PICKER -->
+  <section id="wing" class="screen">
+    <div class="step-h">Step 2 of 2</div>
+    <p class="step-title" id="wingTitle">And your identity?</p>
+    <p class="step-sub">The identity axis flavours how the same type shows up. Pick the one that fits you.</p>
+    <div id="wingList"></div>
+    <div class="nav">
+      <button class="backlink" id="wingBack">← Pick a different type</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="res-head">
+      <span class="badge" id="resBadge"></span>
+      <h2 id="resTitle"></h2>
+      <p class="sub" id="resSub"></p>
+    </div>
+    <div class="wing-blurb" id="resWingBlurb"></div>
+
+    <div class="panel stress">
+      <div class="panel-h"><span class="ic">🌩️</span><h3>Under stress · the grip</h3></div>
+      <p class="arrow-line" id="stressArrow"></p>
+      <div class="sub-h">Signs you're in the grip</div>
+      <ul class="tips" id="stressSigns"></ul>
+      <div class="sub-h">Try this to steady yourself</div>
+      <ul class="tips" id="stressDo"></ul>
+      <div class="tweak" id="stressTweak"></div>
+    </div>
+
+    <div class="panel unwind">
+      <div class="panel-h"><span class="ic">🌿</span><h3>Your growth path</h3></div>
+      <p class="arrow-line" id="growthArrow"></p>
+      <div class="sub-h">Lean into these healthy moves</div>
+      <ul class="tips" id="unwindGrowth"></ul>
+      <div class="sub-h">Recharge with</div>
+      <ul class="tips" id="unwindDo"></ul>
+      <div class="tweak" id="unwindTweak"></div>
+    </div>
+
+    <p class="footnote" id="resFoot"></p>
+    <div class="footlinks nav" style="justify-content:center">
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+      <button class="btn ghost" id="againBtn">Pick a different type / identity</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- Data model: 16 types with grip + growth patterns and two identity variants each ---------- */
+const TYPES = [
+  {
+    code:"INTJ", name:"The Architect", desc:"Strategic, independent, long-range thinker",
+    stressSigns:[
+      "You lose the big picture and fixate on trivial sensory details",
+      "Sudden urges to overindulge — food, spending, binge-watching",
+      "Cold, harsh certainty replaces your usual nuanced thinking"
+    ],
+    stressDo:[
+      "Zoom back out: write the one outcome that actually matters right now",
+      "Move your body to discharge the tension instead of overanalysing it",
+      "Talk it out with one trusted person rather than sealing yourself off"
+    ],
+    unwindGrowth:[
+      "Let a plan stay open — not every variable needs solving today",
+      "Voice a feeling instead of only reporting a conclusion",
+      "Accept 'good enough' execution over a perfect private blueprint"
+    ],
+    unwindDo:[
+      "Deep solo focus on one meaty problem you find genuinely interesting",
+      "A long walk where you let ideas wander with no agenda",
+      "One warm, low-pressure conversation with someone who gets you"
+    ],
+    wings:{
+      a:{label:"INTJ-T", tag:"Turbulent", note:"More self-questioning and driven — you push hard and second-guess whether it was enough.",
+         stressTweak:"Self-doubt sharpens the grip; name the worst-case out loud and check it against evidence.",
+         unwindTweak:"Rest without an outcome attached — progress you can't measure still counts."},
+      b:{label:"INTJ-A", tag:"Assertive", note:"More even-keeled and self-assured — you trust your judgement and shrug off setbacks.",
+         stressTweak:"Confidence can harden into stubborn tunnel vision — invite one dissenting view before you lock in.",
+         unwindTweak:"You recharge fast alone; make sure downtime includes people, not just projects."}
+    }
+  },
+  {
+    code:"INTP", name:"The Logician", desc:"Curious, analytical, endlessly theorising",
+    stressSigns:[
+      "You erupt with uncharacteristic emotion or lash out, then feel awful",
+      "Looping thoughts spiral into anxious worst-case scenarios",
+      "You feel misunderstood and withdraw into your head even further"
+    ],
+    stressDo:[
+      "Name the emotion plainly — 'I'm overwhelmed' — before it leaks out sideways",
+      "Do one concrete task to interrupt the mental spiral",
+      "Step away from the problem; let your subconscious work while you rest"
+    ],
+    unwindGrowth:[
+      "Turn insight into one shipped thing instead of endless refinement",
+      "Share a half-formed idea rather than waiting for airtight logic",
+      "Tend to a relationship or your body, not just your models"
+    ],
+    unwindDo:[
+      "Unstructured time to explore an idea purely for the joy of it",
+      "A quiet space with zero social demands to recharge fully",
+      "A hands-on hobby that gets you out of abstraction for a while"
+    ],
+    wings:{
+      a:{label:"INTP-T", tag:"Turbulent", note:"More restless and self-critical — you chase certainty and doubt your own competence.",
+         stressTweak:"Rumination feeds the grip; set a stop-point on 'just one more angle' and act.",
+         unwindTweak:"Perfection isn't the entry fee for rest — permit yourself an unfinished, curious afternoon."},
+      b:{label:"INTP-A", tag:"Assertive", note:"More relaxed and self-trusting — you follow curiosity without needing to prove it.",
+         stressTweak:"Detachment can slide into dismissing real feelings — check in before you wave them off.",
+         unwindTweak:"Solitude restores you, but a little connection keeps it from tipping into isolation."}
+    }
+  },
+  {
+    code:"ENTJ", name:"The Commander", desc:"Decisive, driving, natural organiser",
+    stressSigns:[
+      "You get overwhelmed by feelings you can't command and hide them",
+      "Snap impatience and sharp control replace strategy",
+      "You isolate, oversensitive to any hint of not being valued"
+    ],
+    stressDo:[
+      "Delegate or drop something — you don't have to carry it all",
+      "Let one person see the pressure instead of powering through alone",
+      "Swap the marathon for a single finishable next action"
+    ],
+    unwindGrowth:[
+      "Make room for others' input before deciding — pace, don't bulldoze",
+      "Value the process and people, not only the result",
+      "Let feelings inform you rather than treating them as inefficiency"
+    ],
+    unwindDo:[
+      "Vigorous exercise or competition to burn off the drive cleanly",
+      "A goal you pursue purely for enjoyment, with no stakes",
+      "Real downtime with people you don't have to lead"
+    ],
+    wings:{
+      a:{label:"ENTJ-T", tag:"Turbulent", note:"More intense and success-anxious — you drive relentlessly and fear falling short.",
+         stressTweak:"Fear of failure tightens the grip; separate 'this went wrong' from 'I am failing'.",
+         unwindTweak:"You don't have to earn rest with a win — schedule it and protect it."},
+      b:{label:"ENTJ-A", tag:"Assertive", note:"More composed and unshakeable — you set the course and rarely look back.",
+         stressTweak:"Certainty can steamroll people — slow down and read the room before you push.",
+         unwindTweak:"Recharge with something you'll never dominate; ease relaxes you more than winning."}
+    }
+  },
+  {
+    code:"ENTP", name:"The Debater", desc:"Inventive, quick, loves a good argument",
+    stressSigns:[
+      "You fixate rigidly on small details, losing your usual flexibility",
+      "Withdrawal and unusual gloom replace the spark",
+      "You feel unappreciated and second-guess ideas you'd normally trust"
+    ],
+    stressDo:[
+      "Pick one idea and finish it before chasing the next possibility",
+      "Get moving physically to reset a stuck, overheated mind",
+      "Voice the frustration to a friend instead of stewing quietly"
+    ],
+    unwindGrowth:[
+      "Commit and follow through, not just generate and pitch",
+      "Listen to land a point rather than winning the exchange",
+      "Sit with one direction long enough to see it bear fruit"
+    ],
+    unwindDo:[
+      "A lively debate or brainstorm with people who can keep up",
+      "A brand-new challenge to explore with zero pressure to master it",
+      "Open, unscheduled time to riff and follow tangents freely"
+    ],
+    wings:{
+      a:{label:"ENTP-T", tag:"Turbulent", note:"More reactive and approval-seeking — you improvise fast and sting when doubted.",
+         stressTweak:"Restlessness feeds the grip; finish one thing to prove momentum beats novelty.",
+         unwindTweak:"You don't need a win to rest — an unproductive, playful evening counts."},
+      b:{label:"ENTP-A", tag:"Assertive", note:"More unbothered and self-assured — you toss out ideas and let critique roll off.",
+         stressTweak:"Confidence can dodge accountability — own the follow-through, not just the spark.",
+         unwindTweak:"Balance the buzz with genuine quiet so you're not always running on stimulation."}
+    }
+  },
+  {
+    code:"INFJ", name:"The Advocate", desc:"Insightful, principled, quietly intense",
+    stressSigns:[
+      "You binge on senses — food, shopping, TV — to escape the overload",
+      "Obsessive fixation on a single detail or grievance takes over",
+      "Warm empathy flips to cold, cutting withdrawal from everyone"
+    ],
+    stressDo:[
+      "Name the feeling instead of absorbing everyone else's as your own",
+      "Ground in the body — a walk, water, breath — to leave the spiral",
+      "Say no to one draining demand and protect your energy"
+    ],
+    unwindGrowth:[
+      "Voice your own needs directly instead of only reading others'",
+      "Act on a vision in small real steps, not just idealising it",
+      "Let yourself be imperfect and seen, not endlessly private"
+    ],
+    unwindDo:[
+      "Quiet solo time to process and refill your inner well",
+      "Creative expression — writing, art, music — with no audience",
+      "One deep, meaningful conversation over many shallow ones"
+    ],
+    wings:{
+      a:{label:"INFJ-T", tag:"Turbulent", note:"More self-critical and sensitive — you feel deeply and replay every misstep.",
+         stressTweak:"Perfectionism and guilt deepen the grip; be as kind to yourself as to others.",
+         unwindTweak:"Rest doesn't need justifying — solitude is maintenance, not indulgence."},
+      b:{label:"INFJ-A", tag:"Assertive", note:"More settled and self-trusting — you hold your convictions with steadier calm.",
+         stressTweak:"Calm certainty can mask real strain — check whether you're coping or suppressing.",
+         unwindTweak:"You steady quickly, but let people in so quiet doesn't become distance."}
+    }
+  },
+  {
+    code:"INFP", name:"The Mediator", desc:"Idealistic, empathic, values-driven",
+    stressSigns:[
+      "You turn hyper-critical and controlling, unlike your gentle norm",
+      "Harsh self-judgement spirals — you feel fundamentally not enough",
+      "You lash out or nitpick, then drown in guilt about it"
+    ],
+    stressDo:[
+      "Soften the inner critic — 'good enough' is genuinely allowed",
+      "Do one small ordinary task to interrupt the emotional undertow",
+      "Reconnect to a core value to remember what actually matters"
+    ],
+    unwindGrowth:[
+      "Take practical action on ideals instead of only feeling them",
+      "Build a steady routine that holds when moods don't",
+      "Share your inner world rather than guarding it entirely"
+    ],
+    unwindDo:[
+      "Solo creative time — journaling, art, music — to process feeling",
+      "Nature or a gentle ritual to restore your sense of meaning",
+      "Time with a few people who accept you exactly as you are"
+    ],
+    wings:{
+      a:{label:"INFP-T", tag:"Turbulent", note:"More self-doubting and tender — you feel setbacks keenly and question your worth.",
+         stressTweak:"Self-criticism fuels the grip; catch the harsh voice and answer it gently.",
+         unwindTweak:"You don't have to earn rest with productivity — feeling deeply is work too."},
+      b:{label:"INFP-A", tag:"Assertive", note:"More grounded and self-accepting — you hold your values with less turbulence.",
+         stressTweak:"Even-keel can quietly avoid conflict — name the discomfort before it hardens.",
+         unwindTweak:"Calm solitude refills you; add a little connection so it doesn't become retreat."}
+    }
+  },
+  {
+    code:"ENFJ", name:"The Protagonist", desc:"Warm, inspiring, deeply people-focused",
+    stressSigns:[
+      "You overthink logic and detail, doubting decisions you'd normally trust",
+      "You feel unappreciated and quietly resentful of all you give",
+      "Warmth turns to over-control or blame when others don't respond"
+    ],
+    stressDo:[
+      "Ask directly for what you need instead of hoping it's noticed",
+      "Step off-stage and check what YOU actually feel, not the room",
+      "Let someone care for you and simply receive it"
+    ],
+    unwindGrowth:[
+      "Attend to your own needs, not only everyone else's",
+      "Let a decision be logical, not just harmonious",
+      "Allow yourself to be a person with limits, not just a giver"
+    ],
+    unwindDo:[
+      "Private, unproductive downtime with no one to tend to",
+      "A creative or reflective outlet that's entirely your own",
+      "Rest that you take without first earning it"
+    ],
+    wings:{
+      a:{label:"ENFJ-T", tag:"Turbulent", note:"More approval-sensitive and driven — you read every reaction and rarely switch off.",
+         stressTweak:"Craving reassurance deepens the grip; one honest check-in beats a dozen performances.",
+         unwindTweak:"Unplug from being seen — a quiet evening off-stage is deeply restorative."},
+      b:{label:"ENFJ-A", tag:"Assertive", note:"More secure and steady — you give warmth without needing it returned in kind.",
+         stressTweak:"Confidence can overlook your own depletion — check your tank before it's empty.",
+         unwindTweak:"You recharge among people, but protect true solo time to hear yourself."}
+    }
+  },
+  {
+    code:"ENFP", name:"The Campaigner", desc:"Enthusiastic, imaginative, warmly spontaneous",
+    stressSigns:[
+      "You get rigid and hyper-focused on details, losing the big vision",
+      "Uncharacteristic pessimism and overwhelm swamp the optimism",
+      "You feel trapped and criticise yourself for not doing enough"
+    ],
+    stressDo:[
+      "Narrow to one next step and let the other possibilities wait",
+      "Move or get outside to shake a stuck, spiralling mind loose",
+      "Talk it through with a friend to hear your own way forward"
+    ],
+    unwindGrowth:[
+      "Follow through on one idea rather than starting five",
+      "Sit with a feeling instead of chasing the next bright thing",
+      "Build enough structure to make the dreams actually land"
+    ],
+    unwindDo:[
+      "Spontaneous connection and play with people you love",
+      "A brand-new experience to explore with pure curiosity",
+      "Open, unplanned time to imagine and follow inspiration"
+    ],
+    wings:{
+      a:{label:"ENFP-T", tag:"Turbulent", note:"More restless and self-doubting — you feel things intensely and fear missing out.",
+         stressTweak:"Scattered anxiety feeds the grip; finish one small thing to prove you can land.",
+         unwindTweak:"You don't need constant novelty — quiet, unproductive rest is allowed."},
+      b:{label:"ENFP-A", tag:"Assertive", note:"More carefree and self-assured — you ride enthusiasm without much second-guessing.",
+         stressTweak:"Optimism can skip over real problems — name what you're avoiding before it grows.",
+         unwindTweak:"Balance the buzz with genuine stillness so you're not always outrunning yourself."}
+    }
+  },
+  {
+    code:"ISTJ", name:"The Logistician", desc:"Dependable, thorough, tradition-honouring",
+    stressSigns:[
+      "You catastrophise wildly, imagining every possible disaster",
+      "You feel out of control and cling harder to rules and routine",
+      "Uncharacteristic gloom and 'what's the point' settle in"
+    ],
+    stressDo:[
+      "Write the fear down and test it against what's actually likely",
+      "Handle one concrete task you can fully control right now",
+      "Let a trusted person offer a second, calmer perspective"
+    ],
+    unwindGrowth:[
+      "Try a small new way instead of only the proven one",
+      "Voice how you feel, not just what the facts are",
+      "Let 'good enough' stand without redoing it to perfect"
+    ],
+    unwindDo:[
+      "A familiar, orderly routine that restores your footing",
+      "Finishing a tangible project from clear start to clean end",
+      "Quiet time or nature away from noise and demands"
+    ],
+    wings:{
+      a:{label:"ISTJ-T", tag:"Turbulent", note:"More cautious and self-scrutinising — you worry whether you've done enough, correctly.",
+         stressTweak:"Anxiety amplifies the catastrophising; separate a real risk from an imagined one.",
+         unwindTweak:"You don't have to earn rest by clearing the list — downtime is maintenance."},
+      b:{label:"ISTJ-A", tag:"Assertive", note:"More unflappable and steady — you do the work and don't sweat the small stuff.",
+         stressTweak:"Stoic calm can bottle strain until it bursts — vent the pressure a little earlier.",
+         unwindTweak:"Routine soothes you; add one small novelty so it doesn't become a rut."}
+    }
+  },
+  {
+    code:"ISFJ", name:"The Defender", desc:"Loyal, caring, quietly conscientious",
+    stressSigns:[
+      "You spin worst-case scenarios and feel a low dread of catastrophe",
+      "You over-give while feeling unseen and quietly resentful",
+      "Uncharacteristic negativity and self-criticism take hold"
+    ],
+    stressDo:[
+      "Name the specific fear and check it against real evidence",
+      "Do one small thing just for you, guilt-free",
+      "Ask directly for support instead of waiting to be noticed"
+    ],
+    unwindGrowth:[
+      "Set a gentle boundary and honour your own needs too",
+      "Try change in small doses rather than clinging to the familiar",
+      "Speak your feelings instead of silently absorbing everyone's"
+    ],
+    unwindDo:[
+      "A cosy, familiar routine that makes you feel safe and settled",
+      "Time with a few trusted people where you can fully relax",
+      "Quiet care for yourself — the way you'd care for anyone else"
+    ],
+    wings:{
+      a:{label:"ISFJ-T", tag:"Turbulent", note:"More anxious and self-effacing — you worry over others and rarely feel done enough.",
+         stressTweak:"Guilt and worry deepen the grip; ask if the 'should' is truly yours to carry.",
+         unwindTweak:"Give yourself explicit permission to rest — frame it as necessary, not selfish."},
+      b:{label:"ISFJ-A", tag:"Assertive", note:"More reassured and steady — you support others from a calmer, surer base.",
+         stressTweak:"Calm can hide self-neglect — check your own tank before you top up everyone else's.",
+         unwindTweak:"Familiar comfort restores you; let others give back so care flows both ways."}
+    }
+  },
+  {
+    code:"ESTJ", name:"The Executive", desc:"Organised, decisive, gets things done",
+    stressSigns:[
+      "You feel unexpectedly emotional and overwhelmed, then hide it",
+      "Rigidity hardens — you double down on control and rules",
+      "You feel isolated and sensitive to any hint of disrespect"
+    ],
+    stressDo:[
+      "Admit the feeling to one person instead of forcing through it",
+      "Delegate a task — you don't have to hold it all together",
+      "Step back and ask what actually matters here, not just the plan"
+    ],
+    unwindGrowth:[
+      "Make space for others' feelings, not only the efficient path",
+      "Stay open to a different method than the tried-and-true one",
+      "Let people close in rather than only managing them"
+    ],
+    unwindDo:[
+      "A clear, finishable task that gives a real sense of order",
+      "Physical activity or sport to discharge the drive cleanly",
+      "Time with family or a trusted circle, off-duty"
+    ],
+    wings:{
+      a:{label:"ESTJ-T", tag:"Turbulent", note:"More status-conscious and driven — you push hard and mind how things reflect on you.",
+         stressTweak:"Fear of losing control tightens the grip; loosen one grip point on purpose.",
+         unwindTweak:"You don't have to earn rest by finishing everything — stop while it's unfinished."},
+      b:{label:"ESTJ-A", tag:"Assertive", note:"More self-assured and unruffled — you decide and move on without much doubt.",
+         stressTweak:"Certainty can run over people — pause to hear the objection before you overrule it.",
+         unwindTweak:"Structure grounds you; add unstructured play so downtime isn't just more tasks."}
+    }
+  },
+  {
+    code:"ESFJ", name:"The Consul", desc:"Sociable, caring, community-minded",
+    stressSigns:[
+      "You get uncharacteristically critical, cynical, and detached",
+      "You feel unappreciated and pressure others through guilt",
+      "Anxiety about disapproval drives overextending yourself"
+    ],
+    stressDo:[
+      "Ask directly for appreciation instead of hinting for it",
+      "Check what YOU feel, apart from the group's mood",
+      "Let one task go undone and forgive yourself for it"
+    ],
+    unwindGrowth:[
+      "Value your own opinion, not only harmony and consensus",
+      "Say no without over-explaining or apologising",
+      "Let yourself receive care, not just provide it"
+    ],
+    unwindDo:[
+      "Warm time with people who make you feel genuinely appreciated",
+      "A comforting routine or tradition that steadies you",
+      "Rest you take without first serving everyone else"
+    ],
+    wings:{
+      a:{label:"ESFJ-T", tag:"Turbulent", note:"More approval-hungry and self-conscious — you read the room and fret over standing.",
+         stressTweak:"Needing to be liked deepens the grip; one real connection beats broad approval.",
+         unwindTweak:"Unplug from being needed — a private evening off-duty genuinely restores you."},
+      b:{label:"ESFJ-A", tag:"Assertive", note:"More secure and steady — you give freely without keeping score of it.",
+         stressTweak:"Confidence can gloss over your own hurt — name it before it turns to blame.",
+         unwindTweak:"You recharge socially, but protect solo time so you don't run on empty."}
+    }
+  },
+  {
+    code:"ISTP", name:"The Virtuoso", desc:"Practical, cool-headed, hands-on problem-solver",
+    stressSigns:[
+      "You overshare emotion or lash out, surprising even yourself",
+      "You get clingy or hypersensitive, unlike your usual detachment",
+      "Withdrawal deepens and you feel oddly untethered"
+    ],
+    stressDo:[
+      "Name the feeling simply before it spills out sideways",
+      "Solve one concrete, physical problem to feel capable again",
+      "Take real space to reset rather than reacting on the spot"
+    ],
+    unwindGrowth:[
+      "Say what's going on inside instead of only acting it out",
+      "Commit to one person or plan past the moment's impulse",
+      "Let people in a little before you retreat by reflex"
+    ],
+    unwindDo:[
+      "A hands-on project or skill you can lose yourself in",
+      "Solo time and physical space with no demands to perform",
+      "Movement or the outdoors to reset a restless system"
+    ],
+    wings:{
+      a:{label:"ISTP-T", tag:"Turbulent", note:"More reactive and self-questioning — you seem cool but churn more underneath.",
+         stressTweak:"Bottled tension feeds the grip; let the pressure out in small doses, sooner.",
+         unwindTweak:"Rest doesn't need a task attached — stillness counts as doing something."},
+      b:{label:"ISTP-A", tag:"Assertive", note:"More unfazed and self-contained — you handle it and rarely let it rattle you.",
+         stressTweak:"Detachment can dodge a feeling that needs facing — check in before you shrug it off.",
+         unwindTweak:"Solitude restores you; a little connection keeps it from becoming a wall."}
+    }
+  },
+  {
+    code:"ISFP", name:"The Adventurer", desc:"Gentle, spontaneous, quietly aesthetic",
+    stressSigns:[
+      "You get uncharacteristically critical and coldly logical",
+      "You spiral into harsh self-judgement and feel not good enough",
+      "You withdraw, sensitive and hurt, sure you've been misread"
+    ],
+    stressDo:[
+      "Soften the critic — you don't have to justify how you feel",
+      "Return to your senses: music, movement, something beautiful",
+      "Do one small pleasant thing to break the downward pull"
+    ],
+    unwindGrowth:[
+      "Voice your needs directly instead of quietly withdrawing",
+      "Try a little structure so good intentions actually happen",
+      "Stay with a challenge past the first flicker of discomfort"
+    ],
+    unwindDo:[
+      "Creative or sensory play — art, music, cooking, nature",
+      "Freedom to follow the moment without a fixed plan",
+      "Quiet time with a few people who feel completely safe"
+    ],
+    wings:{
+      a:{label:"ISFP-T", tag:"Turbulent", note:"More self-doubting and tender — you feel criticism keenly and take it inward.",
+         stressTweak:"Self-criticism deepens the grip; meet the harsh voice with the kindness you give others.",
+         unwindTweak:"You don't have to earn rest — being present to beauty is enough."},
+      b:{label:"ISFP-A", tag:"Assertive", note:"More easygoing and self-accepting — you go with the flow and let things pass.",
+         stressTweak:"Easy calm can avoid a needed conversation — name the friction before it lingers.",
+         unwindTweak:"Sensory downtime refills you; a little planning helps the good moments recur."}
+    }
+  },
+  {
+    code:"ESTP", name:"The Entrepreneur", desc:"Bold, energetic, thrives in the moment",
+    stressSigns:[
+      "You see hidden meanings and negative patterns everywhere",
+      "Uncharacteristic worry about the future replaces your ease",
+      "You withdraw and overthink, unable to just act as usual"
+    ],
+    stressDo:[
+      "Get back into action — one concrete move breaks the overthinking",
+      "Test the anxious story against what's actually in front of you",
+      "Burn off the charge physically before deciding anything"
+    ],
+    unwindGrowth:[
+      "Consider the longer consequence before the fast move",
+      "Follow through past the thrill of the start",
+      "Let a feeling register instead of outrunning it with action"
+    ],
+    unwindDo:[
+      "Fast, physical, hands-on activity to feel fully alive",
+      "A new challenge or a bit of healthy risk to chase",
+      "Lively company and momentum after too much stillness"
+    ],
+    wings:{
+      a:{label:"ESTP-T", tag:"Turbulent", note:"More restless and reactive — you crave stimulation and mind how you're seen.",
+         stressTweak:"Anxious over-reading feeds the grip; act on one real fact, not the imagined pattern.",
+         unwindTweak:"You don't need constant action to recharge — some stillness is allowed."},
+      b:{label:"ESTP-A", tag:"Assertive", note:"More unbothered and self-assured — you improvise and roll with whatever hits.",
+         stressTweak:"Confidence can skip the consequence — pause one beat before the bold move.",
+         unwindTweak:"Balance the go-go energy with real downtime so you don't crash later."}
+    }
+  },
+  {
+    code:"ESFP", name:"The Entertainer", desc:"Playful, warm, spontaneously generous",
+    stressSigns:[
+      "You get lost in gloomy overthinking, hunting for hidden meaning",
+      "Sudden pessimism and worry eclipse your natural sparkle",
+      "You withdraw and feel strangely heavy and disconnected"
+    ],
+    stressDo:[
+      "Reconnect to the present through the senses and movement",
+      "Do one fun, easy thing to lift the mood back up",
+      "Share the worry with a friend rather than brooding alone"
+    ],
+    unwindGrowth:[
+      "Follow through on the practical, not just the pleasant",
+      "Sit briefly with a hard feeling instead of dodging it",
+      "Plan a step ahead so today's fun doesn't cost tomorrow"
+    ],
+    unwindDo:[
+      "Joyful, social experiences with people you adore",
+      "Music, dancing, or anything hands-on and alive",
+      "Spontaneous fun with zero pressure and no agenda"
+    ],
+    wings:{
+      a:{label:"ESFP-T", tag:"Turbulent", note:"More sensitive and self-conscious — you feel dips keenly and seek reassurance.",
+         stressTweak:"Anxious brooding feeds the grip; move your body to get back to the present.",
+         unwindTweak:"You don't have to be 'on' to be worthwhile — quiet rest is allowed too."},
+      b:{label:"ESFP-A", tag:"Assertive", note:"More carefree and resilient — you bounce back and keep the mood bright.",
+         stressTweak:"Optimism can skip past a real problem — face the boring thing before it grows.",
+         unwindTweak:"Balance the buzz with a little calm so you're not always chasing the next high."}
+    }
+  }
+];
+
+const byCode = code => TYPES.find(t => t.code === code);
+
+let sel = { type:null, variant:null }; // variant: 'a' | 'b'
+
+/* ---------- Tiny helpers ---------- */
+const $ = id => document.getElementById(id);
+function on(id, fn){ const el = $(id); if(el) el.addEventListener('click', fn); }
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+  window.scrollTo({ top:0, behavior:'auto' });
+}
+function ul(el, items){
+  el.innerHTML = '';
+  items.forEach(t => { const li = document.createElement('li'); li.textContent = t; el.appendChild(li); });
+}
+
+/* ---------- Build type grid ---------- */
+function buildTypes(){
+  const grid = $('typeGrid');
+  grid.innerHTML = '';
+  const groups = [
+    {label:'Analysts',  test:c => c[1]==='N' && c[2]==='T'},
+    {label:'Diplomats', test:c => c[1]==='N' && c[2]==='F'},
+    {label:'Sentinels', test:c => c[1]==='S' && c[3]==='J'},
+    {label:'Explorers', test:c => c[1]==='S' && c[3]==='P'}
+  ];
+  groups.forEach(g => {
+    const h = document.createElement('div');
+    h.className = 'grid-sub';
+    h.textContent = g.label;
+    grid.appendChild(h);
+    TYPES.filter(t => g.test(t.code)).forEach(t => {
+      const b = document.createElement('button');
+      b.className = 'type-card';
+      b.setAttribute('aria-label', t.code + ', ' + t.name + '. ' + t.desc);
+      b.innerHTML =
+        '<span class="type-num">' + t.code + '</span>' +
+        '<span class="type-name">' + t.name + '</span>' +
+        '<span class="type-desc">' + t.desc + '</span>';
+      b.addEventListener('click', () => { sel.type = t.code; sel.variant = null; buildWings(); show('wing'); });
+      grid.appendChild(b);
+    });
+  });
+}
+
+/* ---------- Build identity variant choices for selected type ---------- */
+function buildWings(){
+  const t = byCode(sel.type);
+  $('wingTitle').textContent = t.code + ' — turbulent or assertive?';
+  const list = $('wingList');
+  list.innerHTML = '';
+  ['a','b'].forEach(key => {
+    const w = t.wings[key];
+    const b = document.createElement('button');
+    b.className = 'wing-card';
+    b.setAttribute('aria-label', w.label + ', ' + w.tag + '. ' + w.note);
+    b.innerHTML =
+      '<span class="wing-label">' + w.label + '</span>' +
+      '<span class="wing-tag">' + w.tag + '</span>' +
+      '<span class="wing-note">' + w.note + '</span>';
+    b.addEventListener('click', () => { sel.variant = key; renderResults(); show('results'); });
+    list.appendChild(b);
+  });
+}
+
+/* ---------- Render results ---------- */
+function renderResults(){
+  const t = byCode(sel.type);
+  const w = t.wings[sel.variant];
+
+  $('resBadge').textContent = 'Your result';
+  $('resTitle').textContent = w.label + ' — ' + t.name;
+  $('resSub').textContent = t.desc;
+  $('resWingBlurb').textContent = w.note;
+
+  $('stressArrow').innerHTML =
+    'Under pressure, ' + t.code + 's fall into the <b>grip</b> — the shadow of your least-developed function — and act unlike yourself.';
+  ul($('stressSigns'), t.stressSigns);
+  ul($('stressDo'), t.stressDo);
+  $('stressTweak').innerHTML = '<b>' + w.label + ' note:</b> ' + w.stressTweak;
+
+  $('growthArrow').innerHTML =
+    'In good conditions, ' + t.code + 's grow by stretching past the comfort zone toward balance.';
+  ul($('unwindGrowth'), t.unwindGrowth);
+  ul($('unwindDo'), t.unwindDo);
+  $('unwindTweak').innerHTML = '<b>' + w.label + ' note:</b> ' + w.unwindTweak;
+
+  $('resFoot').textContent =
+    'This maps the grip and growth patterns of ' + t.code + ' (' + t.name + '). ' +
+    'The ' + w.tag + ' identity (' + w.label + ') colours how each one shows up. ' +
+    'A reflective sketch, not a diagnosis.';
+}
+
+/* ---------- Wire up ---------- */
+function init(){
+  buildTypes();
+  on('startBtn', () => show('type'));
+  on('typeBack', () => show('intro'));
+  on('wingBack', () => show('type'));
+  on('againBtn', () => show('type'));
+}
+document.addEventListener('DOMContentLoaded', init);
+
+/* keyboard: number keys pick a card on the current screen, Enter starts */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); show('type');} return; }
+  if(scr.id==='results')return;
+  if(/^[1-9]$/.test(e.key)){ var cards=scr.querySelectorAll('.type-card,.wing-card,.ctx-card'); var c=cards[+e.key-1]; if(c){e.preventDefault(); c.click();} }
+});
+</script>
+</body>
+</html>

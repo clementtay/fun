@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
+<title>Work Mode — 18 Questions, One Way You Work Best</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(34px,8vw,54px);margin:6px 0 4px;line-height:1.02;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .globe{font-size:70px;margin:14px 0 4px}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+
+  /* Progress */
+  .topbar{display:flex;align-items:center;gap:12px;margin:6px 0 20px}
+  .bar{flex:1;height:9px;background:#20234a;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4);transition:width .4s ease}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:bold}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,var(--card),#191b38);border:1px solid var(--line);
+    border-radius:22px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .4s ease both}
+  .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
+  .scn-emoji{font-size:44px;margin:10px 0 2px;text-align:center}
+  .scn-title{font-size:23px;font-weight:bold;margin:6px 0 6px}
+  .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .opt{
+    text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
+    padding:15px 16px;border-radius:15px;cursor:pointer;font-size:16px;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
+  }
+  .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:16.5px}
+  .opt.pick{border-color:var(--b);background:#243b48}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+  .nextbtn{opacity:.35;pointer-events:none;transition:opacity .2s}
+  .nextbtn.ready{opacity:1;pointer-events:auto}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit}
+  .backlink:hover{color:var(--ink)}
+
+  /* Results */
+  .arche{text-align:center;padding:8px 6px 4px}
+  .arche .emoji{font-size:58px}
+  .arche h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 2px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .arche .sub{color:var(--muted);font-size:15px;margin-bottom:4px}
+  .blurb{font-size:16.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:18px;margin:16px 0}
+  .sect-h{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);
+    font-weight:bold;margin:26px 0 10px}
+  .axis{margin:14px 0}
+  .axis .lbls{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px}
+  .axis .lbls b{color:var(--ink)}
+  .axtrack{position:relative;height:12px;background:#20234a;border-radius:99px}
+  .axtrack > span{position:absolute;top:50%;transform:translate(-50%,-50%);height:20px;width:20px;border-radius:50%;
+    background:linear-gradient(90deg,#4ecdc4,#ffd166);box-shadow:0 3px 10px rgba(0,0,0,.4);border:2px solid #12122a;transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .axtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#3a3e70}
+  .axis .read{font-size:14px;color:#cfcbf3;margin-top:7px}
+  .cardlist{display:grid;gap:12px;grid-template-columns:1fr}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+  .mini h4{margin:0 0 4px;font-size:16px}
+  .mini.blind{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}
+  .mini.super{border-color:rgba(78,205,196,.35);background:rgba(78,205,196,.06)}
+  .mini.dest{border-color:rgba(166,133,255,.35);background:rgba(166,133,255,.06)}
+  .mini p{margin:0;font-size:14.5px;color:#d9d5ff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .chip{background:#23264b;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13.5px}
+  .chip b{color:var(--c)}
+  .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;text-align:center}
+  .again{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .again a{text-decoration:none}
+
+  /* Share lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(6,6,18,.86);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .lightbox.on{display:flex;animation:fade .3s ease both}
+  .lb-inner{max-width:420px;width:100%;text-align:center}
+  .lb-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin-bottom:12px}
+  #shareImg{width:100%;max-height:66vh;object-fit:contain;border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
+  .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
+  .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.opt:focus-visible,.btn:focus-visible,.backlink:focus-visible,.nextbtn:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">How Do You Work Best?</div>
+      <h1>Work Mode</h1>
+      <div class="globe">💼</div>
+      <p class="how">Here's how it works: eighteen quick questions about how you <b>actually</b> get things done — when you focus, who you work with, how you plan. No right answers, just your instincts.</p>
+      <p class="tag">By the end I'll read the shape of your choices across six work dials and hand you your work archetype — plus the kind of role and environment where you'd truly thrive.</p>
+      <button class="btn" id="startBtn">Clock in ▶</button>
+      <div class="disclaimer">Not a real personality assessment — it's a work toy. It reads the <em>pattern</em> of your preferences and gives you an archetype. Entertainment, with a suspicious amount of accuracy. Do not forward to HR.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backlink" id="backBtn">‹ back</button>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="count" id="count">1 / 18</div>
+    </div>
+    <div class="card">
+      <div class="scn-num" id="snum">Question 01</div>
+      <div class="scn-emoji" id="semoji"></div>
+      <div class="scn-title" id="stitle"></div>
+      <div class="scn-body" id="sbody"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
+        <button class="btn nextbtn" id="next">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="arche">
+      <div class="emoji" id="rEmoji">💼</div>
+      <h2 id="rName">Your Work Type</h2>
+      <div class="sub" id="rTagline"></div>
+    </div>
+    <div class="blurb" id="rBlurb"></div>
+
+    <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">How You Work</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
+
+    <div class="sect-h">Where You Thrive</div>
+    <div class="cardlist"><div class="mini dest"><h4 id="rDestH">Environments for you</h4><p id="rDestP"></p></div></div>
+
+    <div class="sect-h">Your Six Work Dials</div>
+    <div id="rAxes"></div>
+
+    <div class="sect-h">Your Work Superpower</div>
+    <div class="cardlist"><div class="mini super"><h4 id="rSuperH"></h4><p id="rSuperP"></p></div></div>
+
+    <div class="sect-h">Your Blind Spots</div>
+    <div class="cardlist" id="rBlind"></div>
+
+    <div class="sect-h">Your Work Motto</div>
+    <div class="blurb" id="rPrinciple" style="margin-top:0"></div>
+
+    <div class="footnote" id="rConsistency"></div>
+    <div class="again">
+      <button class="btn" id="shareBtn">📸 Share my result</button>
+      <button class="btn ghost" id="restartBtn">Retake the quiz ↺</button>
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+    </div>
+    <div class="footnote">Built as a work toy. Share your type, compare with your team, know thyself.</div>
+  </section>
+
+  <!-- SHARE LIGHTBOX -->
+  <div id="shareBox" class="lightbox">
+    <div class="lb-inner">
+      <div class="lb-title">Your shareable card</div>
+      <img id="shareImg" alt="Your Work Mode result card">
+      <div class="lb-hint" id="lbHint">Tap “Share” to send it, “Save” to download, or long-press the image.</div>
+      <div class="lb-btns">
+        <button class="btn" id="lbShare">📤 Share</button>
+        <button class="btn ghost" id="lbSave">⬇ Save</button>
+        <button class="backlink" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SIX WORK DIALS (each answer nudges some of them)
+   focus  : Deep & solo (−)       ↔  Collaborative (+)
+   freedom: Clear structure (−)   ↔  Total autonomy (+)
+   clock  : Early lark (−)        ↔  Night owl (+)
+   rhythm : Steady marathon (−)   ↔  Intense sprints (+)
+   method : Plan it out (−)       ↔  Improvise (+)
+   stage  : Quiet & behind (−)    ↔  Visible & upfront (+)
+   ============================================================ */
+
+const SCEN = [
+ {t:"A brand-new project just landed on your desk. First move?", emoji:"🚀",
+  s:"Blank slate, big ambitions, nothing built yet. Your instinct is to…",
+  o:[
+   {act:"Block out a quiet morning and think it through alone first.", sc:{focus:-2,method:-1}},
+   {act:"Pull the team into a room and brainstorm out loud.", sc:{focus:2,stage:1}},
+   {act:"Draft a detailed plan with milestones before touching anything.", sc:{method:-2,freedom:-1}},
+   {act:"Just start building and figure out the shape as you go.", sc:{method:2,freedom:1}}
+  ]},
+
+ {t:"Your ideal desk setup.", emoji:"🪑",
+  s:"Same job, same pay. Where do you actually get work done?",
+  o:[
+   {act:"A silent corner with noise-cancelling headphones on.", sc:{focus:-2,stage:-1}},
+   {act:"A buzzing open-plan floor with people around.", sc:{focus:2,stage:1}},
+   {act:"Wherever I want — café, home, park, whatever suits today.", sc:{freedom:2,clock:1}},
+   {act:"A tidy assigned desk with everything exactly in its place.", sc:{freedom:-2,method:-1}}
+  ]},
+
+ {t:"When does your best work actually happen?", emoji:"⏰",
+  s:"Be honest about your body clock.",
+  o:[
+   {act:"5am club — I'm sharpest before the world wakes up.", sc:{clock:-2,rhythm:-1}},
+   {act:"Late at night, when it's quiet and nobody pings me.", sc:{clock:2,focus:-1}},
+   {act:"Solid 9-to-5 — I keep normal hours and it works fine.", sc:{clock:-1,rhythm:-1}},
+   {act:"Whenever inspiration strikes — could be 2pm or 2am.", sc:{clock:1,freedom:2,method:1}}
+  ]},
+
+ {t:"How do you like to tackle a big workload?", emoji:"🏃",
+  s:"A mountain of work, a real deadline. Your rhythm is…",
+  o:[
+   {act:"Steady daily progress — a bit every day, no drama.", sc:{rhythm:-2,method:-1}},
+   {act:"Intense bursts of deep work, then recover.", sc:{rhythm:2,focus:-1}},
+   {act:"A calm, consistent pace I can hold for months.", sc:{rhythm:-2,clock:-1}},
+   {act:"Nothing, nothing, nothing — then a glorious all-nighter.", sc:{rhythm:2,clock:1,method:1}}
+  ]},
+
+ {t:"The deadline just moved up two days. You…", emoji:"🔥",
+  s:"Crunch time, suddenly. What kicks in?",
+  o:[
+   {act:"Rewrite the plan, reprioritise, and march the list.", sc:{method:-2,rhythm:-1}},
+   {act:"Rally the team and turn it into a war-room sprint.", sc:{focus:2,rhythm:1,stage:1}},
+   {act:"Put my head down solo and grind it out quietly.", sc:{focus:-2,rhythm:1}},
+   {act:"Improvise, cut scope, ship the scrappy version.", sc:{method:2,freedom:1}}
+  ]},
+
+ {t:"Your relationship with meetings.", emoji:"📅",
+  s:"A calendar invite lands. Your gut reaction is…",
+  o:[
+   {act:"Love them — that's where the energy and ideas are.", sc:{focus:2,stage:1}},
+   {act:"Could've been an email. Protect my focus time.", sc:{focus:-2,method:-1}},
+   {act:"Fine if there's an agenda and it starts on time.", sc:{method:-2,freedom:-1}},
+   {act:"Happy to jump in and lead it if someone should.", sc:{stage:2,focus:1}}
+  ]},
+
+ {t:"How do you plan your week?", emoji:"🗓️",
+  s:"Monday morning. How does the week take shape?",
+  o:[
+   {act:"Every block colour-coded and scheduled in advance.", sc:{method:-2,freedom:-1}},
+   {act:"A loose list of priorities; the order sorts itself out.", sc:{method:1,freedom:1}},
+   {act:"I don't — I react to what the day throws at me.", sc:{method:2,freedom:1,rhythm:1}},
+   {act:"Same steady routine every week, like clockwork.", sc:{freedom:-2,rhythm:-1,clock:-1}}
+  ]},
+
+ {t:"Feedback on your work — how do you want it?", emoji:"💬",
+  s:"You've shipped something. How should the critique come?",
+  o:[
+   {act:"Live, out loud, in a room — let's hash it out together.", sc:{focus:2,stage:1}},
+   {act:"Written comments I can absorb alone, on my own time.", sc:{focus:-2,stage:-1}},
+   {act:"A structured review against clear, agreed criteria.", sc:{method:-2,freedom:-1}},
+   {act:"Just point me in a direction and let me run with it.", sc:{freedom:2,method:1}}
+  ]},
+
+ {t:"Someone has to present to the leadership team. You…", emoji:"🎤",
+  s:"Big room, senior faces, the spotlight is open.",
+  o:[
+   {act:"Volunteer instantly — I love presenting.", sc:{stage:2,focus:1}},
+   {act:"Prefer to prep the deck and let someone else deliver it.", sc:{stage:-2,method:-1}},
+   {act:"Do it if asked, but I'd rather be doing the actual work.", sc:{stage:-1,focus:-1}},
+   {act:"Wing it — I'm better without a script anyway.", sc:{stage:1,method:2}}
+  ]},
+
+ {t:"Your dream manager gives you…", emoji:"🧭",
+  s:"What kind of leadership brings out your best?",
+  o:[
+   {act:"Total freedom — a goal, then leaves me alone.", sc:{freedom:2,focus:-1}},
+   {act:"Clear structure — defined tasks, checklists, expectations.", sc:{freedom:-2,method:-1}},
+   {act:"A close-knit team to bounce everything off constantly.", sc:{focus:2,stage:1}},
+   {act:"Space to experiment and change direction on the fly.", sc:{freedom:1,method:2}}
+  ]},
+
+ {t:"How do you make decisions at work?", emoji:"🎲",
+  s:"A fork in the road, no obvious answer.",
+  o:[
+   {act:"Map the options, weigh them, then commit to the plan.", sc:{method:-2}},
+   {act:"Talk it through with people until it clicks.", sc:{focus:2,stage:1}},
+   {act:"Trust my gut and adjust as I learn more.", sc:{method:2,freedom:1}},
+   {act:"Follow the process — there's usually a right way.", sc:{freedom:-2,method:-1}}
+  ]},
+
+ {t:"Your favourite kind of task is…", emoji:"🧩",
+  s:"Which of these actually energises you?",
+  o:[
+   {act:"A long, hard problem I can disappear into alone.", sc:{focus:-2,rhythm:-1}},
+   {act:"A group challenge where we build something together.", sc:{focus:2,stage:1}},
+   {act:"A fast, high-stakes fire that needs solving now.", sc:{rhythm:2,method:1}},
+   {act:"A well-defined, repeatable task I can perfect.", sc:{freedom:-2,method:-1,rhythm:-1}}
+  ]},
+
+ {t:"What does 'a great day at work' look like?", emoji:"🌟",
+  s:"You leave buzzing. What happened?",
+  o:[
+   {act:"Hours of uninterrupted deep focus, real progress made.", sc:{focus:-2,stage:-1}},
+   {act:"Great conversations and momentum with the team.", sc:{focus:2,stage:1}},
+   {act:"I shaped my own day exactly how I wanted it.", sc:{freedom:2,method:1}},
+   {act:"Everything went to plan and the list got cleared.", sc:{method:-2,freedom:-1}}
+  ]},
+
+ {t:"How early do you like to start?", emoji:"🌅",
+  s:"No alarm forced on you. When do you naturally begin?",
+  o:[
+   {act:"Dawn — first light, first coffee, first emails.", sc:{clock:-2,rhythm:-1}},
+   {act:"A civilised mid-morning start, then a full day.", sc:{clock:-1}},
+   {act:"Late start, late finish — evenings are my prime time.", sc:{clock:2,focus:-1}},
+   {act:"Different every day, and I like it that way.", sc:{clock:1,freedom:2}}
+  ]},
+
+ {t:"When you're stuck, you…", emoji:"🤔",
+  s:"The work has ground to a halt. Your unstick move is…",
+  o:[
+   {act:"Sit with it alone until it cracks.", sc:{focus:-2}},
+   {act:"Grab a colleague and think out loud with them.", sc:{focus:2,stage:1}},
+   {act:"Try five scrappy things and see what sticks.", sc:{method:2,rhythm:1}},
+   {act:"Go back to the plan and find where it broke.", sc:{method:-2,freedom:-1}}
+  ]},
+
+ {t:"How visible do you want to be at work?", emoji:"🏆",
+  s:"When something you built succeeds…",
+  o:[
+   {act:"Front and centre — I'll happily take the stage.", sc:{stage:2,focus:1}},
+   {act:"Quietly satisfied — the work speaks for itself.", sc:{stage:-2,focus:-1}},
+   {act:"Share the credit with the whole team loudly.", sc:{stage:1,focus:2}},
+   {act:"Honestly, I'd rather already be onto the next thing.", sc:{stage:-1,method:1,rhythm:1}}
+  ]},
+
+ {t:"The perfect work environment has…", emoji:"🏢",
+  s:"Design your ideal workplace from scratch.",
+  o:[
+   {act:"Quiet rooms, clear rules, and zero surprises.", sc:{focus:-2,freedom:-2}},
+   {act:"Open energy, live collaboration, people everywhere.", sc:{focus:2,stage:2}},
+   {act:"Total flexibility — work when and where I like.", sc:{freedom:2,clock:1}},
+   {act:"Fast-moving, high-pressure, never a dull moment.", sc:{rhythm:2,method:1,stage:1}}
+  ]},
+
+ {t:"Taking the lead on something — how do you feel?", emoji:"🧑‍✈️",
+  s:"The team needs someone to drive it. That someone is…",
+  o:[
+   {act:"Me, gladly — I like steering and being out front.", sc:{stage:2,focus:1}},
+   {act:"Me, but from behind — I'll organise, you present.", sc:{stage:-2,method:-1}},
+   {act:"Whoever — I'd rather just own my piece deeply.", sc:{focus:-2,freedom:1}},
+   {act:"Me, improvising the direction as we discover it.", sc:{method:2,freedom:1,stage:1}}
+  ]}
+];
+
+/* ---------- scoring ---------- */
+const AXES = [
+  {k:'focus',   negL:'Deep & solo',      posL:'Collaborative',    neg:'Deep worker',pos:'Collaborator'},
+  {k:'freedom', negL:'Clear structure',  posL:'Total autonomy',   neg:'Structured', pos:'Free agent'},
+  {k:'clock',   negL:'Early lark',       posL:'Night owl',        neg:'Lark',       pos:'Owl'},
+  {k:'rhythm',  negL:'Steady marathon',  posL:'Intense sprints',  neg:'Steady',     pos:'Sprinter'},
+  {k:'method',  negL:'Plan it out',      posL:'Improvise',        neg:'Planner',    pos:'Improviser'},
+  {k:'stage',   negL:'Quiet & behind',   posL:'Visible & upfront',neg:'Backstage',  pos:'Spotlight'}
+];
+
+function computeMax(){
+  const max={};
+  AXES.forEach(a=>max[a.k]=0);
+  SCEN.forEach(q=>{
+    AXES.forEach(a=>{
+      let m=0;
+      q.o.forEach(opt=>{ if(opt.sc[a.k]!==undefined) m=Math.max(m,Math.abs(opt.sc[a.k])); });
+      max[a.k]+=m;
+    });
+  });
+  return max;
+}
+
+let RESULT=null;
+let CURRENT_ARCH=null;
+function diagnose(){
+  const tot={}, max=computeMax();
+  AXES.forEach(a=>tot[a.k]=0);
+  answers.forEach((ai,qi)=>{
+    const sc=SCEN[qi].o[ai].sc;
+    for(const k in sc) tot[k]+=sc[k];
+  });
+  // normalized -1..1 and 0..100
+  const norm={}, pct={};
+  AXES.forEach(a=>{ const n = max[a.k]?tot[a.k]/max[a.k]:0; norm[a.k]=n; pct[a.k]=Math.round((n+1)/2*100); });
+  RESULT={tot,norm,pct};
+  renderResults();
+}
+
+/* ---------- archetype selection ---------- */
+function archetype(n){
+  const A=[];
+  A.push({key:'deep', score:(-n.focus)*1.1 + (-n.stage)*0.5 + (-n.rhythm)*0.2, emoji:'🎧', name:'The Deep Worker',
+    tag:'Headphones on, world off, problem solved',
+    dest:"Roles that reward uninterrupted focus: engineering, research, writing, design, analysis — anywhere with quiet rooms, long maker-blocks, and async-first teams.",
+    blurb:"You do your best work in the quiet, alone with a hard problem and nobody pinging you. While the office buzzes, you've slipped into a two-hour flow state and come out the other side with the thing actually done. You know a truth the meeting-lovers forget: real depth needs uninterrupted time, and the work that matters most is rarely produced in a crowded room. Guard your focus and you'll out-build almost anyone."});
+  A.push({key:'connector', score:n.focus*1.1 + n.stage*0.5 + n.rhythm*0.15, emoji:'🤝', name:'The Connector',
+    tag:'Ideas get better when you say them out loud',
+    dest:"Roles built on people: product, partnerships, team leadership, client work, community, or anything cross-functional — open, collaborative, high-contact teams.",
+    blurb:"You think out loud and you think best with others in the room. A whiteboard, a good argument, a team riffing on a half-formed idea — that's where you come alive. You turn a group of individuals into an actual team, spotting the connection nobody else made and getting people moving in the same direction. Left alone too long you go a little flat; put you at the centre of things and the whole room lifts."});
+  A.push({key:'free', score:n.freedom*1.3 + n.method*0.3 + n.clock*0.2, emoji:'🦅', name:'The Free Agent',
+    tag:'Give me the goal, then get out of the way',
+    dest:"Autonomy-rich setups: remote-first companies, freelancing, founder roles, or any team that hands you outcomes instead of instructions and trusts you to deliver.",
+    blurb:"You don't need managing — you need pointing. Hand you an outcome and the freedom to reach it your own way, and you'll deliver something better than anyone could have scripted. Rigid rules and micromanagement suffocate you; trust and space unlock you. You'll work odd hours, from odd places, in your own strange order, and it works, because you own the result completely. The best thing a boss can do for you is disappear."});
+  A.push({key:'sprinter', score:n.rhythm*1.3 + n.method*0.35, emoji:'⚡', name:'The Sprinter',
+    tag:'Nothing focuses the mind like a deadline',
+    dest:"High-tempo, deadline-driven work: startups, launches, agencies, incident response, campaigns — places where intensity comes in waves and shipping fast is the point.",
+    blurb:"You run on adrenaline and deadlines. Steady drip-feed work bores you, but give you a real fire and a ticking clock and you're extraordinary — total focus, huge output, the whole thing shipped while others are still scoping it. You work in bursts: flat out, then recover, then flat out again. It's not a lack of discipline; it's your natural gear. When it matters most and time is shortest, you're exactly who the team wants in the room."});
+  A.push({key:'steady', score:(-n.rhythm)*1.2 + (-n.freedom)*0.4 + (-n.clock)*0.25, emoji:'🧱', name:'The Steady Hand',
+    tag:'A little every day beats a lot in a panic',
+    dest:"Roles that reward consistency: operations, maintenance, long-term builds, finance, program management — stable teams with clear routines and steady, compounding progress.",
+    blurb:"You are the person a team can set its watch by. No drama, no last-minute heroics — just steady, reliable progress, day after day, until the big thing is quietly done. You know that consistency compounds, that the marathon beats the sprint, and that the calmest person in a crisis is usually the one who prepared for it weeks ago. You may not grab the spotlight, but you're the reason things actually get finished — and stay finished."});
+  A.push({key:'improviser', score:n.method*1.3 + n.freedom*0.4, emoji:'🎷', name:'The Improviser',
+    tag:'Plans are nice; adapting is better',
+    dest:"Ambiguous, fast-changing work: early-stage products, creative studios, crisis roles, R&D — anywhere the path isn't drawn yet and you get to invent it as you go.",
+    blurb:"You'd rather start moving and figure it out than wait for a perfect plan that reality will wreck anyway. Ambiguity doesn't scare you — it's your playground. When the brief changes, the tool breaks, or the plan collapses, you're already three scrappy experiments deep into the next idea. You trust yourself to adapt, and you usually land somewhere better than the plan would have taken you. Structure has its place; you just don't need much of it to thrive."});
+  A.push({key:'front', score:n.stage*1.3 + n.focus*0.4, emoji:'🎙️', name:'The Front-of-House',
+    tag:'Happy in the spotlight, better on a stage',
+    dest:"Visible, people-facing roles: sales, marketing, presenting, evangelism, leadership, hosting — anywhere being the face of the work is a feature, not a chore.",
+    blurb:"You're at your best in front of people — pitching, presenting, rallying a room. Where others shrink from the spotlight, you step into it and it makes you sharper. You give the work a face and a voice, turning good ideas into things people actually get excited about. It's not ego; it's a genuine talent for the visible, human side of work that quieter builders often dread. Put you on stage and you'll carry the whole thing."});
+  A.push({key:'balanced', score:0.3 - variance(n), emoji:'🧭', name:'The Balanced Operator',
+    tag:'A bit of everything, tuned to the moment',
+    dest:"Versatile, cross-functional roles: chief-of-staff, generalist manager, product, consulting — anywhere reading the situation and flexing your style is the actual job.",
+    blurb:"You refuse to be boxed into one working style. Some days you go deep and solo; some days you rally the room. Sometimes you plan meticulously, sometimes you improvise — and you seem to know which the moment calls for. That range makes you the easiest person to slot into almost any team and the hardest to replace, because you read the situation and become whatever it needs. Your gift isn't a single strength; it's knowing which one to reach for."});
+  A.sort((x,y)=>y.score-x.score);
+  return A[0];
+}
+function variance(n){ // how far from center overall (0 = perfectly balanced)
+  const vals=AXES.map(a=>Math.abs(n[a.k]));
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* ---------- narrative helpers ---------- */
+function axisRead(a,n){
+  const v=n[a.k]; const s=Math.abs(v);
+  const strong = s>0.55;
+  const mild = s>0.2;
+  if(!mild) return "You sit right in the middle here — it swings with the task, and you like it that way.";
+  const lean = strong ? "strongly" : "moderately";
+  const map={
+    focus:{pos:"You do your best thinking with others — talking it out beats stewing on it alone.",neg:"You do your best work heads-down and solo; interruptions are the enemy of your flow."},
+    freedom:{pos:"You need autonomy — give you the goal and the freedom to reach it your own way.",neg:"You thrive on structure — clear tasks, clear rules, and no ambiguity to wrestle."},
+    clock:{pos:"You're a night owl — your sharpest hours land late, when it's finally quiet.",neg:"You're an early lark — you're at your best before most people are even awake."},
+    rhythm:{pos:"You work in intense sprints — bursts of flat-out effort, then recovery.",neg:"You work like a marathoner — a steady, sustainable pace you can hold for months."},
+    method:{pos:"You'd rather improvise — start moving and adapt as reality reveals itself.",neg:"You'd rather plan it out — map the route before you take a single step."},
+    stage:{pos:"You're happy upfront — presenting, leading, being the visible face of the work.",neg:"You prefer the background — let the work speak while you quietly make it great."}
+  };
+  return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
+}
+
+/* Brief "how you work" synthesis for the results page. */
+function workProfile(n){
+  const P = {
+    focus:{pos:"do your best thinking alongside other people",
+           neg:"do your best work heads-down and undisturbed"},
+    freedom:{pos:"need the autonomy to work your own way",
+             neg:"work best with clear structure and defined expectations"},
+    clock:{pos:"come alive in the late hours when it's quiet",
+           neg:"are sharpest in the early morning before the noise starts"},
+    rhythm:{pos:"run on intense sprints and real deadlines",
+            neg:"prefer a steady, sustainable pace you can hold"},
+    method:{pos:"like to improvise and adapt as you go",
+            neg:"like the plan mapped out before you begin"},
+    stage:{pos:"are at your best out front and visible",
+           neg:"do your best work quietly, behind the scenes"}
+  };
+  const CLOSE = {
+    focus:{pos:"Put you in a room of people and you spark.",neg:"Give you a quiet block and you disappear into the work."},
+    freedom:{pos:"Trust you with the outcome and you'll surprise everyone.",neg:"Give you a clear brief and you'll nail it every time."},
+    clock:{pos:"Your best hours start when everyone else clocks off.",neg:"You've done half a day's work before the first meeting."},
+    rhythm:{pos:"Nothing sharpens you like a countdown.",neg:"You win by never needing the all-nighter."},
+    method:{pos:"You'd rather adjust than sit and plan.",neg:"You'd rather plan than scramble."},
+    stage:{pos:"You give the work a voice.",neg:"You let the work speak for itself."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "How you work is hard to pin down — and that's the strength. Across eighteen questions you leaned every which way, balancing solo focus with collaboration, structure with autonomy, planning with improvisation. In short: you're an all-rounder who reads each task on its own terms and adapts your style to fit.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "You work best when "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
+function blindSpots(n){
+  const out=[];
+  if(n.method<-0.4) out.push(["Over-planned to a fault","Your plans are a thing of beauty — but a week booked to the minute leaves no room for the better idea that shows up on Tuesday. Sometimes the plan becomes the goal instead of the thing it was meant to serve."]);
+  if(n.method>0.4) out.push(["Improvising too hard","Adaptability is your superpower, but 'we'll figure it out' can mean reinventing the wheel and missing the obvious step. A little planning buys you more freedom, not less."]);
+  if(n.rhythm>0.45) out.push(["Living on the crunch","You do incredible work under pressure — but running on sprints and adrenaline burns out the tank. Not every task deserves a fire; some just need a steady week."]);
+  if(n.rhythm<-0.45) out.push(["Allergic to urgency","Your steady pace is a gift — but occasionally a real fire needs a real sprint, and 'a bit each day' isn't fast enough. Learn to shift gears when the moment actually demands it."]);
+  if(n.focus<-0.45) out.push(["The closed door","Deep focus is where you shine — just don't seal yourself off entirely. The five-minute conversation you keep dodging often unblocks the thing you've been stuck on for hours."]);
+  if(n.focus>0.45) out.push(["Never quite alone","You thrive in collaboration, but the best hard problems need quiet, solo depth. If every task becomes a meeting, the real work never gets the focus it deserves."]);
+  if(n.freedom>0.45) out.push(["Allergic to structure","Autonomy fuels you, but a total lack of process leaves teammates guessing what you're doing. A little visible structure isn't a cage — it's how others can actually work with you."]);
+  if(n.freedom<-0.45) out.push(["Waiting for permission","You're brilliant with clear direction — but not everything comes with instructions. Sometimes the job is to define the process yourself, before anyone hands you one."]);
+  if(n.stage>0.5) out.push(["Loudest in the room","You're a natural upfront, but visibility isn't the same as value. Make sure you're leaving space for the quieter builders whose work you're presenting."]);
+  if(n.stage<-0.5) out.push(["Invisible good work","Doing great work quietly is admirable — but if nobody sees it, it's easy to be overlooked. A little self-advocacy isn't showing off; it's making sure your work counts."]);
+  if(out.length===0) out.push(["The comfortable middle","You balance every impulse, which makes you easy to work with — but it can also mean never fully leaning into what you're best at. Sometimes it's worth committing to one style and going all the way."]);
+  return out.slice(0,3);
+}
+
+function superpower(n){
+  const c=[];
+  c.push([Math.abs(n.focus), n.focus>0?["Team catalyst","You turn a group of individuals into a team. Ideas get sharper, people get moving, and the whole room lifts because you're in it."]:["Deep focus","You can disappear into a hard problem and come out with it solved. That ability to concentrate is rarer — and more valuable — than most people realise."]]);
+  c.push([Math.abs(n.method), n.method>0?["Unflappable adapter","When the plan collapses, you're already onto plan B. Chaos doesn't rattle you because you never leaned on the plan in the first place."]:["Master planner","You make complex work look effortless. Milestones line up, nothing slips, and the team happily follows because you've quietly mapped the whole route."]]);
+  c.push([Math.abs(n.rhythm), n.rhythm>0?["Clutch under pressure","When the clock is loudest, you're at your best. You deliver extraordinary work in the crunch that others couldn't manage with twice the time."]:["Steady compounder","You make consistent, reliable progress that compounds into big results. No drama, no burnout — just the thing, done, on time, every time."]]);
+  c.push([Math.abs(n.stage), n.stage>0?["Natural presenter","You give the work a voice. You can walk into a room and make people care about something they'd never have noticed on their own."]:null]);
+  c.push([Math.abs(n.freedom), n.freedom>0?["Self-directed engine","Hand you an outcome and you'll find the path yourself. You need no managing — just a goal and the room to reach it."]:null]);
+  const best=c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0])[0];
+  return best[1];
+}
+
+function principle(arch,n){
+  const P={
+    deep:"“The real work happens in the quiet. Protect the focus and the rest follows.”",
+    connector:"“The best ideas are the ones we build out loud, together.”",
+    free:"“Give me the goal, then get out of my way.”",
+    sprinter:"“Nothing focuses the mind like a deadline. Bring on the crunch.”",
+    steady:"“A little every day beats a lot in a panic.”",
+    improviser:"“A plan is just a starting point I'm happy to abandon.”",
+    front:"“Great work deserves a great voice. I'll happily be it.”",
+    balanced:"“The best working style is the one the moment calls for.”"
+  };
+  return P[arch.key]||P.balanced;
+}
+
+/* ---------- state ---------- */
+let i = 0;
+const answers = new Array(SCEN.length).fill(null); // stores chosen option index
+
+const $ = id => document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+
+function start(){ i=0; render(); show('quiz'); }
+function restart(){ answers.fill(null); i=0; show('intro'); }
+
+function render(){
+  const q = SCEN[i];
+  $('snum').textContent = 'Question ' + String(i+1).padStart(2,'0');
+  $('semoji').textContent = q.emoji || '';
+  $('stitle').textContent = q.t;
+  $('sbody').textContent = q.s;
+  $('count').textContent = (i+1)+' / '+SCEN.length;
+  $('fill').style.width = ((i+1)/SCEN.length*100)+'%';
+  const box = $('opts'); box.innerHTML='';
+  q.o.forEach((opt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(answers[i]===idx?' pick':'');
+    b.innerHTML='<span class="opt-do">'+esc(opt.act)+'</span>';
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  if(answers[i]!==null){
+    $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+  } else {
+    $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
+  }
+  $('next').textContent = (i===SCEN.length-1)?'See my result ▶':'Next ▶';
+}
+
+function choose(idx){
+  answers[i]=idx;
+  document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+}
+
+function next(){
+  if(answers[i]===null) return;
+  if(i===SCEN.length-1){ diagnose(); show('results'); return; }
+  i++; render();
+}
+function prev(){
+  if(i===0){ show('intro'); return; }
+  i--; render();
+}
+
+/* ---------- render results ---------- */
+function renderResults(){
+  const {norm,pct}=RESULT;
+  const arch=archetype(norm);
+  CURRENT_ARCH=arch;
+  $('rEmoji').textContent=arch.emoji;
+  $('rName').textContent=arch.name;
+  $('rTagline').textContent=arch.tag;
+  $('rBlurb').textContent=arch.blurb;
+  $('rProfile').textContent=workProfile(norm);
+  $('rDestP').textContent=arch.dest;
+
+  // chips: dominant traits
+  const chips=$('rChips'); chips.innerHTML='';
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ranked.forEach(r=>{
+    const label = r.v>=0 ? r.a.pos : r.a.neg;
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML='<b>'+label+'</b>';
+    chips.appendChild(el);
+  });
+
+  // axes
+  const box=$('rAxes'); box.innerHTML='';
+  AXES.forEach(a=>{
+    const p=pct[a.k];
+    const d=document.createElement('div'); d.className='axis';
+    d.innerHTML =
+      '<div class="lbls"><span>'+a.negL+'</span><span>'+a.posL+'</span></div>'+
+      '<div class="axtrack"><span style="left:0%"></span><div class="mid"></div></div>'+
+      '<div class="read">'+axisRead(a,norm)+'</div>';
+    box.appendChild(d);
+    // animate knob
+    requestAnimationFrame(()=>{ d.querySelector('.axtrack > span').style.left = p+'%'; });
+  });
+
+  // superpower
+  const sp=superpower(norm);
+  $('rSuperH').textContent=sp[0]; $('rSuperP').textContent=sp[1];
+
+  // blind spots
+  const bl=$('rBlind'); bl.innerHTML='';
+  blindSpots(norm).forEach(b=>{
+    const d=document.createElement('div'); d.className='mini blind';
+    d.innerHTML='<h4>'+b[0]+'</h4><p>'+b[1]+'</p>'; bl.appendChild(d);
+  });
+
+  // principle
+  $('rPrinciple').textContent=principle(arch,norm);
+
+  // versatility note
+  const v=variance(norm);
+  $('rConsistency').textContent = v>0.4
+    ? "You have a strongly defined working style — you know exactly the conditions that bring out your best, and you lean into them."
+    : "You're a versatile worker — your style flexes with the task, which means you can make almost any kind of work work.";
+}
+
+/* ============================================================
+   SHAREABLE RESULT CARD  (rendered on a canvas)
+   ============================================================ */
+let CARD_BLOB=null;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' '); const lines=[]; let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawShareCard(){
+  const W=1080, H=1350;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const {norm,pct}=RESULT, arch=CURRENT_ARCH;
+
+  // background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232653'); bg.addColorStop(.45,'#131427'); bg.addColorStop(1,'#0c0d1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // subtle glow
+  const glow=ctx.createRadialGradient(W/2,180,60,W/2,180,700);
+  glow.addColorStop(0,'rgba(120,110,220,.28)'); glow.addColorStop(1,'rgba(120,110,220,0)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,W,340);
+  // border frame
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,24,24,W-48,H-48,36); ctx.stroke();
+
+  ctx.textAlign='center';
+
+  // kicker
+  ctx.fillStyle='#ffd166'; ctx.font='bold 26px "Trebuchet MS",Arial';
+  ctx.fillText('W O R K   M O D E', W/2, 92);
+
+  // emoji
+  ctx.font='120px "Segoe UI Emoji","Apple Color Emoji",serif';
+  ctx.fillText(arch.emoji, W/2, 232);
+
+  // archetype name (gradient)
+  ctx.font='bold 74px "Trebuchet MS",Arial';
+  const nameLines=wrapLines(ctx,arch.name,W-160);
+  let ny=310;
+  nameLines.forEach(ln=>{
+    const tw=ctx.measureText(ln).width;
+    const g=ctx.createLinearGradient(W/2-tw/2,0,W/2+tw/2,0);
+    g.addColorStop(0,'#ffd166'); g.addColorStop(.5,'#ff6b6b'); g.addColorStop(1,'#a685ff');
+    ctx.fillStyle=g; ctx.fillText(ln,W/2,ny); ny+=80;
+  });
+  // tagline
+  ctx.fillStyle='#b9b4e6'; ctx.font='italic 30px "Trebuchet MS",Arial';
+  const tagLines=wrapLines(ctx,'“'+arch.tag+'”',W-200);
+  tagLines.forEach(ln=>{ ctx.fillText(ln, W/2, ny+8); ny+=42; });
+  let y=ny+40;
+
+  // signature trait chips (top 3 axes)
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ctx.font='bold 30px "Trebuchet MS",Arial';
+  const labels=ranked.map(r=> r.v>=0 ? r.a.pos : r.a.neg);
+  const padX=28, gap=18, chipH=64;
+  const widths=labels.map(l=>ctx.measureText(l).width+padX*2);
+  const totalW=widths.reduce((s,w)=>s+w,0)+gap*(labels.length-1);
+  let cx=(W-totalW)/2;
+  const chipCols=['#ff6b6b','#4ecdc4','#a685ff'];
+  labels.forEach((l,idx)=>{
+    const w=widths[idx];
+    ctx.fillStyle='rgba(255,255,255,.05)';
+    roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.fill();
+    ctx.strokeStyle=chipCols[idx]; ctx.lineWidth=2; roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.stroke();
+    ctx.fillStyle='#f4f1ff'; ctx.textAlign='center';
+    ctx.fillText(l, cx+w/2, y+chipH/2+11);
+    cx+=w+gap;
+  });
+  y+=chipH+70;
+
+  // "MY WORK PROFILE" heading
+  ctx.fillStyle='#ffd166'; ctx.font='bold 24px "Trebuchet MS",Arial';
+  ctx.fillText('M Y   W O R K   P R O F I L E', W/2, y);
+  y+=44;
+
+  // six dials
+  const dialL=90, dialR=W-90, dialW=dialR-dialL;
+  const rowH=66;
+  ctx.textBaseline='alphabetic';
+  AXES.forEach(a=>{
+    ctx.font='500 22px "Trebuchet MS",Arial';
+    ctx.textAlign='left'; ctx.fillStyle='#8f8bc0';
+    ctx.fillText(a.negL, dialL, y);
+    ctx.textAlign='right';
+    ctx.fillText(a.posL, dialR, y);
+    // track
+    const ty=y+22;
+    ctx.fillStyle='#22254a';
+    roundRect(ctx,dialL,ty,dialW,12,6); ctx.fill();
+    // mid tick
+    ctx.fillStyle='#3a3e70'; ctx.fillRect(dialL+dialW/2-1,ty-3,2,18);
+    // knob
+    const kx=dialL + dialW*(pct[a.k]/100);
+    const kg=ctx.createLinearGradient(kx-14,0,kx+14,0);
+    kg.addColorStop(0,'#4ecdc4'); kg.addColorStop(1,'#ffd166');
+    ctx.fillStyle=kg;
+    ctx.beginPath(); ctx.arc(kx,ty+6,14,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0c0d1c'; ctx.lineWidth=3; ctx.stroke();
+    y+=rowH;
+  });
+
+  y+=6;
+  // motto quote box
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const quote=principle(arch,norm);
+  ctx.font='italic 30px "Trebuchet MS",Arial';
+  const qLines=wrapLines(ctx,quote,W-220);
+  const boxH=qLines.length*44+56;
+  ctx.fillStyle='rgba(255,255,255,.04)';
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.stroke();
+  ctx.fillStyle='#efeaff';
+  let qy=y+52;
+  qLines.forEach(ln=>{ ctx.fillText(ln,W/2,qy); qy+=44; });
+  y+=boxH+56;
+
+  // footer
+  ctx.fillStyle='#7d79ad'; ctx.font='22px "Trebuchet MS",Arial';
+  ctx.fillText('18 questions · 6 work dials · a work toy', W/2, H-46);
+
+  return cv;
+}
+
+function openShare(){
+  if(!RESULT||!CURRENT_ARCH) return;
+  const cv=drawShareCard();
+  $('shareImg').src=cv.toDataURL('image/png');
+  cv.toBlob(b=>{ CARD_BLOB=b; }, 'image/png');
+  // hide native share button if unsupported
+  $('lbShare').style.display = (navigator.share||navigator.canShare) ? '' : 'none';
+  $('shareBox').classList.add('on');
+}
+function closeShare(){ $('shareBox').classList.remove('on'); }
+
+function ensureBlob(){
+  return new Promise(res=>{
+    if(CARD_BLOB) return res(CARD_BLOB);
+    drawShareCard().toBlob(b=>{ CARD_BLOB=b; res(b); }, 'image/png');
+  });
+}
+
+async function nativeShare(){
+  const blob=await ensureBlob();
+  const file=new File([blob],'work-mode-result.png',{type:'image/png'});
+  const text='I got “'+CURRENT_ARCH.name+'” on Work Mode.';
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'My Work Mode result', text});
+      return;
+    }
+    if(navigator.share){ await navigator.share({title:'My Work Mode result', text}); return; }
+  }catch(e){ /* user cancelled or blocked — fall through */ }
+  downloadCard();
+}
+
+async function downloadCard(){
+  const blob=await ensureBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='work-mode-result.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  $('lbHint').textContent='Saved! If nothing downloaded, long-press the image above to save it.';
+}
+
+/* ---------- wire up all controls (no inline handlers) ---------- */
+function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
+function init(){
+  on('startBtn', start);
+  on('backBtn', prev);
+  on('next', next);
+  on('shareBtn', openShare);
+  on('restartBtn', restart);
+  on('lbShare', nativeShare);
+  on('lbSave', downloadCard);
+  on('lbClose', closeShare);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+
+/* keyboard: 1-9 pick option, Enter/Right advance, Left back, R retake */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); if(typeof start==='function')start();} return; }
+  if(scr.id==='quiz'){
+    if(/^[1-9]$/.test(e.key)){ var b=document.querySelectorAll('#opts .opt')[+e.key-1]; if(b){e.preventDefault(); b.click();} }
+    else if(e.key==='Enter'||e.key==='ArrowRight'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); prev(); }
+  } else if(scr.id==='results'){
+    if(e.key==='r'||e.key==='R'){ e.preventDefault(); restart(); }
+  }
+});
+</script>
+</body>
+</html>

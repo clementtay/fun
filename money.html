@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
+<title>The Money Mind — 18 Questions, One Money Personality</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(34px,8vw,54px);margin:6px 0 4px;line-height:1.02;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .globe{font-size:70px;margin:14px 0 4px}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+
+  /* Progress */
+  .topbar{display:flex;align-items:center;gap:12px;margin:6px 0 20px}
+  .bar{flex:1;height:9px;background:#20234a;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4);transition:width .4s ease}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:bold}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,var(--card),#191b38);border:1px solid var(--line);
+    border-radius:22px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .4s ease both}
+  .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
+  .scn-emoji{font-size:44px;margin:10px 0 2px;text-align:center}
+  .scn-title{font-size:23px;font-weight:bold;margin:6px 0 6px}
+  .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .opt{
+    text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
+    padding:15px 16px;border-radius:15px;cursor:pointer;font-size:16px;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
+  }
+  .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:16.5px}
+  .opt.pick{border-color:var(--b);background:#243b48}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+  .nextbtn{opacity:.35;pointer-events:none;transition:opacity .2s}
+  .nextbtn.ready{opacity:1;pointer-events:auto}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit}
+  .backlink:hover{color:var(--ink)}
+
+  /* Results */
+  .arche{text-align:center;padding:8px 6px 4px}
+  .arche .emoji{font-size:58px}
+  .arche h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 2px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .arche .sub{color:var(--muted);font-size:15px;margin-bottom:4px}
+  .blurb{font-size:16.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:18px;margin:16px 0}
+  .sect-h{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);
+    font-weight:bold;margin:26px 0 10px}
+  .axis{margin:14px 0}
+  .axis .lbls{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px}
+  .axis .lbls b{color:var(--ink)}
+  .axtrack{position:relative;height:12px;background:#20234a;border-radius:99px}
+  .axtrack > span{position:absolute;top:50%;transform:translate(-50%,-50%);height:20px;width:20px;border-radius:50%;
+    background:linear-gradient(90deg,#4ecdc4,#ffd166);box-shadow:0 3px 10px rgba(0,0,0,.4);border:2px solid #12122a;transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .axtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#3a3e70}
+  .axis .read{font-size:14px;color:#cfcbf3;margin-top:7px}
+  .cardlist{display:grid;gap:12px;grid-template-columns:1fr}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+  .mini h4{margin:0 0 4px;font-size:16px}
+  .mini.blind{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}
+  .mini.super{border-color:rgba(78,205,196,.35);background:rgba(78,205,196,.06)}
+  .mini.dest{border-color:rgba(166,133,255,.35);background:rgba(166,133,255,.06)}
+  .mini p{margin:0;font-size:14.5px;color:#d9d5ff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .chip{background:#23264b;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13.5px}
+  .chip b{color:var(--c)}
+  .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;text-align:center}
+  .again{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .again a{text-decoration:none}
+
+  /* Share lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(6,6,18,.86);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .lightbox.on{display:flex;animation:fade .3s ease both}
+  .lb-inner{max-width:420px;width:100%;text-align:center}
+  .lb-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin-bottom:12px}
+  #shareImg{width:100%;max-height:66vh;object-fit:contain;border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
+  .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
+  .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.opt:focus-visible,.btn:focus-visible,.backlink:focus-visible,.nextbtn:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">What's Your Money Personality?</div>
+      <h1>The Money Mind</h1>
+      <div class="globe">💰</div>
+      <p class="how">Here's how it works: eighteen quick questions about how you <b>actually</b> handle money — what you spend, what you stash, what you'd bet, and what keeps you up at night. No right answers, just your instincts.</p>
+      <p class="tag">By the end I'll read the shape of your choices across six money dials and hand you your money archetype — plus a few concrete moves that actually fit how your mind works.</p>
+      <button class="btn" id="startBtn">Show me the money ▶</button>
+      <div class="disclaimer">Not a real financial assessment — it's a money toy. It reads the <em>pattern</em> of your instincts and gives you an archetype. Entertainment, with a suspicious amount of accuracy. Not advice; talk to a real human for that.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backlink" id="backBtn">‹ back</button>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="count" id="count">1 / 18</div>
+    </div>
+    <div class="card">
+      <div class="scn-num" id="snum">Question 01</div>
+      <div class="scn-emoji" id="semoji"></div>
+      <div class="scn-title" id="stitle"></div>
+      <div class="scn-body" id="sbody"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
+        <button class="btn nextbtn" id="next">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="arche">
+      <div class="emoji" id="rEmoji">💰</div>
+      <h2 id="rName">Your Money Type</h2>
+      <div class="sub" id="rTagline"></div>
+    </div>
+    <div class="blurb" id="rBlurb"></div>
+
+    <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">Your Money Style</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
+
+    <div class="sect-h">Money Moves For You</div>
+    <div class="cardlist"><div class="mini dest"><h4 id="rDestH">Where to lean in</h4><p id="rDestP"></p></div></div>
+
+    <div class="sect-h">Your Six Money Dials</div>
+    <div id="rAxes"></div>
+
+    <div class="sect-h">Your Money Superpower</div>
+    <div class="cardlist"><div class="mini super"><h4 id="rSuperH"></h4><p id="rSuperP"></p></div></div>
+
+    <div class="sect-h">Your Blind Spots</div>
+    <div class="cardlist" id="rBlind"></div>
+
+    <div class="sect-h">Your Money Motto</div>
+    <div class="blurb" id="rPrinciple" style="margin-top:0"></div>
+
+    <div class="footnote" id="rConsistency"></div>
+    <div class="again">
+      <button class="btn" id="shareBtn">📸 Share my result</button>
+      <button class="btn ghost" id="restartBtn">Retake the quiz ↺</button>
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+    </div>
+    <div class="footnote">Built as a money toy. Share your type, compare with friends, argue about who's the real saver.</div>
+  </section>
+
+  <!-- SHARE LIGHTBOX -->
+  <div id="shareBox" class="lightbox">
+    <div class="lb-inner">
+      <div class="lb-title">Your shareable card</div>
+      <img id="shareImg" alt="Your Money Mind result card">
+      <div class="lb-hint" id="lbHint">Tap “Share” to send it, “Save” to download, or long-press the image.</div>
+      <div class="lb-btns">
+        <button class="btn" id="lbShare">📤 Share</button>
+        <button class="btn ghost" id="lbSave">⬇ Save</button>
+        <button class="backlink" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SIX MONEY DIALS (each answer nudges some of them)
+   flow    : Spend & enjoy (−)    ↔  Save & stash (+)
+   horizon : Live for today (−)   ↔  Plan for later (+)
+   risk    : Play it safe (−)     ↔  Take the bet (+)
+   driver  : Security (−)         ↔  Freedom (+)
+   signal  : Quiet & stealth (−)  ↔  Show & status (+)
+   control : Wing it (−)          ↔  Track & optimize (+)
+   ============================================================ */
+
+const SCEN = [
+ {t:"A surprise $5,000 lands in your account. What happens to it?", emoji:"💸",
+  s:"No strings attached — a bonus, a rebate, a gift. First instinct?",
+  o:[
+   {act:"Treat myself to something I've been eyeing. I earned it.", sc:{flow:-2,signal:1,horizon:-1}},
+   {act:"Straight into savings before I can touch it.", sc:{flow:2,horizon:1,control:1}},
+   {act:"Invest the lot — stocks, index, maybe some crypto.", sc:{risk:2,horizon:1}},
+   {act:"Split it: a little fun, most of it for later.", sc:{control:1,flow:1}}
+  ]},
+
+ {t:"You've been eyeing a lovely (pricey) thing.", emoji:"🛍️",
+  s:"It's not essential. It's just... really nice. Do you?",
+  o:[
+   {act:"Buy it now — life's short and the vibe is right.", sc:{flow:-2,horizon:-1}},
+   {act:"Wait for a sale, read the reviews, then pounce.", sc:{flow:1,control:1,horizon:1}},
+   {act:"Talk myself out of it. Don't really need it.", sc:{flow:2,signal:-1}},
+   {act:"Get the top-of-the-range version — best or nothing.", sc:{flow:-1,signal:2}}
+  ]},
+
+ {t:"How do you actually keep track of your money?", emoji:"📊",
+  s:"Be honest about your system (or lack of one).",
+  o:[
+   {act:"Every dollar logged in an app or spreadsheet.", sc:{control:2,horizon:1}},
+   {act:"Rough mental math — I mostly know where I stand.", sc:{control:-1}},
+   {act:"I check the balance, and I feel it out from there.", sc:{control:-2,horizon:-1}},
+   {act:"Automated transfers do the thinking for me.", sc:{control:1,horizon:1,flow:1}}
+  ]},
+
+ {t:"Where does your money actually go to work?", emoji:"📈",
+  s:"Your investing comfort zone looks like…",
+  o:[
+   {act:"High-growth bets — I want the big upside.", sc:{risk:2,driver:1}},
+   {act:"Boring index funds, slow and steady.", sc:{risk:-1,control:1,horizon:1}},
+   {act:"Cash in the bank where I can see it.", sc:{risk:-2,driver:-1}},
+   {act:"Mostly steady, with a little on the side for spice.", sc:{risk:1}}
+  ]},
+
+ {t:"Friends book a fancy dinner. In or out?", emoji:"🍽️",
+  s:"The kind of place where the menu has no prices.",
+  o:[
+   {act:"In! Treat myself now, worry about it later.", sc:{flow:-2,horizon:-1,signal:1}},
+   {act:"In, but I'll order carefully and skip the wine.", sc:{flow:1,control:1}},
+   {act:"I'll gently suggest somewhere a bit cheaper.", sc:{flow:2,signal:-1,driver:1}},
+   {act:"In — and I'll quietly grab the whole bill.", sc:{flow:-1,signal:2}}
+  ]},
+
+ {t:"Deep down, what is money FOR?", emoji:"🎯",
+  s:"The thing you're really chasing.",
+  o:[
+   {act:"Freedom — to quit, to choose, to do my own thing.", sc:{driver:2,horizon:1}},
+   {act:"A safety net so I never have to worry.", sc:{driver:-2,risk:-1}},
+   {act:"The finer things, enjoyed while I'm young.", sc:{flow:-1,signal:1,horizon:-1}},
+   {act:"Looking after the people I love.", sc:{driver:-1,horizon:1,flow:1}}
+  ]},
+
+ {t:"The car, the watch, the label — worth it?", emoji:"⌚",
+  s:"When something signals status, how do you feel?",
+  o:[
+   {act:"Worth every cent — quality speaks for itself.", sc:{signal:2,flow:-1}},
+   {act:"I buy quiet. Nobody needs to know what I have.", sc:{signal:-2,flow:1}},
+   {act:"Function over label, every single time.", sc:{signal:-1,control:1}}
+  ]},
+
+ {t:"Your relationship with debt.", emoji:"💳",
+  s:"Owing money makes you feel…",
+  o:[
+   {act:"Uneasy — I pay it off as fast as I possibly can.", sc:{flow:2,risk:-1,control:1}},
+   {act:"Fine, if it's good debt. Leverage is a tool.", sc:{risk:2,driver:1}},
+   {act:"Minimum payments are fine; I keep cash flexible.", sc:{horizon:-1,control:-1}}
+  ]},
+
+ {t:"Retirement. That far-off, hazy thing.", emoji:"🌅",
+  s:"Where are you on the future-you question?",
+  o:[
+   {act:"Already maxing accounts — compounding is magic.", sc:{horizon:2,control:1}},
+   {act:"Chipping in a bit; I'll ramp it up later.", sc:{horizon:1}},
+   {act:"Future me can figure it out. I'm living now.", sc:{horizon:-2,flow:-1}}
+  ]},
+
+ {t:"The group bill arrives. It's a mess.", emoji:"🧾",
+  s:"Seven people, shared plates, one confused waiter.",
+  o:[
+   {act:"I round up and cover the extras. No fuss.", sc:{signal:1,flow:-1,driver:1}},
+   {act:"Exact split, itemised, to the cent.", sc:{control:2,flow:1}},
+   {act:"Whatever's easiest — I'll get the next one.", sc:{control:-1,horizon:-1}}
+  ]},
+
+ {t:"How big is your emergency fund?", emoji:"🛟",
+  s:"If income stopped tomorrow, you'd be covered for…",
+  o:[
+   {act:"Six-plus months, locked and loaded.", sc:{driver:-1,risk:-1,horizon:1,flow:1}},
+   {act:"A small cushion — enough to not panic.", sc:{control:1}},
+   {act:"Honestly? I'd figure it out if it happened.", sc:{horizon:-2,risk:1}}
+  ]},
+
+ {t:"Payday hits. What's the feeling?", emoji:"🤑",
+  s:"The money just landed. Your gut says…",
+  o:[
+   {act:"Time to treat myself — I've earned a little joy.", sc:{flow:-2,horizon:-1}},
+   {act:"Move it to savings before I'm tempted.", sc:{flow:2,control:1}},
+   {act:"Same as any day — my system runs itself.", sc:{control:2,horizon:1}}
+  ]},
+
+ {t:"A friend swears they've found the next big thing.", emoji:"🚀",
+  s:"“Trust me, this one's going to the moon.”",
+  o:[
+   {act:"I'm in. Could be the one — I don't want to miss it.", sc:{risk:2,control:-1}},
+   {act:"I'll research it hard before a single dollar moves.", sc:{control:2,risk:-1}},
+   {act:"Not for me. I stick to my plan.", sc:{risk:-2,horizon:1}}
+  ]},
+
+ {t:"How do you make a big purchase decision?", emoji:"🔍",
+  s:"Something over a month's rent. Your process is…",
+  o:[
+   {act:"Spreadsheets, reviews, and weeks of deliberation.", sc:{control:2,horizon:1}},
+   {act:"Gut feel. If it feels right, I go.", sc:{control:-2,flow:-1}},
+   {act:"I wait until I can pay cash, then decide.", sc:{flow:1,risk:-1,horizon:1}}
+  ]},
+
+ {t:"Paint the ideal money future.", emoji:"✨",
+  s:"You've made it. What does 'made it' mean?",
+  o:[
+   {act:"Rich enough to never check a price tag again.", sc:{signal:1,flow:-1,driver:1}},
+   {act:"Free enough to work only if I want to.", sc:{driver:2,horizon:1}},
+   {act:"Secure enough to sleep soundly, forever.", sc:{driver:-2,risk:-1}},
+   {act:"Optimized to the last percent, no waste.", sc:{control:2,signal:-1}}
+  ]},
+
+ {t:"Subscriptions, memberships, little monthly spends.", emoji:"🔁",
+  s:"That quiet drip of recurring charges — you…",
+  o:[
+   {act:"Audit them ruthlessly. Nothing survives that I don't use.", sc:{control:2,flow:1}},
+   {act:"Definitely have a few I've completely forgotten about.", sc:{control:-2,flow:-1}},
+   {act:"Happily keep the ones that add real value.", sc:{flow:-1,driver:1}}
+  ]},
+
+ {t:"The market drops 20% overnight.", emoji:"📉",
+  s:"You wake up, check your phone, and see red everywhere.",
+  o:[
+   {act:"Buy the dip — this is an opportunity.", sc:{risk:2,horizon:1}},
+   {act:"Don't even look. Stick to the plan.", sc:{control:1,horizon:1,risk:-1}},
+   {act:"Sell something to protect what's left.", sc:{risk:-2,driver:-1}}
+  ]},
+
+ {t:"Finish the sentence: money is…", emoji:"🧠",
+  s:"One line that sums up your whole money mind.",
+  o:[
+   {act:"…a tool to enjoy life right now.", sc:{flow:-2,horizon:-1}},
+   {act:"…options and freedom down the road.", sc:{driver:2,horizon:1}},
+   {act:"…security and peace of mind.", sc:{driver:-2,risk:-1}},
+   {act:"…a game, and I intend to play it well.", sc:{control:1,risk:1,signal:1}}
+  ]}
+];
+
+/* ---------- scoring ---------- */
+const AXES = [
+  {k:'flow',    negL:'Spend & enjoy',   posL:'Save & stash',     neg:'Spender',   pos:'Saver'},
+  {k:'horizon', negL:'Live for today',  posL:'Plan for later',   neg:'Now-ist',   pos:'Planner'},
+  {k:'risk',    negL:'Play it safe',    posL:'Take the bet',     neg:'Guardian',  pos:'Roller'},
+  {k:'driver',  negL:'Security',        posL:'Freedom',          neg:'Anchor',    pos:'Free bird'},
+  {k:'signal',  negL:'Quiet & stealth', posL:'Show & status',    neg:'Stealth',   pos:'Baller'},
+  {k:'control', negL:'Wing it',         posL:'Track & optimize',  neg:'Freehand', pos:'Optimizer'}
+];
+
+function computeMax(){
+  const max={};
+  AXES.forEach(a=>max[a.k]=0);
+  SCEN.forEach(q=>{
+    AXES.forEach(a=>{
+      let m=0;
+      q.o.forEach(opt=>{ if(opt.sc[a.k]!==undefined) m=Math.max(m,Math.abs(opt.sc[a.k])); });
+      max[a.k]+=m;
+    });
+  });
+  return max;
+}
+
+let RESULT=null;
+let CURRENT_ARCH=null;
+function diagnose(){
+  const tot={}, max=computeMax();
+  AXES.forEach(a=>tot[a.k]=0);
+  answers.forEach((ai,qi)=>{
+    const sc=SCEN[qi].o[ai].sc;
+    for(const k in sc) tot[k]+=sc[k];
+  });
+  // normalized -1..1 and 0..100
+  const norm={}, pct={};
+  AXES.forEach(a=>{ const n = max[a.k]?tot[a.k]/max[a.k]:0; norm[a.k]=n; pct[a.k]=Math.round((n+1)/2*100); });
+  RESULT={tot,norm,pct};
+  renderResults();
+}
+
+/* ---------- archetype selection ---------- */
+function archetype(n){
+  const A=[];
+  A.push({key:'optimizer', score:n.control*1.2 + n.horizon*0.5 + n.risk*0.15, emoji:'🧮', name:'The Optimizer',
+    tag:'Every dollar has a job and a spreadsheet',
+    dest:"Lean into your system: automate transfers on payday, run a zero-based monthly plan, and pick low-fee index funds so your optimizing brain stops second-guessing. Try a net-worth tracker to watch the whole machine compound.",
+    blurb:"You don't just have money; you run it. Where others let cash slosh around, you've got categories, rules, and a quiet satisfaction when the numbers reconcile. Spreadsheets aren't a chore for you — they're a hobby with a payout. You know your savings rate to the decimal and your subscriptions never survive an audit. The risk isn't that you'll lose control; it's that you'll optimize the pennies while the big levers — income, mindset, the occasional splurge that actually makes life good — go unexamined."});
+  A.push({key:'freespirit', score:n.driver*1.0 + (-n.horizon)*0.5 + (-n.control)*0.4, emoji:'🕊️', name:'The Free Spirit',
+    tag:'Money is for living, not for logging',
+    dest:"Keep your freedom, but give it a floor: set one automatic transfer to a 'don't-touch' fund so future-you has options too. A single index fund on autopilot means you can keep winging the rest guilt-free.",
+    blurb:"Money, to you, is oxygen — useful, but not something to obsess over. You'd rather spend a Sunday living than reconciling accounts, and you trust that things generally work out (they usually have). You value experiences over stuff and freedom over a fat balance. That looseness is a gift: you're generous, spontaneous, and unbothered by the small stuff. The catch is that 'I'll figure it out' has a way of catching up — a little structure, quietly running in the background, would buy you even more of the freedom you love."});
+  A.push({key:'guardian', score:(-n.risk)*1.1 + n.flow*0.4 + (-n.signal)*0.2, emoji:'🛡️', name:'The Guardian',
+    tag:'Sleep-at-night money, every night',
+    dest:"Your caution is a strength — just don't let it cost you growth. Keep the emergency fund, but let a fixed slice drip into a broad index fund so inflation doesn't quietly eat your safe cash. Boring and diversified beats a mattress.",
+    blurb:"You play defense, and you play it well. Risk makes you uneasy, so you keep a cushion, avoid debt, and never bet money you can't lose. While others chase the moon, you're happily grounded — and when the market panics, you're the calm one who sleeps fine. That steadiness is rare and valuable. The one thing to watch: money that's too safe barely grows. A guardian who lets a little of it take measured risk ends up far better protected than one who hides it all in cash."});
+  A.push({key:'baller', score:n.signal*1.3 + (-n.flow)*0.3, emoji:'💎', name:'The Baller',
+    tag:'If you\'ve got it, why hide it?',
+    dest:"Enjoy the good life, but make the flex work for you: fund a 'lifestyle' account you can spend guilt-free, and automate investing FIRST so status spending comes from what's left, not what's needed. Buy the experiences that last.",
+    blurb:"You believe money is meant to be seen and enjoyed — the great meal, the sharp fit, the round you quietly cover. Life's too short for a bad seat, and you're generous with it, which people love. Your taste is real and your presence is felt. The trap for the Baller is lifestyle creep: the label costs more than the thing, and status has a way of ratcheting up. Pay yourself first, then dress the rest however you like — that way the shine lasts a lot longer than the moment."});
+  A.push({key:'minimalist', score:n.flow*1.0 + (-n.signal)*0.6 + n.horizon*0.3, emoji:'🌱', name:'The Minimalist',
+    tag:'Fewer things, more freedom',
+    dest:"Your low burn rate is a superpower — turn it into optionality. Bank the gap between what you earn and what you need into low-cost index funds, and let a high savings rate quietly buy you years of freedom. Just remember to actually spend on what you love.",
+    blurb:"You've figured out something most people never do: you don't need much to be happy, and that gap between income and needs is pure freedom. You buy quietly, waste little, and feel no pull toward keeping up with anyone. That discipline compounds fast — a high savings rate is the single biggest lever there is, and you pull it without effort. The only risk is frugality curdling into deprivation. Now and then, spend generously on the few things that genuinely light you up. You've more than earned it."});
+  A.push({key:'highroller', score:n.risk*1.2 + n.signal*0.5 + (-n.flow)*0.2, emoji:'🎲', name:'The High-Roller',
+    tag:'No risk, no story worth telling',
+    dest:"Your appetite for upside can pay off — with guardrails. Keep the swing-for-the-fences money to a set slice (say 10%) of a portfolio that's otherwise boring and diversified, and never bet the rent. Position-size like a pro, not a gambler.",
+    blurb:"You're built for the bet. Where others see danger, you see upside, and you'd rather take a big swing than settle for slow and safe. That nerve is genuinely rare — fortunes are made by people willing to be uncomfortable. But the same wiring that finds the winners also finds the wipeouts, and one blown bet can undo years of them. The great high-rollers aren't fearless; they're disciplined. Cap the risk, size your positions, keep a boring base — then swing as hard as you like with the rest."});
+  A.push({key:'provider', score:(-n.driver)*1.0 + n.horizon*0.7 + n.flow*0.35, emoji:'🏡', name:'The Provider',
+    tag:'Building a fortress for the people you love',
+    dest:"You're wired to protect — make it efficient. Sort insurance and a solid emergency fund first, then automate long-term investing so the security keeps compounding. Don't forget a small 'just for me' fund; you can't pour from an empty cup.",
+    blurb:"Money, for you, is about looking after people — a stable home, a safety net, a future the people you love can count on. You plan ahead, save steadily, and take real comfort in being the dependable one. That generosity and foresight make you the quiet backbone of everyone around you. The blind spot is self-sacrifice: providers often fund everyone else's security and forget their own dreams. Build the fortress, absolutely — just leave a room in it for the things you'd love, too."});
+  A.push({key:'steward', score:0.3 - variance(n), emoji:'⚖️', name:'The Balanced Steward',
+    tag:'A little of everything, held in good balance',
+    dest:"Your instincts are well-rounded, so play to that: a simple, automated setup — spend, save, invest in steady proportions — will serve you better than any clever scheme. Pick one thing to lean into this year and let the rest run on autopilot.",
+    blurb:"You refuse to be one extreme. You save, but you spend on what matters; you plan, but you leave room to enjoy today; you take some risk, but never bet the farm. That balance makes you remarkably hard to knock off course — no single money mistake defines you, because you're not all-in on anything. Your gift is judgement: you read each situation on its own terms and respond sensibly. The only watch-out is that balance can slide into drift. Pick one goal worth committing to, and let your steadiness carry it home."});
+  A.sort((x,y)=>y.score-x.score);
+  return A[0];
+}
+function variance(n){ // how far from center overall (0 = perfectly balanced)
+  const vals=AXES.map(a=>Math.abs(n[a.k]));
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* ---------- narrative helpers ---------- */
+function axisRead(a,n){
+  const v=n[a.k]; const s=Math.abs(v);
+  const strong = s>0.55;
+  const mild = s>0.2;
+  if(!mild) return "You sit right in the middle here — it swings with the situation, and you like it that way.";
+  const lean = strong ? "strongly" : "moderately";
+  const map={
+    flow:{pos:"You're a saver at heart; stashing money away feels better than spending it.",neg:"You're a spender — money's for enjoying, and you'd rather live it than hoard it."},
+    horizon:{pos:"You plan for later; future-you is a real person you take seriously.",neg:"You live for today; tomorrow can mostly sort itself out."},
+    risk:{pos:"You'll take the bet when the upside is there; a little danger doesn't scare you.",neg:"You play it safe; protecting what you've got beats chasing what you might."},
+    driver:{pos:"Freedom drives you — money is a ticket to options and a life on your terms.",neg:"Security drives you — a solid safety net matters more than any upside."},
+    signal:{pos:"You enjoy money that shows; a good flex is part of the fun.",neg:"You keep it stealth; the best wealth is the kind nobody sees."},
+    control:{pos:"You track and optimize; you'd rather run the money than let it run you.",neg:"You wing it; you'd sooner live your money than log every dollar of it."}
+  };
+  return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
+}
+
+/* Brief "what your money style is like" synthesis for the results page. */
+function moneyProfile(n){
+  const P = {
+    flow:{pos:"save and stash more readily than you spend",
+          neg:"spend and enjoy money while you've got it"},
+    horizon:{pos:"plan for a future self you take seriously",
+             neg:"live for today and let tomorrow sort itself out"},
+    risk:{pos:"embrace risk when the upside is worth it",
+          neg:"play it safe and protect what you already have"},
+    driver:{pos:"chase freedom and options above all",
+            neg:"crave security and a solid safety net"},
+    signal:{pos:"enjoy money that shows and signals a little status",
+            neg:"keep your money quiet, stealthy, and unshowy"},
+    control:{pos:"track and optimize almost every dollar",
+             neg:"wing it and trust the vibe over the spreadsheet"}
+  };
+  const CLOSE = {
+    flow:{pos:"A dollar saved is a dollar quietly working for you.",neg:"Money's for living, not just for counting."},
+    horizon:{pos:"Future you is already thanking present you.",neg:"Tomorrow can wait; today is where you live."},
+    risk:{pos:"No risk, no story worth telling.",neg:"Slow and steady sleeps at night."},
+    driver:{pos:"Freedom is the only number that really matters.",neg:"Peace of mind is the real luxury."},
+    signal:{pos:"If you've got it, why hide it?",neg:"The best flex is nobody knowing."},
+    control:{pos:"You run the money; it doesn't run you.",neg:"You'd rather live it than log it."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "Your money style is hard to pin down — and that's the point. Across eighteen questions you leaned every which way, balancing spending with saving, risk with caution, planning with living for today. In short: you're an all-rounder who reads each money decision on its own terms and handles it sensibly.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "Your money style is one where "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
+function blindSpots(n){
+  const out=[];
+  if(n.flow>0.4) out.push(["Saving on autopilot","Stashing money away is a genuine strength — but a balance that only ever grows isn't the goal. Money unspent on the few things you truly love is a quiet kind of waste. Every so often, let yourself enjoy it."]);
+  if(n.flow<-0.4) out.push(["Spending outruns saving","You know how to enjoy money, which is a gift — but if the outflow keeps up with the inflow, you never build the cushion that buys real freedom. Pay yourself first, then spend the rest guilt-free."]);
+  if(n.horizon>0.4) out.push(["Living too much for later","Planning for the future is wise, but deferring every joy to some distant finish line has a cost. Future-you matters — present-you does too. Spend a little on today; you're allowed."]);
+  if(n.horizon<-0.4) out.push(["Tomorrow's bill","Living for today is fun until today writes a cheque tomorrow can't cash. A small, automatic step toward the future — even 5% — buys you far more freedom than it costs in fun."]);
+  if(n.risk>0.45) out.push(["Betting a bit too big","Your nerve finds upside others miss — but the same instinct finds the wipeouts. One oversized bet can undo years of good ones. Cap the risk and keep a boring base underneath it."]);
+  if(n.risk<-0.45) out.push(["Too safe to grow","Caution protects you, but cash left too safe quietly loses to inflation year after year. Playing pure defense is its own kind of risk. A little measured growth is protection, not recklessness."]);
+  if(n.signal>0.45) out.push(["Paying for the label","Enjoying nice things is fine — but status has a ratchet, and lifestyle creep is real. The label often costs far more than the thing. Invest first; let the shine come from what's left over."]);
+  if(n.signal<-0.45) out.push(["Too stealth to enjoy it","Keeping money quiet is smart and grounded — just don't let stealth tip into never treating yourself or undervaluing your own worth. Quiet wealth is still meant to be lived in, not only guarded."]);
+  if(n.control>0.5) out.push(["Optimizing the pennies","Your system is a thing of beauty — but obsessing over the small line items can pull focus from the big levers: income, the occasional splurge that makes life good, and simply letting things run. Not every dollar needs a spreadsheet."]);
+  if(n.control<-0.5) out.push(["Flying blind","Winging it keeps money light and stress-free — right up until a surprise bill or a forgotten subscription bites. You don't need a spreadsheet empire, just enough of a view to not be caught out."]);
+  if(n.driver<-0.45) out.push(["Playing not to lose","Security is a worthy goal, but chasing it too hard can wall you off from the very freedom money can buy. A fortress with no doors is just a nicer cage. Leave room for the upside, too."]);
+  if(out.length===0) out.push(["The comfortable middle","You balance every money impulse, which makes you steady and hard to knock off course — but it can also mean never fully committing to the goal that would change things most. Sometimes it's worth going all-in on one."]);
+  return out.slice(0,3);
+}
+
+function superpower(n){
+  const c=[];
+  c.push([Math.abs(n.flow), n.flow>0?["The saver's discipline","You put money away without it feeling like a sacrifice — the single most powerful money habit there is. Wealth builds quietly in the background while others wonder where theirs went."]:["The art of enjoying it","You actually know how to enjoy money, a skill plenty of savers never learn. You get real life out of every dollar, and you're generous with it — people feel that."]]);
+  c.push([Math.abs(n.control), n.control>0?["Master of the system","You make money behave. Budgets balance, transfers fire, and nothing slips through the cracks because you've quietly built a machine that runs itself."]:["Refreshingly unbothered","You don't sweat the small line items, which keeps money light and your head clear. You spend your energy on living, not reconciling — and you're rarely stressed about it."]]);
+  c.push([Math.abs(n.risk), n.risk>0?["Nerve for the bet","You can stay calm when there's real money on the line, and act when others freeze. That appetite for upside is exactly how fortunes get made."]:["Steady hands","When markets panic, you don't. Your calm keeps you invested through the storms that shake everyone else out — and that steadiness quietly wins the long game."]]);
+  c.push([Math.abs(n.horizon), n.horizon>0?["The long game","You think in decades, not paydays. You let compounding do the heavy lifting, and future-you is set up to win because present-you kept the faith."]:null]);
+  c.push([Math.abs(n.driver), n.driver>0?["Wired for freedom","You keep your eyes on the prize that actually matters — options, autonomy, a life on your terms — and you make money decisions in service of it."]:null]);
+  const best=c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0])[0];
+  return best[1];
+}
+
+function principle(arch,n){
+  const P={
+    optimizer:"“What gets measured gets managed. Every dollar has a job.”",
+    freespirit:"“Money is for living. I'll figure the rest out as I go.”",
+    guardian:"“I'd rather sleep well tonight than dream big and lie awake.”",
+    baller:"“Life's too short for a bad seat. If you've got it, live it.”",
+    minimalist:"“The less I need, the freer I am. That's the whole trick.”",
+    highroller:"“Fortune favours the bold — and the properly position-sized.”",
+    provider:"“Take care of the people you love, and the rest sorts itself out.”",
+    steward:"“A little of everything, held in balance — that's how it lasts.”"
+  };
+  return P[arch.key]||P.steward;
+}
+
+/* ---------- state ---------- */
+let i = 0;
+const answers = new Array(SCEN.length).fill(null); // stores chosen option index
+
+const $ = id => document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+
+function start(){ i=0; render(); show('quiz'); }
+function restart(){ answers.fill(null); i=0; show('intro'); }
+
+function render(){
+  const q = SCEN[i];
+  $('snum').textContent = 'Question ' + String(i+1).padStart(2,'0');
+  $('semoji').textContent = q.emoji || '';
+  $('stitle').textContent = q.t;
+  $('sbody').textContent = q.s;
+  $('count').textContent = (i+1)+' / '+SCEN.length;
+  $('fill').style.width = ((i+1)/SCEN.length*100)+'%';
+  const box = $('opts'); box.innerHTML='';
+  q.o.forEach((opt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(answers[i]===idx?' pick':'');
+    b.innerHTML='<span class="opt-do">'+esc(opt.act)+'</span>';
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  if(answers[i]!==null){
+    $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+  } else {
+    $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
+  }
+  $('next').textContent = (i===SCEN.length-1)?'See my result ▶':'Next ▶';
+}
+
+function choose(idx){
+  answers[i]=idx;
+  document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+}
+
+function next(){
+  if(answers[i]===null) return;
+  if(i===SCEN.length-1){ diagnose(); show('results'); return; }
+  i++; render();
+}
+function prev(){
+  if(i===0){ show('intro'); return; }
+  i--; render();
+}
+
+/* ---------- render results ---------- */
+function renderResults(){
+  const {norm,pct}=RESULT;
+  const arch=archetype(norm);
+  CURRENT_ARCH=arch;
+  $('rEmoji').textContent=arch.emoji;
+  $('rName').textContent=arch.name;
+  $('rTagline').textContent=arch.tag;
+  $('rBlurb').textContent=arch.blurb;
+  $('rProfile').textContent=moneyProfile(norm);
+  $('rDestP').textContent=arch.dest;
+
+  // chips: dominant traits
+  const chips=$('rChips'); chips.innerHTML='';
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ranked.forEach(r=>{
+    const label = r.v>=0 ? r.a.pos : r.a.neg;
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML='<b>'+label+'</b>';
+    chips.appendChild(el);
+  });
+
+  // axes
+  const box=$('rAxes'); box.innerHTML='';
+  AXES.forEach(a=>{
+    const p=pct[a.k];
+    const d=document.createElement('div'); d.className='axis';
+    d.innerHTML =
+      '<div class="lbls"><span>'+a.negL+'</span><span>'+a.posL+'</span></div>'+
+      '<div class="axtrack"><span style="left:0%"></span><div class="mid"></div></div>'+
+      '<div class="read">'+axisRead(a,norm)+'</div>';
+    box.appendChild(d);
+    // animate knob
+    requestAnimationFrame(()=>{ d.querySelector('.axtrack > span').style.left = p+'%'; });
+  });
+
+  // superpower
+  const sp=superpower(norm);
+  $('rSuperH').textContent=sp[0]; $('rSuperP').textContent=sp[1];
+
+  // blind spots
+  const bl=$('rBlind'); bl.innerHTML='';
+  blindSpots(norm).forEach(b=>{
+    const d=document.createElement('div'); d.className='mini blind';
+    d.innerHTML='<h4>'+b[0]+'</h4><p>'+b[1]+'</p>'; bl.appendChild(d);
+  });
+
+  // principle
+  $('rPrinciple').textContent=principle(arch,norm);
+
+  // versatility note
+  const v=variance(norm);
+  $('rConsistency').textContent = v>0.4
+    ? "You have a strongly defined money personality — you know exactly how you like to handle money, and you go all in on it."
+    : "You're a versatile money handler — your instincts flex with the situation, which means you rarely get caught out by any one kind of decision.";
+}
+
+/* ============================================================
+   SHAREABLE RESULT CARD  (rendered on a canvas)
+   ============================================================ */
+let CARD_BLOB=null;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' '); const lines=[]; let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawShareCard(){
+  const W=1080, H=1350;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const {norm,pct}=RESULT, arch=CURRENT_ARCH;
+
+  // background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232653'); bg.addColorStop(.45,'#131427'); bg.addColorStop(1,'#0c0d1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // subtle glow
+  const glow=ctx.createRadialGradient(W/2,180,60,W/2,180,700);
+  glow.addColorStop(0,'rgba(120,110,220,.28)'); glow.addColorStop(1,'rgba(120,110,220,0)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,W,340);
+  // border frame
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,24,24,W-48,H-48,36); ctx.stroke();
+
+  ctx.textAlign='center';
+
+  // kicker
+  ctx.fillStyle='#ffd166'; ctx.font='bold 26px "Trebuchet MS",Arial';
+  ctx.fillText('T H E   M O N E Y   M I N D', W/2, 92);
+
+  // emoji
+  ctx.font='120px "Segoe UI Emoji","Apple Color Emoji",serif';
+  ctx.fillText(arch.emoji, W/2, 232);
+
+  // archetype name (gradient)
+  ctx.font='bold 74px "Trebuchet MS",Arial';
+  const nameLines=wrapLines(ctx,arch.name,W-160);
+  let ny=310;
+  nameLines.forEach(ln=>{
+    const tw=ctx.measureText(ln).width;
+    const g=ctx.createLinearGradient(W/2-tw/2,0,W/2+tw/2,0);
+    g.addColorStop(0,'#ffd166'); g.addColorStop(.5,'#ff6b6b'); g.addColorStop(1,'#a685ff');
+    ctx.fillStyle=g; ctx.fillText(ln,W/2,ny); ny+=80;
+  });
+  // tagline
+  ctx.fillStyle='#b9b4e6'; ctx.font='italic 30px "Trebuchet MS",Arial';
+  const tagLines=wrapLines(ctx,'“'+arch.tag+'”',W-200);
+  tagLines.forEach(ln=>{ ctx.fillText(ln, W/2, ny+8); ny+=42; });
+  let y=ny+40;
+
+  // signature trait chips (top 3 axes)
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ctx.font='bold 30px "Trebuchet MS",Arial';
+  const labels=ranked.map(r=> r.v>=0 ? r.a.pos : r.a.neg);
+  const padX=28, gap=18, chipH=64;
+  const widths=labels.map(l=>ctx.measureText(l).width+padX*2);
+  const totalW=widths.reduce((s,w)=>s+w,0)+gap*(labels.length-1);
+  let cx=(W-totalW)/2;
+  const chipCols=['#ff6b6b','#4ecdc4','#a685ff'];
+  labels.forEach((l,idx)=>{
+    const w=widths[idx];
+    ctx.fillStyle='rgba(255,255,255,.05)';
+    roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.fill();
+    ctx.strokeStyle=chipCols[idx]; ctx.lineWidth=2; roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.stroke();
+    ctx.fillStyle='#f4f1ff'; ctx.textAlign='center';
+    ctx.fillText(l, cx+w/2, y+chipH/2+11);
+    cx+=w+gap;
+  });
+  y+=chipH+70;
+
+  // "MY MONEY PROFILE" heading
+  ctx.fillStyle='#ffd166'; ctx.font='bold 24px "Trebuchet MS",Arial';
+  ctx.fillText('M Y   M O N E Y   P R O F I L E', W/2, y);
+  y+=44;
+
+  // six dials
+  const dialL=90, dialR=W-90, dialW=dialR-dialL;
+  const rowH=66;
+  ctx.textBaseline='alphabetic';
+  AXES.forEach(a=>{
+    ctx.font='500 22px "Trebuchet MS",Arial';
+    ctx.textAlign='left'; ctx.fillStyle='#8f8bc0';
+    ctx.fillText(a.negL, dialL, y);
+    ctx.textAlign='right';
+    ctx.fillText(a.posL, dialR, y);
+    // track
+    const ty=y+22;
+    ctx.fillStyle='#22254a';
+    roundRect(ctx,dialL,ty,dialW,12,6); ctx.fill();
+    // mid tick
+    ctx.fillStyle='#3a3e70'; ctx.fillRect(dialL+dialW/2-1,ty-3,2,18);
+    // knob
+    const kx=dialL + dialW*(pct[a.k]/100);
+    const kg=ctx.createLinearGradient(kx-14,0,kx+14,0);
+    kg.addColorStop(0,'#4ecdc4'); kg.addColorStop(1,'#ffd166');
+    ctx.fillStyle=kg;
+    ctx.beginPath(); ctx.arc(kx,ty+6,14,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0c0d1c'; ctx.lineWidth=3; ctx.stroke();
+    y+=rowH;
+  });
+
+  y+=6;
+  // motto quote box
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const quote=principle(arch,norm);
+  ctx.font='italic 30px "Trebuchet MS",Arial';
+  const qLines=wrapLines(ctx,quote,W-220);
+  const boxH=qLines.length*44+56;
+  ctx.fillStyle='rgba(255,255,255,.04)';
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.stroke();
+  ctx.fillStyle='#efeaff';
+  let qy=y+52;
+  qLines.forEach(ln=>{ ctx.fillText(ln,W/2,qy); qy+=44; });
+  y+=boxH+56;
+
+  // footer
+  ctx.fillStyle='#7d79ad'; ctx.font='22px "Trebuchet MS",Arial';
+  ctx.fillText('18 questions · 6 money dials · a money toy', W/2, H-46);
+
+  return cv;
+}
+
+function openShare(){
+  if(!RESULT||!CURRENT_ARCH) return;
+  const cv=drawShareCard();
+  $('shareImg').src=cv.toDataURL('image/png');
+  cv.toBlob(b=>{ CARD_BLOB=b; }, 'image/png');
+  // hide native share button if unsupported
+  $('lbShare').style.display = (navigator.share||navigator.canShare) ? '' : 'none';
+  $('shareBox').classList.add('on');
+}
+function closeShare(){ $('shareBox').classList.remove('on'); }
+
+function ensureBlob(){
+  return new Promise(res=>{
+    if(CARD_BLOB) return res(CARD_BLOB);
+    drawShareCard().toBlob(b=>{ CARD_BLOB=b; res(b); }, 'image/png');
+  });
+}
+
+async function nativeShare(){
+  const blob=await ensureBlob();
+  const file=new File([blob],'money-mind-result.png',{type:'image/png'});
+  const text='I got “'+CURRENT_ARCH.name+'” on The Money Mind.';
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'My Money Mind result', text});
+      return;
+    }
+    if(navigator.share){ await navigator.share({title:'My Money Mind result', text}); return; }
+  }catch(e){ /* user cancelled or blocked — fall through */ }
+  downloadCard();
+}
+
+async function downloadCard(){
+  const blob=await ensureBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='money-mind-result.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  $('lbHint').textContent='Saved! If nothing downloaded, long-press the image above to save it.';
+}
+
+/* ---------- wire up all controls (no inline handlers) ---------- */
+function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
+function init(){
+  on('startBtn', start);
+  on('backBtn', prev);
+  on('next', next);
+  on('shareBtn', openShare);
+  on('restartBtn', restart);
+  on('lbShare', nativeShare);
+  on('lbSave', downloadCard);
+  on('lbClose', closeShare);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+
+/* keyboard: 1-9 pick option, Enter/Right advance, Left back, R retake */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); if(typeof start==='function')start();} return; }
+  if(scr.id==='quiz'){
+    if(/^[1-9]$/.test(e.key)){ var b=document.querySelectorAll('#opts .opt')[+e.key-1]; if(b){e.preventDefault(); b.click();} }
+    else if(e.key==='Enter'||e.key==='ArrowRight'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); prev(); }
+  } else if(scr.id==='results'){
+    if(e.key==='r'||e.key==='R'){ e.preventDefault(); restart(); }
+  }
+});
+</script>
+</body>
+</html>

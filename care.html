@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1020">
+<title>Care Styles — 18 Questions, One Way of Loving</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171935; --card:#1e2140; --ink:#f4f1ff; --muted:#a6a1cf;
+    --a:#ff6b6b; --b:#4ecdc4; --c:#ffd166; --d:#a685ff; --line:#2c2f57;
+    --good:#4ecdc4; --warn:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Trebuchet MS",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #232653 0%, var(--bg) 55%);
+    color:var(--ink); min-height:100vh; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px;}
+  .screen{display:none;animation:fade .45s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+  /* Intro */
+  .hublink{text-align:center;margin:2px 0 -6px}
+  .hublink a{color:var(--muted);font-size:14px;text-decoration:none}
+  .hublink a:hover{color:var(--ink)}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--c);font-weight:bold}
+  h1{font-size:clamp(34px,8vw,54px);margin:6px 0 4px;line-height:1.02;
+     background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4,#a685ff);
+     -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .globe{font-size:70px;margin:14px 0 4px}
+  .tag{color:var(--muted);font-size:16px;max-width:520px;margin:10px auto 0}
+  .how{color:#d9d5ff;font-size:15px;max-width:520px;margin:14px auto 0}
+  .how b{color:var(--ink)}
+  .disclaimer{font-size:12.5px;color:var(--muted);max-width:520px;margin:20px auto 0;
+    border:1px dashed var(--line);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.02)}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-weight:bold;font-family:inherit;
+    padding:15px 26px;border-radius:14px;font-size:17px;color:#12122a;
+    background:linear-gradient(90deg,#ffd166,#4ecdc4);
+    box-shadow:0 8px 26px rgba(78,205,196,.28);transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:normal}
+  .center{text-align:center}
+
+  /* Progress */
+  .topbar{display:flex;align-items:center;gap:12px;margin:6px 0 20px}
+  .bar{flex:1;height:9px;background:#20234a;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffd166,#4ecdc4);transition:width .4s ease}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:bold}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,var(--card),#191b38);border:1px solid var(--line);
+    border-radius:22px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .4s ease both}
+  .scn-num{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold}
+  .scn-emoji{font-size:44px;margin:10px 0 2px;text-align:center}
+  .scn-title{font-size:23px;font-weight:bold;margin:6px 0 6px}
+  .scn-body{color:#d9d5ff;font-size:16.5px}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .opt{
+    text-align:left;background:#23264b;border:1px solid var(--line);color:var(--ink);
+    padding:15px 16px;border-radius:15px;cursor:pointer;font-size:16px;font-family:inherit;
+    transition:transform .1s ease,border-color .15s ease,background .15s ease;line-height:1.35;
+  }
+  .opt:hover{border-color:#5b60a8;background:#282c58;transform:translateY(-1px)}
+  .opt-do{font-weight:bold;color:#fff;display:block;font-size:16.5px}
+  .opt.pick{border-color:var(--b);background:#243b48}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+  .nextbtn{opacity:.35;pointer-events:none;transition:opacity .2s}
+  .nextbtn.ready{opacity:1;pointer-events:auto}
+  .backlink{color:var(--muted);font-size:14px;cursor:pointer;background:none;border:0;font-family:inherit}
+  .backlink:hover{color:var(--ink)}
+
+  /* Results */
+  .arche{text-align:center;padding:8px 6px 4px}
+  .arche .emoji{font-size:58px}
+  .arche h2{font-size:clamp(26px,6.5vw,40px);margin:6px 0 2px;
+    background:linear-gradient(90deg,#ffd166,#ff6b6b,#a685ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .arche .sub{color:var(--muted);font-size:15px;margin-bottom:4px}
+  .blurb{font-size:16.5px;color:#e6e3ff;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:18px;margin:16px 0}
+  .sect-h{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);
+    font-weight:bold;margin:26px 0 10px}
+  .axis{margin:14px 0}
+  .axis .lbls{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px}
+  .axis .lbls b{color:var(--ink)}
+  .axtrack{position:relative;height:12px;background:#20234a;border-radius:99px}
+  .axtrack > span{position:absolute;top:50%;transform:translate(-50%,-50%);height:20px;width:20px;border-radius:50%;
+    background:linear-gradient(90deg,#4ecdc4,#ffd166);box-shadow:0 3px 10px rgba(0,0,0,.4);border:2px solid #12122a;transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .axtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#3a3e70}
+  .axis .read{font-size:14px;color:#cfcbf3;margin-top:7px}
+  .cardlist{display:grid;gap:12px;grid-template-columns:1fr}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+  .mini h4{margin:0 0 4px;font-size:16px}
+  .mini.blind{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}
+  .mini.super{border-color:rgba(78,205,196,.35);background:rgba(78,205,196,.06)}
+  .mini.dest{border-color:rgba(166,133,255,.35);background:rgba(166,133,255,.06)}
+  .mini p{margin:0;font-size:14.5px;color:#d9d5ff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .chip{background:#23264b;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13.5px}
+  .chip b{color:var(--c)}
+  .footnote{font-size:12.5px;color:var(--muted);margin-top:26px;text-align:center}
+  .again{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .again a{text-decoration:none}
+
+  /* Share lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(6,6,18,.86);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .lightbox.on{display:flex;animation:fade .3s ease both}
+  .lb-inner{max-width:420px;width:100%;text-align:center}
+  .lb-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--c);font-weight:bold;margin-bottom:12px}
+  #shareImg{width:100%;max-height:66vh;object-fit:contain;border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);background:#12122a}
+  .lb-hint{font-size:13px;color:var(--muted);margin:14px 0 12px}
+  .lb-btns{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.opt:focus-visible,.btn:focus-visible,.backlink:focus-visible,.nextbtn:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="screen on">
+    <div class="hublink"><a href="index.html">‹ all quizzes</a></div>
+    <div class="hero">
+      <div class="kicker">How Do You Show You Care?</div>
+      <h1>Care Styles</h1>
+      <div class="globe">💞</div>
+      <p class="how">Here's how it works: eighteen quick questions about how you <b>actually</b> give and receive care — how you comfort, celebrate, apologise, and love the people around you. No right answers, just your instincts.</p>
+      <p class="tag">By the end I'll read the shape of your choices across six care dials and hand you your care archetype — plus exactly how you feel most loved.</p>
+      <button class="btn" id="startBtn">Start the quiz ▶</button>
+      <div class="disclaimer">Not a real personality test — it's an affection toy. It reads the <em>pattern</em> of how you love and hands you an archetype. Entertainment, with a suspicious amount of tenderness.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backlink" id="backBtn">‹ back</button>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="count" id="count">1 / 18</div>
+    </div>
+    <div class="card">
+      <div class="scn-num" id="snum">Question 01</div>
+      <div class="scn-emoji" id="semoji"></div>
+      <div class="scn-title" id="stitle"></div>
+      <div class="scn-body" id="sbody"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <span style="font-size:13px;color:var(--muted)" id="hint">Choose one.</span>
+        <button class="btn nextbtn" id="next">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="arche">
+      <div class="emoji" id="rEmoji">💞</div>
+      <h2 id="rName">Your Care Style</h2>
+      <div class="sub" id="rTagline"></div>
+    </div>
+    <div class="blurb" id="rBlurb"></div>
+
+    <div class="stats" id="rChips"></div>
+
+    <div class="sect-h">How You Show Care</div>
+    <div class="blurb" id="rProfile" style="margin-top:0"></div>
+
+    <div class="sect-h">How You Feel Most Loved</div>
+    <div class="cardlist"><div class="mini dest"><h4 id="rDestH">Feeling most loved</h4><p id="rDestP"></p></div></div>
+
+    <div class="sect-h">Your Six Care Dials</div>
+    <div id="rAxes"></div>
+
+    <div class="sect-h">Your Care Superpower</div>
+    <div class="cardlist"><div class="mini super"><h4 id="rSuperH"></h4><p id="rSuperP"></p></div></div>
+
+    <div class="sect-h">Your Blind Spots</div>
+    <div class="cardlist" id="rBlind"></div>
+
+    <div class="sect-h">Your Care Motto</div>
+    <div class="blurb" id="rPrinciple" style="margin-top:0"></div>
+
+    <div class="footnote" id="rConsistency"></div>
+    <div class="again">
+      <button class="btn" id="shareBtn">📸 Share my result</button>
+      <button class="btn ghost" id="restartBtn">Retake the quiz ↺</button>
+      <a class="btn ghost" href="index.html">✨ More quizzes</a>
+    </div>
+    <div class="footnote">Built as a care toy. Share your style, compare with the people you love, and learn how they feel loved too.</div>
+  </section>
+
+  <!-- SHARE LIGHTBOX -->
+  <div id="shareBox" class="lightbox">
+    <div class="lb-inner">
+      <div class="lb-title">Your shareable card</div>
+      <img id="shareImg" alt="Your Care Styles result card">
+      <div class="lb-hint" id="lbHint">Tap “Share” to send it, “Save” to download, or long-press the image.</div>
+      <div class="lb-btns">
+        <button class="btn" id="lbShare">📤 Share</button>
+        <button class="btn ghost" id="lbSave">⬇ Save</button>
+        <button class="backlink" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SIX CARE DIALS (each answer nudges some of them)
+   express : Say it in words (−)   ↔  Show it in actions (+)
+   token   : Time together (−)     ↔  Thoughtful things (+)
+   touch   : Words over touch (−)  ↔  Warmth & touch (+)
+   stage   : Private & quiet (−)   ↔  Open & demonstrative (+)
+   scale   : Small & steady (−)    ↔  Big gestures (+)
+   flow    : Love to give (−)      ↔  Love to receive (+)
+   ============================================================ */
+
+const SCEN = [
+ {t:"A friend is having a genuinely awful day. You…", emoji:"🫂",
+  s:"They text you, low and defeated. Your first instinct is to…",
+  o:[
+   {act:"Tell them exactly how much they mean to you.", sc:{express:-2}},
+   {act:"Show up with soup and quietly sort their chores.", sc:{express:2,flow:-1}},
+   {act:"Sit close, give a long hug, and just be there.", sc:{touch:2,flow:-1}},
+   {act:"Send a thoughtful little care package to their door.", sc:{token:2}}
+  ]},
+
+ {t:"Someone you love just landed a big win.", emoji:"🎉",
+  s:"They got the job / passed the exam / nailed the thing. You…",
+  o:[
+   {act:"Post it everywhere — the world needs to know.", sc:{stage:2,scale:1}},
+   {act:"A quiet, heartfelt “I'm so proud of you.”", sc:{express:-1,stage:-2}},
+   {act:"Throw a surprise party — full production.", sc:{scale:2,stage:1}},
+   {act:"Buy them the thing they've been eyeing for months.", sc:{token:2,scale:1}}
+  ]},
+
+ {t:"How do you say sorry?", emoji:"🙏",
+  s:"You messed up and you know it. Your way back is…",
+  o:[
+   {act:"Words — a real, honest, out-loud apology.", sc:{express:-2}},
+   {act:"Actions — I fix it and quietly make it right.", sc:{express:2,flow:-1}},
+   {act:"A peace offering: flowers, their favourite treat.", sc:{token:2}},
+   {act:"A hug, and staying close until it melts.", sc:{touch:2}}
+  ]},
+
+ {t:"Your love language, on the receiving end.", emoji:"💌",
+  s:"For you to really feel it, someone has to…",
+  o:[
+   {act:"Just tell me they love me — and say it often.", sc:{express:-2,flow:1}},
+   {act:"Show me — do something, don't just say it.", sc:{express:2,flow:1}},
+   {act:"Hold my hand, sit close. That's everything.", sc:{touch:2,flow:1}},
+   {act:"Surprise me with something they knew I'd love.", sc:{token:2,flow:1}}
+  ]},
+
+ {t:"A quiet Tuesday night with someone you love.", emoji:"🌙",
+  s:"Nothing planned, just the two of you. You're…",
+  o:[
+   {act:"Cooking for them, doing some small kind thing.", sc:{express:2,flow:-1}},
+   {act:"Curled up together on the couch, close.", sc:{touch:2,stage:-1}},
+   {act:"Deep in a long talk about everything and nothing.", sc:{express:-1,token:-1}},
+   {act:"Secretly planning a little surprise for the weekend.", sc:{token:1,scale:1}}
+  ]},
+
+ {t:"Someone you love is stressed to the bone.", emoji:"😮‍💨",
+  s:"They're overwhelmed and running on empty. You…",
+  o:[
+   {act:"Quietly take things off their plate.", sc:{express:2,flow:-1,stage:-1}},
+   {act:"Remind them, in words, that they've got this.", sc:{express:-2}},
+   {act:"Pull them into a long hug: “come here.”", sc:{touch:2}},
+   {act:"Run them a bath, little treats, the works.", sc:{token:1,scale:1}}
+  ]},
+
+ {t:"How you like to be thanked.", emoji:"🙌",
+  s:"You did something kind. The thank-you that lands best is…",
+  o:[
+   {act:"The words — a sincere thank-you hits hardest.", sc:{express:-2,flow:1}},
+   {act:"Don't thank me — just let me keep helping.", sc:{flow:-2,express:1}},
+   {act:"A hug says it better than any speech.", sc:{touch:2,flow:1}},
+   {act:"A little thank-you gift makes me glow.", sc:{token:2,flow:1}}
+  ]},
+
+ {t:"An anniversary or a big milestone.", emoji:"💞",
+  s:"You want to mark it in a way that's truly you. That's…",
+  o:[
+   {act:"A grand gesture they'll never forget.", sc:{scale:2,stage:1}},
+   {act:"Something small and meaningful, just between us.", sc:{scale:-2,stage:-1}},
+   {act:"A heartfelt letter pouring everything out.", sc:{express:-2,scale:-1}},
+   {act:"A carefully chosen, absolutely perfect gift.", sc:{token:2}}
+  ]},
+
+ {t:"Comforting someone who's grieving.", emoji:"🕯️",
+  s:"There are no good words, and yet. You…",
+  o:[
+   {act:"Sit in silence and just hold them.", sc:{touch:2,express:1}},
+   {act:"Say the thing nobody else will say out loud.", sc:{express:-2}},
+   {act:"Bring food, handle the logistics, be useful.", sc:{express:2,flow:-1}},
+   {act:"Keep up small gestures: notes, quiet check-ins.", sc:{token:1,scale:-1}}
+  ]},
+
+ {t:"Your default way of saying “I love you.”", emoji:"❤️",
+  s:"When it really matters, you tend to…",
+  o:[
+   {act:"Say it. Plainly, warmly, and often.", sc:{express:-2,stage:1}},
+   {act:"Show it in a hundred small daily acts.", sc:{express:2,scale:-1}},
+   {act:"A squeeze of the hand, a kiss on the head.", sc:{touch:2}},
+   {act:"Remember the little things and act on them.", sc:{token:1,express:1}}
+  ]},
+
+ {t:"In public with someone you adore.", emoji:"👀",
+  s:"Out and about together, you're…",
+  o:[
+   {act:"Arm around them — PDA and proud of it.", sc:{touch:1,stage:2}},
+   {act:"Warm but private; affection is for us, not the room.", sc:{stage:-2}},
+   {act:"Loudly bragging about them to anyone who'll listen.", sc:{stage:2,express:-1}},
+   {act:"A subtle hand squeeze only they'd notice.", sc:{touch:1,stage:-1,scale:-1}}
+  ]},
+
+ {t:"A close friend is moving away.", emoji:"📦",
+  s:"The goodbye is coming. You mark it with…",
+  o:[
+   {act:"A big farewell send-off, everyone invited.", sc:{scale:2,stage:1}},
+   {act:"A heartfelt card and a very long hug.", sc:{express:-1,touch:1,scale:-1}},
+   {act:"Turning up early to help pack every last box.", sc:{express:2,flow:-1}},
+   {act:"A parting gift they'll keep forever.", sc:{token:2}}
+  ]},
+
+ {t:"How you show a new friend you care.", emoji:"🌱",
+  s:"You want them to feel it early on. You…",
+  o:[
+   {act:"Tell them straight up you're glad they're around.", sc:{express:-2,stage:1}},
+   {act:"Pull them into everything — lots of time together.", sc:{token:-2}},
+   {act:"Remember their coffee order and their birthday.", sc:{token:1,express:1}},
+   {act:"Quietly do them favours before they even ask.", sc:{express:2,flow:-1,stage:-1}}
+  ]},
+
+ {t:"Your ideal date-night energy.", emoji:"🍷",
+  s:"Given a free evening with your person, you'd pick…",
+  o:[
+   {act:"Something big, planned, and memorable.", sc:{scale:2}},
+   {act:"A cozy night in, close and quiet.", sc:{touch:1,stage:-1,scale:-1}},
+   {act:"Just uninterrupted time to talk properly.", sc:{token:-2,express:-1}},
+   {act:"A surprise I dreamed up just for them.", sc:{token:1,scale:1}}
+  ]},
+
+ {t:"When words fail you completely.", emoji:"🤍",
+  s:"You feel it deeply but can't quite say it. So you…",
+  o:[
+   {act:"Let a long hug do the talking.", sc:{touch:2,flow:-1}},
+   {act:"Do something practical for them instead.", sc:{express:2,flow:-1}},
+   {act:"Write it down — it's easier than saying it.", sc:{express:-1,scale:-1}},
+   {act:"Give them a little something that says it for me.", sc:{token:2}}
+  ]},
+
+ {t:"Being cared for when you're low.", emoji:"🛟",
+  s:"You're the one struggling now. What you need is for someone to…",
+  o:[
+   {act:"Tell me it'll be okay — I need to hear it.", sc:{express:-2,flow:1}},
+   {act:"Just sit with me, close. No words needed.", sc:{touch:2,flow:1}},
+   {act:"Handle the small stuff so I don't have to.", sc:{express:2,flow:1}},
+   {act:"Bring me my comfort things without asking.", sc:{token:2,flow:1}}
+  ]},
+
+ {t:"How affectionate are you, honestly?", emoji:"🧸",
+  s:"On the touchy-feely scale, you're…",
+  o:[
+   {act:"Very — hugs, cuddles, always a hand somewhere.", sc:{touch:2,stage:1}},
+   {act:"Warm in words, a little shy with touch.", sc:{express:-2,touch:-1}},
+   {act:"I show love by doing, not by touching.", sc:{express:2,touch:-1,flow:-1}},
+   {act:"Quietly affectionate, only in private moments.", sc:{stage:-2,scale:-1}}
+  ]},
+
+ {t:"Your people would say you're the one who…", emoji:"🌟",
+  s:"Ask your friends and they'd all agree: you're the one who…",
+  o:[
+   {act:"Always says the kind thing at the right time.", sc:{express:-2}},
+   {act:"Always shows up and gets things done.", sc:{express:2,flow:-1}},
+   {act:"Always gives the most thoughtful gifts.", sc:{token:2}},
+   {act:"Always makes the big, unforgettable gestures.", sc:{scale:2,stage:1}}
+  ]}
+];
+
+/* ---------- scoring ---------- */
+const AXES = [
+  {k:'express', negL:'Say it in words',  posL:'Show it in actions',  neg:'Word-giver', pos:'Doer'},
+  {k:'token',   negL:'Time together',    posL:'Thoughtful things',   neg:'Time-giver', pos:'Gift-giver'},
+  {k:'touch',   negL:'Words over touch', posL:'Warmth & touch',      neg:'Verbal',     pos:'Physical'},
+  {k:'stage',   negL:'Private & quiet',  posL:'Open & demonstrative',neg:'Private',    pos:'Demonstrative'},
+  {k:'scale',   negL:'Small & steady',   posL:'Big gestures',        neg:'Steady',     pos:'Grand'},
+  {k:'flow',    negL:'Love to give',     posL:'Love to receive',     neg:'Giver',      pos:'Receiver'}
+];
+
+function computeMax(){
+  const max={};
+  AXES.forEach(a=>max[a.k]=0);
+  SCEN.forEach(q=>{
+    AXES.forEach(a=>{
+      let m=0;
+      q.o.forEach(opt=>{ if(opt.sc[a.k]!==undefined) m=Math.max(m,Math.abs(opt.sc[a.k])); });
+      max[a.k]+=m;
+    });
+  });
+  return max;
+}
+
+let RESULT=null;
+let CURRENT_ARCH=null;
+function diagnose(){
+  const tot={}, max=computeMax();
+  AXES.forEach(a=>tot[a.k]=0);
+  answers.forEach((ai,qi)=>{
+    const sc=SCEN[qi].o[ai].sc;
+    for(const k in sc) tot[k]+=sc[k];
+  });
+  // normalized -1..1 and 0..100
+  const norm={}, pct={};
+  AXES.forEach(a=>{ const n = max[a.k]?tot[a.k]/max[a.k]:0; norm[a.k]=n; pct[a.k]=Math.round((n+1)/2*100); });
+  RESULT={tot,norm,pct};
+  renderResults();
+}
+
+/* ---------- archetype selection ---------- */
+function archetype(n){
+  const A=[];
+  A.push({key:'nurturer', score:n.express*1.0 + n.touch*0.4 + (-n.flow)*0.5, emoji:'🫶', name:'The Nurturer',
+    tag:'You love by looking after people',
+    dest:"You feel most loved when someone does something for you for once — lets you be looked after instead of always being the carer. Tell your people: a returned favour, an unprompted “sit down, I've got this,” lands deeper than any speech.",
+    blurb:"Your love shows up as action. While others are still working out what to say, you've already made the tea, cleared the mess, and quietly fixed the thing that was worrying them. You read a room fast and you move faster — comfort, in your hands, looks like practical care and a warm presence right beside them. The people in your life feel genuinely held, because you don't just tell them you care, you prove it, every single day."});
+  A.push({key:'words', score:(-n.express)*1.2 + (-n.touch)*0.2, emoji:'💬', name:'The Words Person',
+    tag:'You say the thing that needs saying',
+    dest:"You feel most loved when it's said out loud — plainly, often, unprompted. Tell your people: don't assume you already know; a spoken “I love you” or “I'm proud of you” from them is worth more to you than any grand gesture.",
+    blurb:"You believe love unspoken is love half-given, so you say it — clearly, warmly, and often. You're the one who names the feeling in the room, who tells people exactly what they mean to you before it's too late to matter. A well-timed sentence from you can carry someone through a whole hard week. You know that words are not cheap when they're true, and yours always are. People never have to guess where they stand with you, and that's a rare kind of gift."});
+  A.push({key:'quality', score:(-n.token)*1.1 + (-n.scale)*0.2, emoji:'⏳', name:'The Quality-Timer',
+    tag:'Your time is how you say it',
+    dest:"You feel most loved with undivided time — phone down, fully present. Tell your people: the cancel-the-plans, just-us hours mean more to you than any gift. Presence is the whole point.",
+    blurb:"For you, love is spelled T-I-M-E. The most precious thing you can offer someone is your full, undivided attention — no phone, no distractions, just being properly there. You'd rather have a long unhurried conversation than the fanciest present, and you give the people you love the rarest luxury of all: your presence. When you're with someone, you're all the way with them, and they feel it. In a distracted world, that kind of attention is close to devotion."});
+  A.push({key:'gift', score:n.token*1.2 + n.scale*0.2, emoji:'🎁', name:'The Gift-Giver',
+    tag:'You remember, and you bring proof',
+    dest:"You feel most loved when someone remembers the little thing — the offhand wish, the favourite snack — and acts on it. Tell your people: it's never about the price, it's the proof they were paying attention.",
+    blurb:"You love through thoughtful things — not because you think love can be bought, but because a well-chosen gift is proof that you were paying attention. You clock the offhand comment, the favourite treat, the thing they mentioned wanting once in passing, and months later it turns up wrapped. Your presents aren't about price; they're little arguments that say “I saw you, I remembered, I thought of you when you weren't there.” Few things say I love you as precisely as the perfect small surprise."});
+  A.push({key:'quiet', score:(-n.stage)*1.1 + (-n.scale)*0.5, emoji:'🤫', name:'The Quiet Devotee',
+    tag:'The realest love needs no audience',
+    dest:"You feel most loved in private, low-key moments — a note, a quiet word, a hand held where no one's watching. Tell your people: skip the public fuss; the intimate gesture is the one that reaches you.",
+    blurb:"Your love is deep and understated — it lives in private moments, not public displays. No grand announcements, no performance for the crowd; just a quiet steadiness that the people closest to you feel and everyone else tends to miss. You'd rather whisper it than shout it, and the tenderness you save for behind closed doors is all the more powerful for being unseen. You know that the biggest feelings often make the least noise, and yours run very deep indeed."});
+  A.push({key:'grand', score:n.scale*1.1 + n.stage*0.6, emoji:'💐', name:'The Grand Romantic',
+    tag:'If you love someone, the world will know',
+    dest:"You feel most loved by the big, unmistakable gesture — the surprise, the effort, the moment. Tell your people: go bold. Understatement can read as indifference to you, and a little theatre goes a long way.",
+    blurb:"You love out loud and in colour. Why whisper it when you can spell it out in the sky? You're the one behind the surprise party, the big speech, the gesture so over-the-top nobody could ever doubt how you feel. There's no half-measure in your heart — when you love someone, you want it to be unmistakable, memorable, a moment they'll be telling people about for years. Life's too short for small love, and you make sure yours is impossible to miss."});
+  A.push({key:'rock', score:(-n.scale)*0.6 + n.express*0.5 + (-n.flow)*0.7, emoji:'🪨', name:'The Steady Rock',
+    tag:'No fireworks — just always there',
+    dest:"You feel most loved through steadiness — someone showing up, following through, being reliably there. Tell your people: consistency is your love language received. The daily small stuff means far more to you than any one big night.",
+    blurb:"You're the dependable one — the person who shows up, follows through, and is simply, reliably there. No drama, no fanfare, no grand declarations; just a steady, unwavering presence that the people around you have quietly built their lives around. You give without keeping score and rarely ask for anything back. Your love isn't loud, but it is bedrock: the kind people don't fully appreciate until they realise how much they've come to lean on it. Consistency, in your hands, is its own quiet romance."});
+  A.push({key:'balanced', score:0.3 - variance(n), emoji:'💗', name:'The Balanced Heart',
+    tag:'A little of every love language',
+    dest:"You feel most loved in lots of ways, which makes you easy to please and easy to surprise. Tell your people: mix it up — words one day, a hug the next, a small gift when least expected. Variety keeps your heart full.",
+    blurb:"You refuse to be pinned to one way of loving. Some days it's the perfect word, some days a hug, some days a favour done before anyone asked; sometimes a grand gesture, sometimes the quietest small one. You read each person on their own terms and give them care in the shape they actually need it — which makes you a remarkably fluent lover of people. Your gift is range: you can meet someone in words or actions, in public or private, and make almost anyone feel truly cared for."});
+  A.sort((x,y)=>y.score-x.score);
+  return A[0];
+}
+function variance(n){ // how far from center overall (0 = perfectly balanced)
+  const vals=AXES.map(a=>Math.abs(n[a.k]));
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* ---------- narrative helpers ---------- */
+function axisRead(a,n){
+  const v=n[a.k]; const s=Math.abs(v);
+  const strong = s>0.55;
+  const mild = s>0.2;
+  if(!mild) return "You sit right in the middle here — it swings with the person and the moment, and you like it that way.";
+  const lean = strong ? "strongly" : "moderately";
+  const map={
+    express:{pos:"You show care by doing — favours, fixing, showing up beats a speech every time.",neg:"You say it out loud; the right words, spoken plainly, are how you love."},
+    token:{pos:"You reach for thoughtful things — a gift, a token, a little surprise that says you were thinking of them.",neg:"You give your time — shared hours and full presence are your love language."},
+    touch:{pos:"You love through touch — a hug, a hand, closeness says what words can't.",neg:"You'd rather say it than touch it — warmth comes through your words, not contact."},
+    stage:{pos:"You wear affection openly — you're happy for the world to see how much you care.",neg:"You keep affection private — the real tenderness is just between the two of you."},
+    scale:{pos:"You go big — the grand gesture, the moment they'll never forget.",neg:"You keep it small and steady — quiet, consistent care over the fireworks."},
+    flow:{pos:"You love being cared for — you receive affection openly and gladly.",neg:"You're a giver — happiest looking after others, a little shy of being looked after."}
+  };
+  return "You lean "+lean+" toward the "+(v>0?a.posL:a.negL).toLowerCase()+" side. "+map[a.k][v>0?'pos':'neg'];
+}
+
+/* Brief "how you show care" synthesis for the results page. */
+function careProfile(n){
+  const P = {
+    express:{pos:"show your care through actions more than words",
+             neg:"put your love into words and say it out loud"},
+    token:{pos:"reach for thoughtful gifts and little tokens",
+           neg:"give the gift of time and undivided presence"},
+    touch:{pos:"love through warmth, hugs, and closeness",
+           neg:"lead with words rather than touch"},
+    stage:{pos:"wear your affection openly for all to see",
+           neg:"keep your affection private and just between you"},
+    scale:{pos:"go big with grand, memorable gestures",
+           neg:"show love in small, steady, everyday ways"},
+    flow:{pos:"open up and love being cared for in return",
+          neg:"pour yourself into giving more than receiving"}
+  };
+  const CLOSE = {
+    express:{pos:"You'd rather show it than say it.",neg:"You'd rather say it than assume it's known."},
+    token:{pos:"The right little something says it all.",neg:"Your time is the realest gift you give."},
+    touch:{pos:"A hug lands where words can't.",neg:"You reach for words before contact."},
+    stage:{pos:"Your love is loud and proud.",neg:"Your love is quiet and close."},
+    scale:{pos:"Go big or don't bother.",neg:"Small and steady wins your heart."},
+    flow:{pos:"You let yourself be looked after.",neg:"You're at your best looking after others."}
+  };
+  const ranked = AXES.map(a=>({k:a.k, v:n[a.k], s:Math.abs(n[a.k])}))
+                     .filter(x=>x.s>0.2).sort((a,b)=>b.s-a.s);
+  if(ranked.length===0){
+    return "How you show care is hard to pin down — and that's the charm. Across eighteen questions you leaned every which way, balancing words with actions, gifts with time, big gestures with quiet ones. In short: you're an all-rounder who reads each person on their own terms and loves them exactly the way they need.";
+  }
+  const ph = ranked.slice(0,3).map(x=> P[x.k][x.v>0?'pos':'neg']);
+  const body = ph.length===1 ? "you "+ph[0]+"."
+             : ph.length===2 ? "you "+ph[0]+", and you "+ph[1]+"."
+             : "you "+ph[0]+", you "+ph[1]+", and you "+ph[2]+".";
+  const top = ranked[0];
+  return "The way you show care is one where "+body+" "+CLOSE[top.k][top.v>0?'pos':'neg'];
+}
+
+function blindSpots(n){
+  const out=[];
+  if(n.express>0.4) out.push(["All action, few words","You show love in a hundred quiet ways — but the people you care about sometimes need to actually hear it. A deed says a lot; three plain words say the rest."]);
+  if(n.express<-0.4) out.push(["Words without follow-through","You say the loving thing beautifully — but words land harder when they're backed by action. Every so often, show it as well as say it."]);
+  if(n.flow>0.4) out.push(["Better at taking than giving back","You receive care gracefully, which is lovely — but relationships run both ways. Make sure the people who pour into you feel it flowing back just as freely."]);
+  if(n.flow<-0.4) out.push(["Never letting anyone in","You give and give — but flat-out refusing to be cared for can leave your people feeling shut out. Let someone look after you sometimes; it's a gift to them too."]);
+  if(n.scale>0.4) out.push(["Grand gestures, thin in between","The big moments are dazzling, but love mostly lives in the small daily stuff. Don't let the fireworks distract from the quiet, consistent care that holds it all up."]);
+  if(n.scale<-0.4) out.push(["Too subtle to notice","Your steady, understated care is real — but sometimes it's so quiet it goes completely unseen. Every now and then, make a little noise about how much you actually feel."]);
+  if(n.touch>0.4) out.push(["Touch isn't everyone's language","Closeness is how you connect, but not everyone reads touch the way you do. Pair the hug with a word or a deed so nobody ever misses the message."]);
+  if(n.stage>0.5) out.push(["Love as performance","You love out loud, which is wonderful — just check the big public display is really for them and not the audience. The quietest moments are often the most intimate ones."]);
+  if(n.token>0.45) out.push(["Gifts as a shortcut","A thoughtful gift is lovely, but it can't stand in for time and presence. Make sure the token always points to something realer waiting behind it."]);
+  if(out.length===0) out.push(["The even keel","You balance every way of caring, which makes you wonderfully easy to love — but it can also mean never leaning fully into any one. Sometimes it's worth loving someone loudly, in exactly the way they most need."]);
+  return out.slice(0,3);
+}
+
+function superpower(n){
+  const c=[];
+  c.push([Math.abs(n.express), n.express>0?["Love in action","You don't just talk about caring — you do the thing. The people around you feel looked after because you show up, quietly and reliably, every single time."]:["A way with words","You say what others feel but can't voice. The right sentence at the right moment from you can carry someone through an entire hard week."]]);
+  c.push([Math.abs(n.touch), n.touch>0?["Healing warmth","Your presence is a comfort all by itself. A hug from you does what a hundred words can't — people just feel safer the moment you're close."]:null]);
+  c.push([Math.abs(n.flow), n.flow>0?["Grace in receiving","You let people love you, which is its own quiet gift — you make the ones who care for you feel genuinely needed and appreciated."]:["A bottomless giver","You look after everyone around you, often before they've even asked. You're the person people feel deeply lucky to have in their corner."]]);
+  c.push([Math.abs(n.token), n.token>0?["The thought that counts","You notice the little things — the offhand wish, the favourite snack — and turn them into gestures that make people feel truly seen."]:null]);
+  c.push([Math.abs(n.scale), n.scale>0?["The memory-maker","You create moments people talk about for years. When you decide to show love, you do it in a way nobody ever forgets."]:["Quiet consistency","Your care is steady as a heartbeat — no drama, no fanfare, just there, day after day. That reliability is rarer and more precious than any grand gesture."]]);
+  const best=c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0])[0];
+  return best[1];
+}
+
+function principle(arch,n){
+  const P={
+    nurturer:"“I don't just say I care — I show up and prove it.”",
+    words:"“Say it out loud. Nobody should ever have to guess they're loved.”",
+    quality:"“The most precious thing I can give you is my time.”",
+    gift:"“I love you — so I remembered, and I brought you this.”",
+    quiet:"“The realest love is the quiet kind nobody else gets to see.”",
+    grand:"“If I love you, the whole world is going to know it.”",
+    rock:"“No fireworks. Just me, here, every single day.”",
+    balanced:"“I love people the exact way they need to be loved.”"
+  };
+  return P[arch.key]||P.balanced;
+}
+
+/* ---------- state ---------- */
+let i = 0;
+const answers = new Array(SCEN.length).fill(null); // stores chosen option index
+
+const $ = id => document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+
+function start(){ i=0; render(); show('quiz'); }
+function restart(){ answers.fill(null); i=0; show('intro'); }
+
+function render(){
+  const q = SCEN[i];
+  $('snum').textContent = 'Question ' + String(i+1).padStart(2,'0');
+  $('semoji').textContent = q.emoji || '';
+  $('stitle').textContent = q.t;
+  $('sbody').textContent = q.s;
+  $('count').textContent = (i+1)+' / '+SCEN.length;
+  $('fill').style.width = ((i+1)/SCEN.length*100)+'%';
+  const box = $('opts'); box.innerHTML='';
+  q.o.forEach((opt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(answers[i]===idx?' pick':'');
+    b.innerHTML='<span class="opt-do">'+esc(opt.act)+'</span>';
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  if(answers[i]!==null){
+    $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+  } else {
+    $('next').classList.remove('ready'); $('hint').textContent='Choose one.';
+  }
+  $('next').textContent = (i===SCEN.length-1)?'See my result ▶':'Next ▶';
+}
+
+function choose(idx){
+  answers[i]=idx;
+  document.querySelectorAll('#opts .opt').forEach((el,k)=>el.classList.toggle('pick',k===idx));
+  $('next').classList.add('ready'); $('hint').textContent='You can change your mind, or move on.';
+}
+
+function next(){
+  if(answers[i]===null) return;
+  if(i===SCEN.length-1){ diagnose(); show('results'); return; }
+  i++; render();
+}
+function prev(){
+  if(i===0){ show('intro'); return; }
+  i--; render();
+}
+
+/* ---------- render results ---------- */
+function renderResults(){
+  const {norm,pct}=RESULT;
+  const arch=archetype(norm);
+  CURRENT_ARCH=arch;
+  $('rEmoji').textContent=arch.emoji;
+  $('rName').textContent=arch.name;
+  $('rTagline').textContent=arch.tag;
+  $('rBlurb').textContent=arch.blurb;
+  $('rProfile').textContent=careProfile(norm);
+  $('rDestP').textContent=arch.dest;
+
+  // chips: dominant traits
+  const chips=$('rChips'); chips.innerHTML='';
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ranked.forEach(r=>{
+    const label = r.v>=0 ? r.a.pos : r.a.neg;
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML='<b>'+label+'</b>';
+    chips.appendChild(el);
+  });
+
+  // axes
+  const box=$('rAxes'); box.innerHTML='';
+  AXES.forEach(a=>{
+    const p=pct[a.k];
+    const d=document.createElement('div'); d.className='axis';
+    d.innerHTML =
+      '<div class="lbls"><span>'+a.negL+'</span><span>'+a.posL+'</span></div>'+
+      '<div class="axtrack"><span style="left:0%"></span><div class="mid"></div></div>'+
+      '<div class="read">'+axisRead(a,norm)+'</div>';
+    box.appendChild(d);
+    // animate knob
+    requestAnimationFrame(()=>{ d.querySelector('.axtrack > span').style.left = p+'%'; });
+  });
+
+  // superpower
+  const sp=superpower(norm);
+  $('rSuperH').textContent=sp[0]; $('rSuperP').textContent=sp[1];
+
+  // blind spots
+  const bl=$('rBlind'); bl.innerHTML='';
+  blindSpots(norm).forEach(b=>{
+    const d=document.createElement('div'); d.className='mini blind';
+    d.innerHTML='<h4>'+b[0]+'</h4><p>'+b[1]+'</p>'; bl.appendChild(d);
+  });
+
+  // principle
+  $('rPrinciple').textContent=principle(arch,norm);
+
+  // versatility note
+  const v=variance(norm);
+  $('rConsistency').textContent = v>0.4
+    ? "You have a strongly defined way of loving — you know exactly how you give and receive care, and you lead with it."
+    : "You're a versatile carer — the way you show love flexes with the person and the moment, which means almost anyone can feel cared for by you.";
+}
+
+/* ============================================================
+   SHAREABLE RESULT CARD  (rendered on a canvas)
+   ============================================================ */
+let CARD_BLOB=null;
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' '); const lines=[]; let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawShareCard(){
+  const W=1080, H=1350;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  const {norm,pct}=RESULT, arch=CURRENT_ARCH;
+
+  // background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#232653'); bg.addColorStop(.45,'#131427'); bg.addColorStop(1,'#0c0d1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // subtle glow
+  const glow=ctx.createRadialGradient(W/2,180,60,W/2,180,700);
+  glow.addColorStop(0,'rgba(120,110,220,.28)'); glow.addColorStop(1,'rgba(120,110,220,0)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,W,340);
+  // border frame
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,24,24,W-48,H-48,36); ctx.stroke();
+
+  ctx.textAlign='center';
+
+  // kicker
+  ctx.fillStyle='#ffd166'; ctx.font='bold 26px "Trebuchet MS",Arial';
+  ctx.fillText('C A R E   S T Y L E S', W/2, 92);
+
+  // emoji
+  ctx.font='120px "Segoe UI Emoji","Apple Color Emoji",serif';
+  ctx.fillText(arch.emoji, W/2, 232);
+
+  // archetype name (gradient)
+  ctx.font='bold 74px "Trebuchet MS",Arial';
+  const nameLines=wrapLines(ctx,arch.name,W-160);
+  let ny=310;
+  nameLines.forEach(ln=>{
+    const tw=ctx.measureText(ln).width;
+    const g=ctx.createLinearGradient(W/2-tw/2,0,W/2+tw/2,0);
+    g.addColorStop(0,'#ffd166'); g.addColorStop(.5,'#ff6b6b'); g.addColorStop(1,'#a685ff');
+    ctx.fillStyle=g; ctx.fillText(ln,W/2,ny); ny+=80;
+  });
+  // tagline
+  ctx.fillStyle='#b9b4e6'; ctx.font='italic 30px "Trebuchet MS",Arial';
+  const tagLines=wrapLines(ctx,'“'+arch.tag+'”',W-200);
+  tagLines.forEach(ln=>{ ctx.fillText(ln, W/2, ny+8); ny+=42; });
+  let y=ny+40;
+
+  // signature trait chips (top 3 axes)
+  const ranked=AXES.map(a=>({a,v:norm[a.k]})).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  ctx.font='bold 30px "Trebuchet MS",Arial';
+  const labels=ranked.map(r=> r.v>=0 ? r.a.pos : r.a.neg);
+  const padX=28, gap=18, chipH=64;
+  const widths=labels.map(l=>ctx.measureText(l).width+padX*2);
+  const totalW=widths.reduce((s,w)=>s+w,0)+gap*(labels.length-1);
+  let cx=(W-totalW)/2;
+  const chipCols=['#ff6b6b','#4ecdc4','#a685ff'];
+  labels.forEach((l,idx)=>{
+    const w=widths[idx];
+    ctx.fillStyle='rgba(255,255,255,.05)';
+    roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.fill();
+    ctx.strokeStyle=chipCols[idx]; ctx.lineWidth=2; roundRect(ctx,cx,y,w,chipH,chipH/2); ctx.stroke();
+    ctx.fillStyle='#f4f1ff'; ctx.textAlign='center';
+    ctx.fillText(l, cx+w/2, y+chipH/2+11);
+    cx+=w+gap;
+  });
+  y+=chipH+70;
+
+  // "MY CARE PROFILE" heading
+  ctx.fillStyle='#ffd166'; ctx.font='bold 24px "Trebuchet MS",Arial';
+  ctx.fillText('M Y   C A R E   P R O F I L E', W/2, y);
+  y+=44;
+
+  // six dials
+  const dialL=90, dialR=W-90, dialW=dialR-dialL;
+  const rowH=66;
+  ctx.textBaseline='alphabetic';
+  AXES.forEach(a=>{
+    ctx.font='500 22px "Trebuchet MS",Arial';
+    ctx.textAlign='left'; ctx.fillStyle='#8f8bc0';
+    ctx.fillText(a.negL, dialL, y);
+    ctx.textAlign='right';
+    ctx.fillText(a.posL, dialR, y);
+    // track
+    const ty=y+22;
+    ctx.fillStyle='#22254a';
+    roundRect(ctx,dialL,ty,dialW,12,6); ctx.fill();
+    // mid tick
+    ctx.fillStyle='#3a3e70'; ctx.fillRect(dialL+dialW/2-1,ty-3,2,18);
+    // knob
+    const kx=dialL + dialW*(pct[a.k]/100);
+    const kg=ctx.createLinearGradient(kx-14,0,kx+14,0);
+    kg.addColorStop(0,'#4ecdc4'); kg.addColorStop(1,'#ffd166');
+    ctx.fillStyle=kg;
+    ctx.beginPath(); ctx.arc(kx,ty+6,14,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0c0d1c'; ctx.lineWidth=3; ctx.stroke();
+    y+=rowH;
+  });
+
+  y+=6;
+  // motto quote box
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const quote=principle(arch,norm);
+  ctx.font='italic 30px "Trebuchet MS",Arial';
+  const qLines=wrapLines(ctx,quote,W-220);
+  const boxH=qLines.length*44+56;
+  ctx.fillStyle='rgba(255,255,255,.04)';
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=2;
+  roundRect(ctx,70,y,W-140,boxH,24); ctx.stroke();
+  ctx.fillStyle='#efeaff';
+  let qy=y+52;
+  qLines.forEach(ln=>{ ctx.fillText(ln,W/2,qy); qy+=44; });
+  y+=boxH+56;
+
+  // footer
+  ctx.fillStyle='#7d79ad'; ctx.font='22px "Trebuchet MS",Arial';
+  ctx.fillText('18 questions · 6 care dials · a care toy', W/2, H-46);
+
+  return cv;
+}
+
+function openShare(){
+  if(!RESULT||!CURRENT_ARCH) return;
+  const cv=drawShareCard();
+  $('shareImg').src=cv.toDataURL('image/png');
+  cv.toBlob(b=>{ CARD_BLOB=b; }, 'image/png');
+  // hide native share button if unsupported
+  $('lbShare').style.display = (navigator.share||navigator.canShare) ? '' : 'none';
+  $('shareBox').classList.add('on');
+}
+function closeShare(){ $('shareBox').classList.remove('on'); }
+
+function ensureBlob(){
+  return new Promise(res=>{
+    if(CARD_BLOB) return res(CARD_BLOB);
+    drawShareCard().toBlob(b=>{ CARD_BLOB=b; res(b); }, 'image/png');
+  });
+}
+
+async function nativeShare(){
+  const blob=await ensureBlob();
+  const file=new File([blob],'care-styles-result.png',{type:'image/png'});
+  const text='I got “'+CURRENT_ARCH.name+'” on Care Styles.';
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'My Care Styles result', text});
+      return;
+    }
+    if(navigator.share){ await navigator.share({title:'My Care Styles result', text}); return; }
+  }catch(e){ /* user cancelled or blocked — fall through */ }
+  downloadCard();
+}
+
+async function downloadCard(){
+  const blob=await ensureBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='care-styles-result.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  $('lbHint').textContent='Saved! If nothing downloaded, long-press the image above to save it.';
+}
+
+/* ---------- wire up all controls (no inline handlers) ---------- */
+function on(id,fn){ const el=$(id); if(el) el.addEventListener('click',fn); }
+function init(){
+  on('startBtn', start);
+  on('backBtn', prev);
+  on('next', next);
+  on('shareBtn', openShare);
+  on('restartBtn', restart);
+  on('lbShare', nativeShare);
+  on('lbSave', downloadCard);
+  on('lbClose', closeShare);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+
+/* keyboard: 1-9 pick option, Enter/Right advance, Left back, R retake */
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  var scr=document.querySelector('.screen.on'); if(!scr)return;
+  if(scr.id==='intro'){ if(e.key==='Enter'){e.preventDefault(); if(typeof start==='function')start();} return; }
+  if(scr.id==='quiz'){
+    if(/^[1-9]$/.test(e.key)){ var b=document.querySelectorAll('#opts .opt')[+e.key-1]; if(b){e.preventDefault(); b.click();} }
+    else if(e.key==='Enter'||e.key==='ArrowRight'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); prev(); }
+  } else if(scr.id==='results'){
+    if(e.key==='r'||e.key==='R'){ e.preventDefault(); restart(); }
+  }
+});
+</script>
+</body>
+</html>
